@@ -1,18 +1,10 @@
-version: "3.9"
 
+version: "3.9" # optional since v1.27.0
 services:
   frontend:
     build:
-      context: ./shop/
+      context: .
       args:
         HOST_API: ${SERVER_API}
     ports:
-    - "${PORT_SHOP}:3001"
-
-  backoffice:
-    build:
-      context: ./admin/
-      args:
-        HOST_API: ${SERVER_API}
-    ports:
-      - "${PORT_ADMIN}:3002"
+      - "${PORT}:3001

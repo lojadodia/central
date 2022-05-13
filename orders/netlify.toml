@@ -1,9 +1,0 @@
-[build]
-  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF shop/"
-  command = "next build"
-[context.production]
-  environment = {NODE_VERSION = "12"}
-
-[[plugins]]
-  # Installs the Lighthouse Build Plugin for all deploy contexts
-  package = "@netlify/plugin-nextjs"
