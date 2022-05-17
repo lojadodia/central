@@ -30,7 +30,7 @@ const EmptyCart: FC<EmptyCartProps> = ({
 					gradientUnits="objectBoundingBox"
 				>
 					<stop offset="0" stopColor={Color(settings.site.color).lighten(0.3)} />
-					<stop offset="1" stopColor={settings.site.color} />
+					<stop offset="1" stopColor="{settings.site.color}" />
 				</linearGradient>
 			</defs>
 			<g

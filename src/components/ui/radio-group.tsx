@@ -17,7 +17,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
 }) => { 
   const classes = cn(
     {
-      "px-2 py-2 my-1 mr-2 text-md border border-gray-100 bg-white rounded text-heading dark:text-white   dark:bg-neutral-600 dark:border-neutral-500 absolute-capitalize":
+      "px-4 py-3 my-1 mr-2 text-lg border border-gray-100 bg-white rounded text-heading dark:text-white   dark:bg-neutral-600 dark:border-neutral-300 absolute-capitalize":
         className !== "color",
       "!text-white !bg-primary !border-primary":
         active && className !== "color",

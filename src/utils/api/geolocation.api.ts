@@ -1,12 +1,9 @@
 import { Visitor } from "@ts-types/custom.types";
 import { sendVisitor } from "@data/visitor/visitor"; 
+import Cookies from "js-cookie";
 
   const getVisitorDetails = () => {
-    return Promise.all([fetch("https://geolocation-db.com/json/0f761a30-fe14-11e9-b59f-e53803842572")
-        .then(response => response.json())
-            .then(data => data),
-            fetch(`${process.env.NEXT_PUBLIC_REST_API_ENDPOINT}api/store/info?token=LDDEUu`)
-            .then(res => res.json()).then(data => data.merchant)])
+
   }
   export function pushVisitorDetails () {
     const geo = sessionStorage.getItem('session_storage_merchant') || null

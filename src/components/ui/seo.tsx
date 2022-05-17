@@ -12,7 +12,7 @@ const Seo = ({metadata = {}}: {metadata?: object | null}) => {
           content: "width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0",
         },
       ]}
-      title={settings?.siteTitle ?? "Loja do Dia"}
+      title={"TELE - LODA DO DIA"}
       titleTemplate={`%s${settings?.seo?.metaTitle ?? ""}`}
       description={settings?.seo?.metaDescription || settings?.siteSubtitle}
       canonical={settings?.seo?.canonicalUrl}

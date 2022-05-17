@@ -35,7 +35,7 @@ const Mini: React.FC<MiniProps> = ({ product, className }) => {
   return (
     <article
       className={cn(
-        "product-card cart-type-neon rounded h-full bg-white dark:bg-black border dark:border-neutral-700 overflow-hidden shadow-sm transition-all duration-200 hover:shadow transform hover:-translate-y-0.5",
+        "product-card cart-type-neon rounded h-full bg-white dark:bg-neutral-900 border dark:border-neutral-700 overflow-hidden shadow-sm transition-all duration-200 hover:shadow transform hover:-translate-y-0.5",
         className
       )}
     >
@@ -44,7 +44,7 @@ const Mini: React.FC<MiniProps> = ({ product, className }) => {
 
       >
         <Image
-          src={settings?.env?.THEME == "dark" ? (image?.original ?? "/dark/product-placeholder.svg") : (image?.original ?? siteSettings?.product?.placeholderImage)}
+          src={(image?.original ?? "/dark/product-placeholder.svg")}
           alt={name}
           layout="fill"
           objectFit="contain"

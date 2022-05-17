@@ -97,42 +97,45 @@ const Feed = () => {
     );
   }
   return (
-    <div className="bg-gray-100  dark:bg-black min-h-full">
-      <div className="dark:bg-neutral-900  pt-6 pb-8 px-2 lg:p-8">
-      <div className="relative" style={{ marginTop: "-25px" }}>
+    <div className=" dark:bg-black min-h-full">
+      <div className="dark:bg-black pb-8 px-2 lg:px-8 lg:pb-8 lg:pt-0">
+      <div className="relative" >
         {loading && !data?.pages?.length ? (
           <ProductFeedLoader limit={20} />
         ) : ( 
           <>
-            {!!cacheData2?.length && (
-              <div className="relative">
-                <div className="absolute scroll-behavior" id="hh"></div>
-                <h1 className="mb-4 mt-8 text-2xl dark:text-white text-heading font-medium absolute-capitalize">
-                  {" "}
-                  {menuTitle ? menuTitle : "Menus do dia"}
-                </h1>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-3">
-                  <Fragment>
-                    {cacheData2?.map((product: any) => (
-                      <motion.div key={product.id}>
-                        {renderProductCard(product)}
-                      </motion.div>
-                    ))}
-                  </Fragment>
-                </div>
-              </div>
-            )}
 
-            {cacheData?.map((items: Category) => (
-              <div key={items.id}>
-                  <ProdutosItemsCategory
-                    key={items.id}
-                    name={items.name}
-                    slug={items.slug}
-                    products={items.products}
-                  />
-              </div>
-            ))}
+       
+                {!!cacheData2?.length && (
+                  <div className="relative">
+                    <div className="absolute scroll-behavior" id="hh"></div>
+                    <h1 className="mb-4 mt-0 text-xl dark:text-white text-heading font-semibold  uppercase">
+                      {" "}
+                      {menuTitle ? menuTitle : "Menus do dia"}
+                    </h1>
+                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 2xl:grid-cols-6 3xl:grid-cols-6 gap-2">
+                      <Fragment>
+                        {cacheData2?.map((product: any) => (
+                          <motion.div key={product.id}>
+                            {renderProductCard(product)}
+                          </motion.div>
+                        ))}
+                      </Fragment>
+                    </div>
+                  </div>
+                )}
+                {cacheData?.map((items: Category) => (
+                  <div key={items.id}>
+                      <ProdutosItemsCategory
+                        key={items.id}
+                        name={items.name}
+                        slug={items.slug}
+                        products={items.products}
+                      />
+                  </div>
+                ))}
+
+
           </>
         )}
       </div>

@@ -25,7 +25,7 @@ const ProductAttributes = ({
   extras,
   selectedExtras,
   activeExtra,
-  baseLimitExtra = 10,
+  baseLimitExtra = 50,
   setAttributes,
   toggleExtra,
 }: Props) => {
@@ -90,7 +90,7 @@ const ProductAttributes = ({
         opacity: index <= cardapioId  ? 1 : 1,
         pointerEvents: index <= cardapioId ? "initial": "initial"
       }}
-          className=" pb-2 flex flex-col relative items-start px-3 border-b border-gray-300 dark:border-neutral-700 border-opacity-70 first:pt-0"
+          className=" pb-2 flex flex-col relative items-start px-3 first:pt-0"
           key={index}
           
         >
@@ -99,10 +99,10 @@ const ProductAttributes = ({
           className="absolute"
           style={{marginTop:"-200px",background:"transparent",width:"1px",height:"1px"}}></div>
           {index === cardapioId && 
-            <div className="absolute bg-attr top-0 left-0 bg-yellow-400 dark:bg-yellow-700 current-choice-item" style={{width:"100%",height:"100%",zIndex:"-10",opacity:1}}></div>
+            <div className="absolute bg-attr top-0 left-0 bg-yellow-400 dark:bg-yellow-300 current-choice-item" style={{width:"100%",height:"100%",zIndex:"-10",opacity:1}}></div>
           }
          
-          <span className="text-md  pt-3 text-heading  dark:text-white leading-none uppercase font-bold mb-1 mr-4 min-w-[60px] inline-block">
+          <span className={`text-md  pt-5 text-heading  leading-none uppercase font-bold mb-3 mr-4 min-w-[60px] inline-block  ${index === cardapioId ? ' dark:text-black' : ' dark:text-white'} `}>
            
           {/* {index + 1}.  */}
            {variations[variationName][0].attribute?.name}
@@ -137,14 +137,11 @@ const ProductAttributes = ({
           className=" pt-5 pb-2 px-4 flex flex-col relative items-start border-b border-gray-200 dark:border-neutral-700  border-opacity-70 first:pt-0"
           key={index} 
         >
-
-
       <div ref={refExtras} id={`${product}-extras`} className="absolute " style={{marginTop:"-200px",background:"red",width:"1px",height:"1px"}}></div>
-
           {!activeExtra && 
-            <div className="absolute bg-attr top-0 left-0 bg-yellow-400 dark:bg-yellow-700 current-choice-item" style={{width:"100%",height:"100%",zIndex:"-10"}}></div>
+            <div className="absolute bg-attr top-0 left-0 bg-yellow-400 dark:bg-yellow-300 current-choice-item" style={{width:"100%",height:"100%",zIndex:"-10"}}></div>
           }
-          <span className="text-heading dark:text-white leading-none uppercase font-bold mb-4 mr-4 min-w-[60px] inline-block">
+          <span className="text-heading dark:text-black leading-none uppercase font-bold mb-4 mr-4 min-w-[60px] inline-block">
             ADICIONAR {extras[ExtraName][0].attribute?.name} 
           </span>
           <div className="w-full flex flex-wrap justify-start">

@@ -35,16 +35,16 @@ const Neon: React.FC<NeonProps> = ({ product, className }) => {
   return (
     <article
       className={cn(
-        "product-card cart-type-neon rounded h-full bg-white dark:bg-black border dark:border-neutral-700 overflow-hidden shadow-sm transition-all duration-200 hover:shadow transform hover:-translate-y-0.5",
+        "product-card cart-type-neon rounded h-full bg-white dark:bg-neutral-900 border dark:border-neutral-700 overflow-hidden shadow-sm transition-all duration-200 hover:shadow transform hover:-translate-y-0.5",
         className
       )}
     >
       <div
-        className="relative flex items-center justify-center cursor-pointer w-auto h-48 sm:h-64"
+        className="relative flex items-center justify-center cursor-pointer w-auto h-32"
         onClick={handleProductQuickView}
       >
         <Image
-          src={settings?.env?.THEME == "dark" ? (image?.original ?? "/dark/product-placeholder.svg") : (image?.original ?? siteSettings?.product?.placeholderImage)}
+          src={(image?.original ?? "/dark/product-placeholder.svg")}
           alt={name}
           layout="fill"
           objectFit="contain"
@@ -58,9 +58,9 @@ const Neon: React.FC<NeonProps> = ({ product, className }) => {
       </div>
       {/* End of product image */}
 
-      <header className="p-3 md:p-6">
+      <header className="p-3">
         <h3
-          className=" md:text-sm text-heading font-semibold dark:text-white  truncate mb-0 cursor-pointer absolute-capitalize"
+          className=" md:text-sm text-heading font-semibold dark:text-white   mb-2 cursor-pointer uppercase"
           onClick={handleProductQuickView}
         >
           {name}

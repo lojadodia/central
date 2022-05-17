@@ -21,7 +21,7 @@ const ExtraGroup: React.FC<ExtraGroupProps> = ({
 
   const classes = cn(
     {
-      "order-5 mr-1 mb-2 sm:order-4 py-2 px-2 sm:px-5 border border-gray-100  dark:border-neutral-800 dark:text-white flex items-center justify-center sm:justify-start text-sm rounded-full bg-white dark:bg-black  transition-colors duration-300": true,
+      "order-5 mr-1 mb-2 sm:order-4 py-3 px-4 sm:px-5 border border-gray-100  dark:border-neutral-800 dark:text-white flex items-center justify-center sm:justify-start text-lg rounded-full bg-white dark:bg-black  transition-colors duration-300": true,
       "!text-white !bg-primary !border-primary": active,
       "!border-primary": active,
     },

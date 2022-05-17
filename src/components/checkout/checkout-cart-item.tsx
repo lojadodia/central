@@ -23,16 +23,16 @@ const CheckoutCartItem = ({ item, notAvailable, isOffer = false }: Props) => {
     }
   }
   return (
-    <div className={cn("text-sm", notAvailable ? "text-red-500" : "text-body dark:text-white ")}
+    <div className={cn("text-lg mt-5", notAvailable ? "text-red-500" : "text-body dark:text-white ")}
     key={item.id}>
-      <div className={cn("flex justify-between py-2 ")+ `${isOffer && " uppercase font-semibold text-primary italic" }`}>
+      <div className={cn("flex justify-between py-1 ")+ `${isOffer && " uppercase font-semibold text-primary italic" }`}>
         <p className={"flex items-center justify-between text-body "}>
           <span
-            className={cn("text-sm", notAvailable ? "text-red-500" : "text-body ") + (!!isOffer && " text-primary")}
+            className={cn("text-lg", notAvailable ? "text-red-500" : "text-body ") + (!!isOffer && " text-primary")}
           >
             <span
               className={cn(
-                "text-sm font-bold",
+                "text-lg font-bold",
                 notAvailable ? "text-red-500" : "text-heading "
               ) + (!!isOffer && " text-primary")}
             >
@@ -44,9 +44,9 @@ const CheckoutCartItem = ({ item, notAvailable, isOffer = false }: Props) => {
           </span>
         </p>
         <span
-          className={cn("text-sm", notAvailable ? "text-red-500" : "text-body dark:text-neutral") + (!!isOffer && " text-primary")}
+          className={cn("text-lg", notAvailable ? "text-red-500" : "dark:text-gray") + (!!isOffer && " text-primary")}
         >
-          <span className="dark:text-gray text-heading">{!notAvailable ? price : "Indisponível"}</span>
+          <span className="dark:text-white text-heading">{!notAvailable ? price : "Indisponível"}</span>
         </span>
       </div>
       {items.length !== 0 &&

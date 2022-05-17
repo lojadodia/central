@@ -19,7 +19,7 @@ export function formatAddress(address: UserAddress) {
   if(!formattedAddress?.street_address){
     return "Takeaway";
   }else{
-    return formattedAddress?.street_address + ' ' + formattedAddress?.door + ' ' + formattedAddress?.details + ', '+ formattedAddress?.zip + ', ' + formattedAddress?.city + ', ' + formattedAddress?.state;
+    return formattedAddress?.street_address + ' ' + formattedAddress?.door + ' ' + formattedAddress?.details + ', '+ formattedAddress?.zip + ', ' + formattedAddress?.city;
   }
   
 

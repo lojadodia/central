@@ -6,9 +6,7 @@ export type LoginInputType = {
 };
 export type RegisterUserInputType = {
   name: string;
-  email: string;
   contact: string;
-  password: string;
 };
 
 export type ChangePasswordInputType = {
@@ -34,7 +32,7 @@ class Auth extends CoreApi {
   }
   register(input: RegisterUserInputType) {
     return this.http
-      .post(API_ENDPOINTS.REGISTER, input)
+      .post(API_ENDPOINTS.NEW_CUSTOMER, input)
       .then((res) => res.data);
   }
   logout() {

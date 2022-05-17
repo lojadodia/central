@@ -1,5 +1,5 @@
 :root {
-  --gossamer-500: #111;
+  --gossamer-500: #473bf0;
   --gossamer-600: #444;
   --bg-gray-100: #eee;
   --primary-2: #444;
@@ -126,6 +126,6 @@
   text-shadow: 0px 2px 5px rgba(40,40,40,.2) !important;
 }
 
-* {
+/* * {
   scroll-behavior: smooth;
-}
+} */

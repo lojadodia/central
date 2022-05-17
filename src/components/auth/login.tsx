@@ -114,19 +114,7 @@ const LoginForm = () => {
           </Button>
         </div>
       </form>
-      <a href="javascript:return false;" className="text-sm mt-3 text-primary" onClick={() => setModalView("FORGOT_VIEW")}>Esqueceu a Password?</a>
-      {/* End of forgot login form */}
 
-      <div className="flex flex-col items-center  justify-center relative text-sm text-heading mt-5 sm:mt-4 mb-5 sm:mb-5">
-        <hr className="w-full dark:border-neutral-700" />
-        <span className="absolute left-2/4 -top-2.5 px-2 -ml-4 bg-white dark:bg-neutral-800  dark:text-white">
-          Ou
-        </span>
-      </div>
-
-      <Button className="w-full h-11 sm:h-12 border-2 bg-black dark:bg-black register-button"  onClick={() => setModalView("REGISTER")} >
-        CRIAR CONTA
-      </Button>
 
     </div>
   );

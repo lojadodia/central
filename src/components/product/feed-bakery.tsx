@@ -22,7 +22,7 @@ const BakeryFeed = () => {
     data,
     error,
   } = useProductsQuery({
-    type: "bakery",
+    type: "home",
     limit: 21,
     text: query?.text as string,
     category: query?.category as string,
@@ -33,7 +33,7 @@ const BakeryFeed = () => {
   }
   if (!loading && !data?.pages?.[0]?.data?.length) {
     return (
-      <div className="bg-gray-100 min-h-full pt-6 pb-8 px-4 lg:p-8">
+      <div className=" min-h-full pt-6 pb-8 px-4 lg:p-8">
         <NotFound
           text="Nenhum produto encontrado :("
           className="w-7/12 mx-auto"
@@ -43,7 +43,7 @@ const BakeryFeed = () => {
   }
 
   return (
-    <div className="bg-gray-100 min-h-full pt-6 pb-8 px-4 lg:p-8">
+    <div className=" min-h-full pt-6 pb-8 px-4 lg:p-8">
       <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 gap-3">
         {loading && !data?.pages?.length ? (
           <ProductFeedLoader limit={20} />

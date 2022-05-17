@@ -206,16 +206,7 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
     setPriceExtra(total);
   }, [extras]);
 
-  // alcohol
-
-  useEffect(() => {
-    if (!options) return false;
-      if (JSON.parse(options)?.alcohol) {
-        setModal(!modaL);
-      } 
-  }, [options]);
- 
-  // end alcohol
+  
 
   if (loading)
     return (
@@ -224,7 +215,7 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
       </div>
     );
   return (
-    <article className="bg-white dark:bg-neutral-800 w-full h-full max-w-6xl dark:border dark:border-neutral-700 relative lg:rounded-lg z-[59] overflow-y-auto">
+    <article className="bg-white dark:bg-neutral-900 w-full h-full  dark:border dark:border-neutral-700 relative lg:rounded-lg z-[59] overflow-y-auto">
       <div>
         {modaL &&
             <div style={Cookies.get('alcohol') !== 'true' ? { position: "absolute", top: -20, left: -470, zIndex:999} : {display: 'none'} }>
@@ -238,9 +229,9 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
 
       <div
         className={cn(
-          "max-w-6xl h-auto  md:block bg-white dark:bg-black fixed top-0 left-1/2 transform mx-auto -translate-x-1/2 z-50 px-8 py-4 shadow-350 transition-all duration-300",
+          "h-auto  md:block bg-white dark:bg-neutral-900 fixed top-0 left-1/2 transform mx-auto -translate-x-1/2 z-50 px-10 py-4 dark:border-neutral-700 border-b transition-all duration-300",
           {
-            "invisible opacity-0 -translate-y-1/2": !displayModalStickyBar,
+            "visible opacity-100 translate-y-0": !displayModalStickyBar,
             "visible opacity-100 translate-y-0 transition-all":
               displayModalStickyBar,
           }
@@ -277,7 +268,7 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
             >
               {name}
             </h3>
-
+            {description}
             {unit && isEmpty(variations) ? (
               <span className="text-sm font-normal text-body dark:text-neutral mt-2 block">
                 {unit}
@@ -324,21 +315,27 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
               ></div>
 
               <div
-                className={cn({ "mt-4 hidden md:block": !isEmpty(variations) })}
+                className={cn({ "mt-0 pr-5 hidden md:block": !isEmpty(variations) })}
               >
-                {quantity! > 0 ? (
+                 <div
+                className="pr-5 mr-10"
+              >
+              {quantity! > 0 ? (
                   <AddToCart
                     data={data}
                     obs={obs}
                     variant="big"
                     variation={selectedVariation}
-                    disabled={selectedVariation?.is_disable || !isSelected}
-                  />
+                    disabled={selectedVariation?.is_disable || !isSelected}  />
+            
+             
+                
                 ) : (
                   <div className="bg-red-500 rounded text-sm text-white px-3 py-2">
                     Fora de estoque
                   </div>
-                )}
+                )}  
+                </div>
               </div>
             </div>
           </div>
@@ -349,44 +346,17 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
 
       {/* Main content */}
 
-      <div className="flex flex-col md:flex-row border-b border-gray-200 dark:border-neutral-700 border-opacity-70   product-card cart-type-neon">
+      <div className=" border-gray-200 dark:border-neutral-700 border-opacity-70  pt-5 mt-10 product-card cart-type-neon">
         {/* <div className="lg:w-1/2 p-6 pt-8 lg:p-12 2xl:p-16 lg:border-r lg:border-gray-200 dark:border-neutral-700 lg:border-opacity-60"> */}
 
-        <div className="md:w-1/2 p-0 md:pt-10 lg:p-0 xl:p-0">
-          <div className="product-gallery h-full relative">
-            {discount && (
-              <div className="rounded-full text-xs leading-6 font-semibold px-3 bg-yellow-500 text-white absolute top-4 right-4 z-10">
-                {discount}
-              </div>
-            )}
-
-            {!!gallery?.length ? (
-              <ThumbsCarousel gallery={gallery} />
-            ) : (
-              <div className="w-full h-[90%] flex   items-center justify-center">
-                <Image
-                  src={
-                    settings?.env?.THEME == "dark"
-                      ? image?.original ?? "/dark/product-placeholder.svg"
-                      : image?.original ?? "/product-placeholder.svg"
-                  }
-                  alt={name}
-                  className="product-image"
-                  width={450}
-                  height={450}
-                />
-              </div>
-            )}
-            {/* End of product thumb slider */}
-          </div>
-        </div>
+       
         {/* End of product image / gallery */}
 
-        <div className="flex justify-start w-full md:w-1/2 p-0 md:pt-10 lg:p-14 xl:p-16">
-          <div className="flex flex-col items-start overflow-hidden">
+        <div className="w-full pt-5  px-10">
+          <div className="flex flex-col  overflow-hidden">
             <div className="w-full">
               <div className="px-3">
-                <h1
+                {/* <h1
                   className="font-bold mb-1 mt-3 text-2xl md:text-xl xl:text-2xl tracking-tight text-heading dark:text-white absolute-capitalize"
                   title={name}
                 >
@@ -411,7 +381,7 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
                       <ins className="text-2xl md:text-3xl font-semibold text-primary no-underline">
                         {basePrice ? basePrice : price}
                       </ins>
-                      {/* use del price markup when product has discount price */}
+
                       {discount && (
                         <del className="text-sm md:text-base  text-gray-400 dark:text-neutral ml-2">
                           {price}
@@ -419,28 +389,21 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
                       )}
                     </span>
                   )}
-                </div>
-
+                </div> 
+*/}
+     <h1 className="mt-5">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+     &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+   </h1>
                 {unit && isEmpty(variations) && (
                   <span className="text-sm font-normal text-body dark:text-neutral mt-2 md:mt-3 block hidden">
                     {unit}
                   </span>
                 )}
 
-                {description && (
-                  <div className="mb-4 md:mb-3 mt-0 md:mt-0 text-body dark:text-neutral text leading-7">
-                    <Truncate character={400} hideButton={true}>
-                      {description}
-                    </Truncate>
-                  </div>
-                )}
+
               </div>
 
-              {/* end of del price markup  */}
-              {!isEmpty(variations) && (
-                <hr className="mb-0 border-gray-300 border-opacity-70" />
-              )}
-
+        
               <div>
                 <ProductAttributes
                   product={slug}
@@ -477,16 +440,16 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
                     </a>
                   ) : (
                     <>
-                      <div className="mb-3 lg:mb-0 w-full lg:max-w-[400px]">
-                        <AddToCart
+                      <div className="mb-3 lg:mb-0 w-full">
+                        {/* <AddToCart
                           data={data}
                           obs={obs}
                           variant="big"
                           variation={selectedVariation}
                           disabled={
                             selectedVariation?.is_disable || !isSelected
-                          }
-                        />
+                          } 
+                        />*/}
                       </div>
                       {settings?.site?.stock == "on" ? (
                         <>
@@ -520,7 +483,7 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
                 </div>
               </div>
             </div>
-            <div className="px-2 mb-4">
+            {/* <div className="px-2 mb-4">
               {!!categories?.length && (
                 <ProductCategories
                   categories={categories}
@@ -528,16 +491,16 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
                   onClose={closeModal}
                 />
               )}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
-
       {related_products?.length! > 1 && (
-        <div className="py-5 px-3 md:pb-10 lg:p-14 xl:p-16">
+        <div className="py-8 px-10">
           <RelatedProducts products={related_products} currentProductId={id} />
         </div>
       )}
+
     </article>
   );
 };

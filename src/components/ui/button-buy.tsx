@@ -23,9 +23,11 @@ export default function ButtonBuy ({ className, title, isOpenModal }: any) {
         setModalView("RECOMMENDATIONS");
         return openModal();
       }
+      
 
-      router.push(ROUTES.CHECKOUT);
-      return closeSidebar();
+      setModalView("ADD_CARD_INFO");
+      return openModal();
+
 
     }
   }
@@ -40,7 +42,7 @@ export default function ButtonBuy ({ className, title, isOpenModal }: any) {
           onClick={() => handleCheckout()}
         >
           <span className="flex flex-1 items-center h-full px-5 text-white text-special-shadow">
-            {title ? title : 'Pagamento'}
+            {title ? title : 'Enviar Encomenda'}
           </span>
           <span className="flex items-center flex-shrink-0 h-12 bg-white text-primary rounded-full px-5">
             {totalPrice}

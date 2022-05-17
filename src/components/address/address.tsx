@@ -76,7 +76,7 @@ const Address = ({ id, addresses, heading, count, type }: Props) => {
     <SectionWithCardGroup
       count={count}
       heading={heading}
-      addActionText="Endereço"
+      addActionText="ENDEREÇO"
       items={addresses}
       onSelect={handleSelect}
       onAdd={handleAdd}

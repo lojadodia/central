@@ -7,6 +7,7 @@ import PromotionSlider from "@components/common/promotion-slider";
 import { useSettings } from "@contexts/settings.context";
 import React, { useState, useEffect } from "react";
 import { API_ENDPOINTS } from "@utils/api/endpoints";
+import Cookies from "js-cookie";
 
 type BannerProps = {
   banner: BannerType;
@@ -24,8 +25,9 @@ const Banner: React.FC<BannerProps> = ({ className }) => {
   };
   const settings = useSettings();
   const [data,setData] = useState([])
+  const url = Cookies.get("url_endpoint");
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_REST_API_ENDPOINT}${API_ENDPOINTS.BANNER}`) 
+    fetch(`${url}${API_ENDPOINTS.BANNER}`) 
     .then((resp) => resp.json())
     .then(function(data) {
       setData(data)

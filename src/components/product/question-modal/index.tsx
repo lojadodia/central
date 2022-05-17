@@ -43,7 +43,7 @@ const SimpleModal = () => {
             {!showModal &&
 
             
-        <div className="fixed inset-0 bg-black bg-opacity-85 w-full h-full" ref={backgroundRef} >
+        <div className="fixed inset-0 bg-black bg-opacity-95 w-full h-full" ref={backgroundRef} >
               <div className="min-h-full md:p-5 text-center relative">
         <span className="responsive-center-modal inline-block h-screen align-middle" aria-hidden="true">&nbsp;</span>
             <div className="inline-block min-w-content max-w-full text-left align-middle transition-all md:rounded-xl relative" >

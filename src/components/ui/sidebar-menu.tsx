@@ -52,82 +52,36 @@ function SidebarMenuItem({ className, item, depth = 0 }: any) {
   let expandIcon;
   if (Array.isArray(items) && items.length) {
     expandIcon = !isOpen ? (
-      <ExpandLessIcon className="w-3 h-3" />
+      <ExpandLessIcon className="" />
     ) : (
-      <ExpandMoreIcon className="w-3 h-3" />
+      <ExpandMoreIcon className="" />
     );
   }
 
   return (
     <>
-      <motion.li
-        initial={false}
-        //animate={{ backgroundColor: "#ffffff" }}
-        onClick={closeSidebar}
-        className="py-1 rounded-md dark:bg-black"
-      >
-        <button
+     
+    <div className="inline-block" style={{padding:"10px 4px"}}>
+          <a href={`#${slug}`} 
           className={cn(
-            "flex dark:bg-black items-center w-full py-2 text-left outline-none text-gray-600 dark:text-neutral font-semibold  focus:outline-none focus:ring-0 focus:text-primary ",
-            isOpen ? "text-primary" : "text-gray-600",
-            className ? className : "text-md"
+            "px-4 py-2 text-sm  first-word border-gray-100 bg-white rounded-full text-heading  dark:border-neutral-300 uppercase ",
+            isOpen ? "dark:text-white    dark:bg-primary" : "dark:text-white    dark:bg-primary",
+            className ? className : "text-sm"
           )}
-        >
-          {icon && (
-            <span className="flex w-5  mr-4 items-center justify-center">
-              {getIcon({
-                iconList: CategoryIcons,
-                iconName: icon,
-                className: "max-h-full max-w-full",
-              })}
-            </span>
-          )}
-          <a href={`#${slug}`} className="uppercase">{name}</a>
-          {Array.isArray(items) && !!items.length && <span className="ml-auto" onClick={() => setOpen(!isOpen)} >{expandIcon}</span>}
+          >{name?.replace(/ .*/,'')}</a>
+          </div>
 
-        </button>
-      </motion.li>
-      <AnimatePresence initial={false}>
-        {Array.isArray(items) && isOpen ? (
-          <li>
-            <motion.ul
-              key="content"
-              initial="collapsed"
-              animate="open"
-              exit="collapsed"
-              variants={{
-                open: { opacity: 1, height: "auto" },
-                collapsed: { opacity: 0, height: 0 },
-              }}
-              transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
-              className="ml-4 text-xs"
-            >
-              {items?.map((currentItem) => {
-                const childDepth = depth + 1;
-                return (
-                  <SidebarMenuItem
-                    key={`${currentItem.name}${currentItem.slug}`}
-                    item={currentItem}
-                    depth={childDepth}
-                    className={cn("text-sm text-gray-500 ml-5")}
-                  />
-                );
-              })}
-            </motion.ul>
-          </li>
-        ) : null}
-      </AnimatePresence>
     </>
   );
 }
 
 function SidebarMenu({ items, className }: any) {
   return (
-    <ul className={cn("text-xs", className)}>
+    <>
       {items?.map((item: any) => (
         <SidebarMenuItem key={`${item.name}${item.slug}`} item={item} />
       ))}
-    </ul>
+    </>
   );
 }
 

@@ -8,10 +8,10 @@ const Logo: React.FC<React.AnchorHTMLAttributes<{}>> = ({
   className,
   ...props
 }) => {
-  const { logo, siteTitle } = useSettings();
+
   return (
     <Link
-      href={siteSettings.logo.href}
+      href={"/central"}
       className={cn("inline-flex", className)}
       {...props}
     >
@@ -23,8 +23,8 @@ const Logo: React.FC<React.AnchorHTMLAttributes<{}>> = ({
         }}
       >
         <Image
-          src={logo?.original ?? siteSettings.logo.url}
-          alt={siteTitle ?? siteSettings.logo.alt}
+          src={siteSettings.logo.url}
+          alt={siteSettings.logo.alt}
           layout="fill"
           objectFit="contain"
           loading="eager"

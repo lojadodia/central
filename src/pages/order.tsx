@@ -40,18 +40,7 @@ const OrderPage = () => {
     );
   }
   return (
-    <div className="py-8 px-4 lg:py-10 lg:px-8 xl:py-14 xl:px-16 2xl:px-20">
-      <div className="flex flex-col lg:flex-row items-center lg:items-start m-auto lg:space-x-8 w-full max-w-5xl">
-        <div className="lg:max-w-2xl w-full space-y-6 order-2 lg:order-1">
-          <div className="shadow-700 bg-white dark:bg-neutral-800 border dark:border-neutral-700 rounded-lg p-5 md:p-8">
-            <PaymentForm />
-          </div>
-        </div>
-        <div className="w-full lg:w-96 order-1 lg:order-2 mb-10 sm:mb-12 lg:mb-0">
-          <OrderInformation />
-        </div>
-      </div>
-    </div>
+    <PaymentForm />
   );
 };
 

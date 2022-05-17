@@ -3,11 +3,13 @@ import styles from "./page-loader.module.css";
 import { useSettingsQuery } from "@data/settings/use-settings.query";
 import Head from 'next/head'
 import { ThemeProvider } from "next-themes";
-import { useSettings } from "@contexts/settings.context";
+
+import Auth from "@components/auth/auth";
 
 const PageLoader = () => {
+  
   const { isLoading: loading } = useSettingsQuery();
-  const settings = useSettings();
+  
   return (
   <>
      <Head>
@@ -17,7 +19,8 @@ const PageLoader = () => {
       </Head>
       {!!loading ? 
 
-    <ThemeProvider attribute="class" forcedTheme={settings?.env?.THEME ? settings?.env?.THEME : "light"}>
+    <ThemeProvider attribute="class" forcedTheme="dark">
+      <Auth/>
     <div
       className={cn(
         "w-full h-screen flex fixed top-0 left-0 right-0 bottom-0 flex-col z-50 bg-white dark:bg-black items-center justify-center"

@@ -9,34 +9,31 @@ import { fadeInOut } from "@utils/motion/fade-in-out";
 import { useCart } from "@contexts/quick-cart/cart.context";
 import { formatString } from "@utils/format-string";
 import ButtonBuy from "@components/ui/button-buy";
+import Scrollbar from "@components/ui/scrollbar";
 
 const CartSidebarView = () => {
   const { items, totalUniqueItems } = useCart();
   const { closeSidebar } = useUI();
 
   return (
-    <section className="flex flex-col h-full relative dark:bg-neutral-800 dark:bg-black">
-      <header className="fixed max-w-md w-full top-0 z-10 bg-white dark:bg-black py-4 px-6 flex items-center justify-between border-b border-gray-200 dark:border-neutral-700 border-opacity-75">
-        <div className="flex text-primary font-semibold">
-          <CartCheckBagIcon className="flex-shrink-0" width={24} height={22} />
-          <span className="flex ml-2">
-            {/* {formatString(totalUniqueItems, "Item")} */} CARRINHO
-          </span>
-        </div>
-        <button
-          onClick={() => closeSidebar()}
-          className="w-10 h-10 ml-3 -mr-2 flex items-center justify-center rounded-full text-gray-400 bg-gray-100 dark:text-white dark:bg-neutral-100 transition-all duration-200 focus:outline-none hover:bg-primary focus:bg-primary hover:text-white focus:text-white"
-        >
-          <span className="sr-only">close</span>
-          <CloseIcon className="w-10 h-10" />
-        </button>
-      </header>
+    <>
+    <section className="flex flex-col h-full relative dark:bg-neutral-900 border-l dark:border-neutral-700" >
+    <div >
+    <div className="" style={{width:"inherit"}}>
+   
       {/* End of cart header */}
 
       <AnimateSharedLayout>
-        <motion.div layout className="flex-grow pt-16 dark:bg-black">
+      
+        <motion.div layout className="flex  dark:bg-neutral-900">
+       
+        <Scrollbar
+                className="w-full"
+                style={{ height: items.length > 0 ? "calc(100vh)" : "calc(100vh)",paddingTop:"78px",marginBottom:items.length > 0 ? "-197px" : "0px" }}>
+               
           {items.length > 0 ? (
             items?.map((item) => <CartItem item={item} key={item.id} />)
+          
           ) : (
             <motion.div
               layout
@@ -44,24 +41,33 @@ const CartSidebarView = () => {
               animate="to"
               exit="from"
               variants={fadeInOut(0.25)}
-              className="h-full flex flex-col items-center justify-center"
+              className=" w-full h-full flex flex-col items-center justify-center"
             >
-              <EmptyCartIcon width={500} height={176}  />
-              <h4 className="mt-6 text-gray-500 font-semibold dark:text-gray">
-              Nenhum produto encontrado
+              {/* <EmptyCartIcon width={500} height={176}  /> */}
+              <h4 className=" text-gray-500 font-semibold dark:text-gray">
+              Nenhum item selecionado
               </h4>
             </motion.div>
           )}
+            <div style={{height: items.length > 0 ? "97px" : "0px"}}></div>
+          </Scrollbar>
+         
         </motion.div>
+       
+        
       </AnimateSharedLayout>
       {/* End of cart items */}
 
-      <footer className="sticky left-0 bottom-0 w-full py-5 px-6 z-10 bg-white dark:bg-black">
-        <ButtonBuy />
-      </footer>
+      </div>
+      </div>
       {/* End of footer */}
     </section>
-  
+    {items.length > 0 && (
+<footer className="sticky left-0 bottom-0  w-full py-5 px-6 z-10 bg-white  dark:bg-neutral-900 border-t dark:border-neutral-700">
+  <ButtonBuy />
+</footer>
+)}
+</>
   );
 };
 

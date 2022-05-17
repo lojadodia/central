@@ -25,7 +25,7 @@ export default function Modal({ open, onClose, lock = false, children }: any) {
         onClose={onClose}
       >
         <div
-        className="min-h-full md:p-5 text-center relative">
+        className="min-h-full text-center relative">
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -59,8 +59,9 @@ export default function Modal({ open, onClose, lock = false, children }: any) {
                 onClick={close}
                 aria-label="Close panel"
                 ref={cancelButtonRef}
-                className="inline-block bg-white bg-opacity-50 dark:bg-black dark:bg-opacity-50 outline-none focus:outline-none p-2 rounded-full absolute top-2 right-2 z-[60] x-close-icon"
-              >
+                className="inline-block mr-4 bg-white fixed bg-opacity-50 dark:bg-black dark:bg-opacity-50 outline-none focus:outline-none p-4 mt-2 rounded-full  top-8 right-2 z-[60] x-close-icon"
+                style={{top:"20px"}}
+            >
                 <CloseIcon className="w-8 h-8" />
               </button>)
               }

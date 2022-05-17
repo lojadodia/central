@@ -12,6 +12,7 @@ export default function SignOut() {
   useEffect(() => {
     mutate();
     Cookies.remove("auth_token");
+    Cookies.remove("url_endpoint");
     Cookies.remove("auth_permissions");
     //router.push("/");
     setOrderType(null);

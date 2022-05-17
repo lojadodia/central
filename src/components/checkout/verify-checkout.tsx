@@ -17,7 +17,7 @@ import { toast } from 'react-toastify'
 const VerifyCheckout = () => {
   const router = useRouter();
   const [errorMessage, setError] = useState("");
-  const { delivery_time, billing_address, setCheckoutData, order_type, checkoutData } = useCheckout();
+  const { delivery_time, client, billing_address, setCheckoutData, order_type, checkoutData } = useCheckout();
   const { items, total, isEmpty } = useCart();
   const { openModal, setModalView } = useUI();
   const settings = useSettings();
@@ -41,7 +41,12 @@ const VerifyCheckout = () => {
   } = useVerifyCheckoutMutation();
   async function handleVerifyCheckout() {
     if (loggedIn()) {
-      if (settings?.minAmount <= total) {
+      // if (settings?.minAmount <= total) {
+
+        if (!client) {
+          toast.error("Selecione o Cliente");
+          return false;
+        }
 
         if (order_type == "takeaway") {
 
@@ -62,7 +67,7 @@ const VerifyCheckout = () => {
               {
                 onSuccess: (data) => {
                   setCheckoutData(data);
-                  router.push("/order");
+                  router.push("/checkout");
 
                 },
                 onError: (error) => {
@@ -71,7 +76,7 @@ const VerifyCheckout = () => {
             );
           } else {
             if (settings?.scheduleType != "store") {
-              setError("Selecione a Data e Hora");
+              toast.error("Selecione a Data e Hora");
             }
 
           }
@@ -99,7 +104,8 @@ const VerifyCheckout = () => {
                     window.location.hash = "#"
                     window.location.hash = "#target-address"
                   } else {
-                    router.push("/order");
+
+                    router.push("/checkout");
                   }
 
                 },
@@ -129,9 +135,9 @@ const VerifyCheckout = () => {
 
 
 
-      } else {
-        setError("Valor inferior ao valor mínimo de: " + minAmount + ".");
-      }
+      // } else {
+      //   toast.error("Valor inferior ao valor mínimo de: " + minAmount + ".");
+      // }
 
     } else {
       setModalView("LOGIN_VIEW");
@@ -141,7 +147,7 @@ const VerifyCheckout = () => {
 
   return (
     <div className="w-full">
-      <div className="flex flex-col items-center space-x-4 mb-4">
+      {/* <div className="flex flex-col items-center space-x-4 mb-4">
         <span className="text-base font-bold text-heading dark:text-white">Seu Pedido</span>
       </div>
       <div className="flex flex-col py-3 border-b dark:border-neutral-100 border-rgb">
@@ -169,16 +175,16 @@ const VerifyCheckout = () => {
           <p className="text-sm text-heading dark:text-gray">Entrega Estimada</p>
           <span className="text-sm text-heading dark:text-gray">Cálculo no Checkout</span>
         </div>
-      </div>
+      </div> */}
 
       {(settings?.order?.type?.takeaway == 'true' || settings?.order?.type?.delivery == 'true') && (
       <Button
         loading={loading}
-        className="w-full mt-5 add-cart-button h-16 text-lg text-special-shadow"
+        className="w-full  rounded-full h-16 text-lg text-special-shadow"
         onClick={handleVerifyCheckout}
-        disabled={isEmpty}
+        //disabled={isEmpty}
       >
-        Fazer Pagamento Seguro →
+        Escolher Produtos →
       </Button>
       )}
       {errorMessage && (

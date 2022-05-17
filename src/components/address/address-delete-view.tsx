@@ -6,12 +6,16 @@ import { useCheckout } from "@contexts/checkout.context";
 const AddressDeleteView = () => {
   const { closeModal, modalData } = useUI();
   const { mutate: deleteAddressById, isLoading } = useDeleteAddressMutation();
-  const { updateBillingAddress, updateShippingAddress } = useCheckout();
+  const { updateBillingAddress, updateShippingAddress, updateClient, client } = useCheckout();
 
   function handleDelete() {
     deleteAddressById({ id: modalData.addressId });
-    updateBillingAddress(null)
+    setTimeout(() => {
+      updateBillingAddress(null)
+    }, 600);
+    
     updateShippingAddress(null)
+ 
     return closeModal();
   }
   return (

@@ -5,12 +5,8 @@ import { scroller, Element } from "react-scroll";
 import { QueryClient } from "react-query";
 
 import dynamic from "next/dynamic";
-import Banner from "@components/common/banner";
 import HomeLayout from "@components/layout/home-layout";
-import PromotionSlider from "@components/common/promotion-slider";
 import ProductFeed from "@components/product/feed";
-import CategoryDropdownSidebar from "@components/category/category-dropdown-sidebar";
-import FilterBar from "@components/common/filter-bar";
 import { useWindowSize } from "@utils/use-window-size";
 import { sitePages, PageName } from "@settings/site-pages.settings";
 import { getKeyValue } from "@utils/get-key-value";
@@ -19,14 +15,17 @@ import { fetchCategories } from "@data/category/use-categories.query";
 import { fetchTypes } from "@data/type/use-types.query";
 import { useUI } from "@contexts/ui.context";
 import React, { useEffect } from "react";
-
-
+import Scrollbar from "@components/ui/scrollbar";
+import BakeryCategory from "@components/category/bakery-category";
 
 const CartCounterButton = dynamic(
   () => import("@components/cart/cart-counter-button"),
   { ssr: false }
 );
 
+const CartSidebarView = dynamic(
+	() => import('@components/cart/cart-sidebar-view')
+);
 
 export default function HomePage() {
 
@@ -77,19 +76,37 @@ export default function HomePage() {
   return (
     
     <>
-      <Banner banner={getPageData?.banner} className="" />
-      {/* <PromotionSlider /> */}
-      <FilterBar />
-      <Element
+     <Element
         name="grid"
-        className="flex flex-1  border-solid border-gray-200 border-opacity-70"
+        className="flex flex-1 border-t border-r border-solid border-theme dark:border-neutral-700 dark:bg-black border-opacity-70"
       >
-        <CategoryDropdownSidebar />
+       
         <main className="flex-1">
-          <ProductFeed />
+        <div className="grid grid-cols-3 gap-0">
+          
+              <div className="col-span-2">
+                <div className="w-full dark:bg-neutral-900 py-3 px-5 border-b dark:border-neutral-700" style={{marginTop:"78px"}}>
+                   <BakeryCategory /> 
+                </div> 
+             
+              <Scrollbar
+                className="w-full"
+                style={{ height: "calc(100vh - 147px)",marginBottom:"-97px" }}>
+                
+              <ProductFeed />
+            </Scrollbar>
+         
+          </div>
+          <div className="relative">
+
+              <CartSidebarView />
+
+            </div>
+          </div>
+
         </main>
       </Element>
-      {width > 1023 && <CartCounterButton />}
+     {width > 1023 && <CartCounterButton />} 
     </>
   );
 }

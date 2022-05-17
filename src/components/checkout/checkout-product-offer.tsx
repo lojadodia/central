@@ -50,7 +50,7 @@ const ProductOffer = () => {
     <div className="w-32 sm:w-32 mx-auto h-32 sm:h-32   overflow-hidden mx-auto flex-shrink-0 relative">
 
     <Image
-          src={settings?.env?.THEME == "dark" ? (modalData?.item?.image ?? "/dark/product-placeholder.svg") : (image?.original ?? siteSettings?.product?.placeholderImage)}
+          src={(modalData?.item?.image ?? "/dark/product-placeholder.svg")}
           alt={modalData.item?.name}
           layout="fill"
           objectFit="contain"

@@ -7,8 +7,8 @@ export const siteSettings = {
   name: "",
   description: "",
   logo: {
-    url: "/product-placeholder.svg",
-    alt: "PickBazar",
+    url: "https://lojadodia.s3.eu-central-1.amazonaws.com/lojadodia/0121/1019/logo-lojadodia-TELE.png",
+    alt: "LOJA DO DIA TELE",
     href: "/",
     width: 220,
     height: 40,
@@ -61,31 +61,13 @@ export const siteSettings = {
     { href: ROUTES.CONTACT, label: "CONTATOS" },
   ],
   authorizedLinks: [
-    { href: ROUTES.PROFILE, label: "Perfil" },
-    { href: ROUTES.CHECKOUT, label: "Checkout" },
-    { href: ROUTES.ORDERS, label: "Meus Pedidos" },
-    { href: ROUTES.LOGOUT, label: "Sair" },
+    { href: ROUTES.LOGOUT, label: "SAIR" },
   ],
   dashboardSidebarMenu: [
-    {
-      href: ROUTES.PROFILE,
-      label: "Perfil",
-    },
-    {
-      href: ROUTES.CHANGE_PASSWORD,
-      label: "Mudar Password",
-    },
-    {
-      href: ROUTES.ORDERS,
-      label: "Meus Pedidos",
-    },
-    {
-      href: ROUTES.HELP,
-      label: "Precisa de Ajuda?",
-    },
+
     {
       href: ROUTES.LOGOUT,
-      label: "Sair",
+      label: "SAIR",
     },
   ],
   deliverySchedule: [

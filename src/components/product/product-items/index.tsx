@@ -9,12 +9,12 @@ type PropsData = {
 
 };
 
-export function Produts({ products, name, slug }: PropsData) {
+export function Produts({ products, name, slug}: PropsData) {
   
   return(
-  <div className="relative">
-    <div className="absolute scroll-behavior" id={slug}></div>
-    <h1 className="mb-4 mt-5 text-2xl dark:text-white uppercase text-heading font-bold absolute-capitalize">
+  <div className={`relative `}>
+    <div className="absolute scroll-behavior" style={{marginTop:"-20px"}} id={slug}></div>
+    <h1 className="mb-4 mt-5 text-xl dark:text-white uppercase text-heading font-bold absolute-capitalize">
       {name}
     </h1>
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-2">

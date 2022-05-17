@@ -34,49 +34,8 @@ import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
 import HttpApi from "i18next-http-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
-
-
-function FacebookPixel() {
-  const settings: any = useSettings();
-  const [isLinkElementLoaded, setLinkElementLoaded] = useState(false)
-
-
-
-
-
-  useEffect(() => {
-    const FACEBOOKPIXELID = settings?.env?.FACEBOOK_PIXEL;
-    FACEBOOKPIXELID &&
-      import("react-facebook-pixel")
-        .then((x) => x.default)
-        .then((ReactPixel) => {
-          ReactPixel.init(FACEBOOKPIXELID);
-          ReactPixel.pageView();
-
-          Router.events.on("routeChangeComplete", () => {
-            ReactPixel.pageView();
-          });
-        });
-    settings?.env?.GOOGLE_TAG &&
-      TagManager.initialize({
-        gtmId: settings?.env?.GOOGLE_TAG,
-      });
-
-
-    const linkElement = document.createElement("link");
-    linkElement.setAttribute("rel", "stylesheet");
-    linkElement.setAttribute("type", "text/css");
-    linkElement.setAttribute(
-      "href",
-      `${process.env.NEXT_PUBLIC_REST_API_ENDPOINT}`+"custom/style.css"
-    );
-    document.head.appendChild(linkElement);
-    setLinkElementLoaded(true)
-
-  }, [settings?.env]);
-
-  return null;
-}
+import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 
 const Noop: React.FC = ({ children }) => <>{children}</>;
 
@@ -93,40 +52,12 @@ export default function CustomApp({ Component, pageProps }: AppProps) {
   if (!queryClientRef.current) {
     queryClientRef.current = new QueryClient();
   }
+  
+ 
+
 
   useEffect(() => {
     // alterar o tema do site.
-    fetchSettings().then((res: any) => res.settings.options).then((data: {color: any}) => {
-      const color = Color(data?.site?.color).darken(0.5);
-      const bg = Color(data?.site?.color).lightness(96)
-      const textnormal = Color(data?.site?.color).lightness(20)
-      const textdark = Color(data?.site?.color).lightness(15)
-      document.documentElement.style.setProperty('--text-normal', textnormal);
-      document.documentElement.style.setProperty('--text-dark', textdark);
-      document.documentElement.style.setProperty('--gossamer-600', color);
-      document.documentElement.style.setProperty('--gossamer-500', data?.site?.color);
-
-      if(data?.env?.THEME != "dark"){
-        if(data?.site?.bg_color){
-          document.documentElement.style.setProperty('--bg-gray-100', data?.site?.bg_color);
-          document.documentElement.style.setProperty('--border-theme', Color(data?.site?.bg_color).darken(0.1));
-        }else{
-          document.documentElement.style.setProperty('--bg-gray-100', bg);
-        }
-      }else{
-        document.documentElement.style.setProperty('--bg-gray-100', "#000");
-        document.documentElement.style.setProperty('--border-theme', "#262626");
-      }
-
-      var link = document.querySelector("link[rel~='icon']");
-      if (!link) {
-        link = document.createElement("link");
-        link.rel = "icon";
-        document.getElementsByTagName("head")[0].appendChild(link);
-      }
-        link.href = data?.seo?.ogImage?.original;
-      });
-
     i18next
       .use(HttpApi)
       .use(LanguageDetector)
@@ -145,6 +76,28 @@ export default function CustomApp({ Component, pageProps }: AppProps) {
           loadPath: "/locales/{{lng}}/translation.json",
         },
       });
+
+
+  setTimeout(() => {
+    console.log(Router?.query?.token)
+      if(Router?.query?.token){
+        const hash = new Buffer(Router?.query?.token, 'base64')
+        const base64 = hash.toString();
+        const get = base64.split("\\");
+    
+        if (typeof get[0] !== 'undefined' && typeof get[1] !== 'undefined') {
+          console.log(get[0])
+          Cookies.set("auth_token", get[0]);
+          Cookies.set("auth_permissions", {"super_admin":"SUPER_ADMIN"});
+          Cookies.set("url_endpoint", get[1]);
+    
+
+          window.location.href="/central";
+        }
+      }
+      
+  }, 1000);
+
   }, []);
 
 
@@ -159,12 +112,10 @@ export default function CustomApp({ Component, pageProps }: AppProps) {
                 <CheckoutProvider>
                   <SearchProvider>
                     <Layout>
-                   
                       <Head> 
-                     
                       </Head>
                       <Seo />
-                      <FacebookPixel />
+
                       <Component {...pageProps} />
                     </Layout>
                     <ToastContainer autoClose={4000} />

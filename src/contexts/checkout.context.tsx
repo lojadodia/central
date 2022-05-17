@@ -64,6 +64,10 @@ type Action =
       type: "UPDATE_OBS";
       payload: any;
     }
+  |{
+      type: "UPDATE_CLIENT";
+      payload: any;
+    }
   | {
       type: "SET_CHECKOUT_DATA";
       payload: any;
@@ -125,6 +129,12 @@ function checkoutReducer(state: State, action: Action) {
         obs: action.payload,
       };
     }
+    case "UPDATE_CLIENT": {
+      return {
+        ...state,
+        client: action.payload,
+      };
+    }
     case "CLEAR_CHECKOUT": {
       return defaultState;
     }
@@ -181,6 +191,10 @@ export const CheckoutProvider: FC = (props) => {
     dispatch({ type: "UPDATE_DELIVERY_SCHEDULE", payload });
   const updateObs = (payload: any) =>
     dispatch({ type: "UPDATE_OBS", payload });
+
+  const updateClient = (payload: any) =>
+    dispatch({ type: "UPDATE_CLIENT", payload });
+
   const setOrderType = (payload: any) => {
     
     if (!isEmpty) {
@@ -231,6 +245,7 @@ export const CheckoutProvider: FC = (props) => {
       updateDeliveryTime,
       updateDeliverySchedule,
       updateObs,
+      updateClient,
       setOrderType,
       setCheckoutData,
       applyCoupon,

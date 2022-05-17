@@ -9,15 +9,17 @@ import { useRouter } from "next/router";
 import { ROUTES } from "@utils/routes";
 import { useUI } from "@contexts/ui.context";
 import { useSettings } from "@contexts/settings.context";
+import Cookies from "js-cookie";
 
 const RecommendationsModal = () => {
   const settings = useSettings();
   const router = useRouter();
   const [data, setData] = useState();
-  const { closeModal } = useUI();
+  const { closeModal, setModalView, openModal } = useUI();
 
+  const url = Cookies.get("url_endpoint");
   useEffect(() => {
-    axios.get(process.env.NEXT_PUBLIC_REST_API_ENDPOINT+API_ENDPOINTS.RECOMMENDATIONS)
+    axios.get(url+API_ENDPOINTS.RECOMMENDATIONS)
     .then(function (response) {
       setData(response?.data)
     })
@@ -26,7 +28,9 @@ const RecommendationsModal = () => {
 
   function handleCheckout() {
       closeModal();
-      router.push(ROUTES.CHECKOUT);
+      
+      setModalView("ADD_CARD_INFO");
+      return openModal()
   }
 
 
@@ -59,7 +63,7 @@ const RecommendationsModal = () => {
      </div>
      <div className="w-full pt-5 text-center">
      <div className="lg:hidden block py-10 my-5 h-10"></div>
-        <Button className="add-cart-button py-4 px-5 h-14 w-full flex items-center text-white justify-center text-lg lg:text-base font-light md:rounded bg-primary hover:bg-primary-2 transition-colors duration-300 focus:outline-none focus:bg-primary-2 text-special-shadow" size="big" onClick={handleCheckout}>
+        <Button className="add-cart-button py-8 font-semibold px-5 h-14 w-full flex items-center text-white justify-center text-xl   md:rounded bg-primary hover:bg-primary-2 transition-colors duration-300 focus:outline-none focus:bg-primary-2 text-special-shadow" size="big" onClick={handleCheckout}>
             Continuar para o Pagamento  →
         </Button>
         </div>

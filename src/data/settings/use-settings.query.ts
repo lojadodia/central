@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 import { Category, SettingsType } from "@ts-types/custom.types";
 import axios from "axios";
 import { settings } from "cluster";
+import Cookies from "js-cookie";
 
 const SettingsService = new CoreApi(API_ENDPOINTS.SETTINGS);
 
@@ -22,9 +23,10 @@ export const useSettingsQuery = () => {
 };
 
 export const listCategory = async()=>{
+  const url = Cookies.get("url_endpoint");
   return new Promise ((resolve, rejeita )  =>  {
-    console.log(process.env.NEXT_PUBLIC_REST_API_ENDPOINT, API_ENDPOINTS.PRODUCTS)
-    axios.get(  `${process.env.NEXT_PUBLIC_REST_API_ENDPOINT}${API_ENDPOINTS.PRODUCTS}?search=type.slug:home`).then((resp)=>{
+    console.log(url, API_ENDPOINTS.PRODUCTS)
+    axios.get(  `${url}${API_ENDPOINTS.PRODUCTS}?search=type.slug:home`).then((resp)=>{
       const data:Category[] = resp.data?.data;
       resolve(data);
     }).catch((error)=>{

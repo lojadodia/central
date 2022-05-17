@@ -30,7 +30,7 @@ export default function MobileCategoryMenu() {
       <div className="h-full max-h-full overflow-hidden">
         <Scrollbar className="w-full h-full max-h-screen">
           {data?.categories?.data?.length ? (
-            <SidebarMenu items={data?.categories?.data} className="py-3 px-6" />
+            <SidebarMenu items={data?.categories?.data} className="py-3 px-0" />
           ) : (
             <div className="min-h-full pt-6 pb-8 px-4 lg:p-8">
               <NotFound text="Nenhuma categoria encontrada :(" className="h-96" />

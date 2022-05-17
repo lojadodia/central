@@ -28,7 +28,7 @@ const SearchBox: React.FC<Props> = ({
   ...rest
 }) => {
   return (
-    <form onSubmit={onSubmit} className="w-full">
+    <form onSubmit={onSubmit} className="w-full hidden">
       <div
         className={cn(
           "rounded md:rounded-lg flex relative",
@@ -45,7 +45,7 @@ const SearchBox: React.FC<Props> = ({
           value={value}
           autoComplete="off"
           className={cn(
-            "w-full h-full flex item-center appearance-none transition duration-300 ease-in-out text-heading placeholder-gray-500 overflow-hidden rounded-lg dark:bg-neutral-800 dark:border dark:placeholder-neutral-400 dark:border-neutral-500 border-r-0 dark:text-white focus:outline-none focus:ring-0",
+            "w-full h-full flex item-center appearance-none transition duration-300 ease-in-out text-heading placeholder-gray-500 overflow-hidden rounded-lg dark:bg-black dark:border dark:placeholder-neutral-400 dark:border-neutral-500 border-r-0 dark:text-white focus:outline-none focus:ring-0",
             classes[variant]
           )}
           {...rest}

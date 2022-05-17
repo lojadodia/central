@@ -19,7 +19,7 @@ const RelatedProducts = ({
       </h2>
       <div style={{paddingBottom:'120px'}}
         className={cn(
-          "grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2",
+          "grid grid-cols-2 md:grid-cols-4 xl:grid-cols-4 gap-2",
           gridClassName
         )}
       >

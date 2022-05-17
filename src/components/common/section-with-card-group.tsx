@@ -49,30 +49,21 @@ const SectionWithCardGroup = ({
  
   return (
     <>
-      <div className="flex items-center justify-between mb-5 md:mb-8">
-        <div className="flex items-center space-x-3 md:space-x-4">
-          {count && (
-            <span className="rounded-full w-8 h-8 bg-primary flex items-center justify-center text-base lg:text-xl text-white">
-              {count}
-            </span>
-          )}
-          <p className="text-lg lg:text-xl uppercase font-semibold text-heading dark:text-white">
-            {heading}
-          </p>
-        </div>
+      <div className="flex items-center justify-between mb-5">
+
         {onAdd && (
           <button
-            className="flex items-center text-sm font-semibold text-primary transition-colors duration-200 focus:outline-none "
-            onClick={onAdd}
+            className=" items-center  w-full text-right text-md font-semibold text-yellow transition-colors duration-200 focus:outline-none "
+            onClick={onAdd} style={{color:"#fbbe24"}}
           >
-            <PlusIcon className="w-4 h-4 stroke-2 mr-0.5" /> Adicionar {" "}
+           + ADICIONAR {" "}
             <span className="hidden sm:inline-block sm:ml-1">
               {addActionText}
             </span>
           </button>
         )}
       </div>
-      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-2 grid-cols-1 sm:grid-cols-1 lg:grid-cols-1">
         {items?.length ? (
           items?.map((item, idx) => (
             <div
@@ -80,15 +71,15 @@ const SectionWithCardGroup = ({
               className={cn(
                 "relative p-4 rounded border cursor-pointer group hover:border-primary",
                 {
-                  "border-primary shadow-sm": selected === idx,
-                  "bg-gray-100 dark:bg-neutral-800 border-transparent": selected !== idx,
+                  "border-primary dark:bg-primary shadow-sm": selected === idx,
+                  "dark:bg-transparent border border-primary": selected !== idx,
                 }
               )}
               onClick={() => select(item, idx)}
             >
-              <p className="text-sm text-heading font-semibold dark:text-neutral mb-3 capitalize">
+              {/* <p className="text-sm text-heading font-semibold dark:text-neutral mb-3 capitalize">
                 {item.title}
-              </p>
+              </p> */}
               <p className="text-sm text-gray-700 dark:text-neutral">
                 {item.description ? item.description : formatAddress(item.address)}                  
               </p>
@@ -117,7 +108,7 @@ const SectionWithCardGroup = ({
         ) : (
 
        
-          <div onClick={onAdd} className="relative px-5 py-6 text-body dark:text-gray text-center bg-gray-100 dark:border-neutral-700 rounded border border-gray-200">
+          <div onClick={onAdd} className="relative px-5 py-3 dark:bg-neutral-900 text-body dark:text-gray text-center  dark:border-neutral-700 rounded border border-gray-200">
               Nenhum endereço encontrado
           </div>
         )}

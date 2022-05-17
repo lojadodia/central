@@ -54,7 +54,7 @@ const CartItem = ({ item }: CartItemProps) => {
       animate="to"
       exit="from"
       variants={fadeInOut(0.25)}
-      className="flex items-center py-4 px-4 sm:px-6 text-sm border-b dark:border-neutral-700 border-solid border-gray-200 border-opacity-75"
+      className="flex items-center py-3 px-4 sm:px-4 text-sm border-b dark:border-neutral-700 border-solid border-gray-200 border-opacity-75"
     >
       <div className="flex-shrink-0 ">
         <Counter
@@ -65,7 +65,7 @@ const CartItem = ({ item }: CartItemProps) => {
           disabled={outOfStock}
         />
       </div>
-      <div className="w-10 sm:w-16 h-10 sm:h-16 flex items-center justify-center overflow-hidden bg-gray-100 mx-4 flex-shrink-0 relative">
+      <div className="w-10 sm:w-16 h-10 sm:h-16 flex items-center justify-center overflow-hidden  mx-4 flex-shrink-0 relative">
         <Image
           src={item?.image ?? siteSettings?.product?.placeholderImage}
           alt={item.name}
@@ -75,7 +75,7 @@ const CartItem = ({ item }: CartItemProps) => {
       </div>
       <div >
         <h3 className="font-bold text-heading dark:text-white">{item.name}</h3>
-        <p className="my-2.5 font-semibold text-primary">{price}</p>
+        <p className="my-0 font-semibold text-primary">{price}</p>
         {items.length !== 0 &&
         (<>
         <p>

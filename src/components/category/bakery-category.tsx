@@ -84,55 +84,40 @@ const BakeryCategory = () => {
     },
 
     1100: {
-      slidesPerView: 6,
+      slidesPerView: 5,
     },
 
     1280: {
-      slidesPerView: 7,
+      slidesPerView: 5,
     },
   };
 
   return (
-    <div className="w-full bg-gray-100">
+    <div className="w-full px-0">
       {data?.categories?.data?.length ? (
-        <div className="pt-5 px-4 lg:p-8 lg:pb-0">
-          <div className="relative">
+
+          <div className="relative w-full px-5">
             <Swiper
               id="category-card-menu"
               navigation={{
                 nextEl: ".banner-slider-next",
                 prevEl: ".banner-slider-prev",
               }}
+              className="w-full px-5"
+              style={{height:"42px",width:"100% !important",paddingTop:"0px"}}
               breakpoints={breakpoints}
-              slidesPerView={7}
+              slidesPerView={5}
               spaceBetween={10}
             >
               {data?.categories?.data.map((category, idx) => (
-                <SwiperSlide key={idx}>
-                  <div
-                    className={cn(
-                      "text-center rounded bg-white relative overflow-hidden cursor-pointer border-2",
-                      selectedQueries === category.slug
-                        ? "border-primary"
-                        : "border-white"
-                    )}
-                    role="button"
-                    onClick={() => onCategoryClick(category?.slug)}
-                  >
-                    <div className="flex items-center justify-center h-32 w-full relative overflow-hidden mb-3">
-                      <img
-                        src={
-                          category?.image?.original! ??
-                          "/product-placeholder.svg"
-                        }
-                        alt={category?.name}
-                        className="w-auto h-auto max-w-full max-h-full"
-                      />
-                    </div>
-                    <span className="text-sm font-semibold text-heading text-center px-4 pb-4 block">
-                      {category.name}
-                    </span>
-                  </div>
+                <SwiperSlide key={idx} className="w-full ">
+                    <a href={`#${category.slug}`} 
+                      className={cn(
+                        "w-full  py-2 inline-block text-sm first-word border-gray-100 bg-white rounded-full text-heading dark:border-neutral-300 uppercase text-center ",
+                        location.hash == '#'+category.slug ? "dark:text-white dark:bg-primary" : "dark:text-white dark:bg-primary"
+                      )}>
+                        {category.name?.replace(/ .*/,'')}
+                    </a>
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -143,7 +128,7 @@ const BakeryCategory = () => {
               <ArrowNextIcon />
             </button>
           </div>
-        </div>
+
       ) : (
         <div className="min-h-full pt-6 pb-8 px-4 lg:p-8">
           <NotFound text="Nenhuma categoria encontrada :(" className="h-96" />
