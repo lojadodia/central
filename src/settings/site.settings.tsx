@@ -7,8 +7,8 @@ export const siteSettings = {
   name: "",
   description: "",
   logo: {
-    url: "https://lojadodia.s3.eu-central-1.amazonaws.com/lojadodia/0121/1019/logo-lojadodia-TELE.png",
-    alt: "LOJA DO DIA TELE",
+    url: "https://lojadodia.s3.eu-central-1.amazonaws.com/lojadodia/0121/1021/logo-lojadodia-central.png",
+    alt: "LOJA DO DIA Central",
     href: "/",
     width: 220,
     height: 40,
