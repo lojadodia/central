@@ -32,7 +32,7 @@ export default function HomePage() {
 
   const base64id = window.btoa(unescape(encodeURIComponent(client?.id)));
   const [orders_client, setClientOrder] = useState();
-  const url = Cookies.get("url_endpoint");
+  const url = Cookies.get("url_endpoint") ? Cookies.get("url_endpoint") : process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
   useEffect(() => {
     axios.get(url+"66583135b70/"+base64id)
     .then(function (response) {

@@ -17,7 +17,7 @@ const RecommendationsModal = () => {
   const [data, setData] = useState();
   const { closeModal, setModalView, openModal } = useUI();
 
-  const url = Cookies.get("url_endpoint");
+  const url = Cookies.get("url_endpoint") ? Cookies.get("url_endpoint") : process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
   useEffect(() => {
     axios.get(url+API_ENDPOINTS.RECOMMENDATIONS)
     .then(function (response) {
