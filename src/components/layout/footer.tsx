@@ -1,4 +1,3 @@
-import CookieConsent from "react-cookie-consent";
 import { useSettings } from "@contexts/settings.context";
 import { useUI } from "@contexts/ui.context";
 
@@ -54,23 +53,7 @@ const Footer = () => {
       </div>
       <div className="lg:hidden md:hidden py-8"></div>
     </div>
-      <CookieConsent
-        location="bottom"
-        buttonText="Eu aceito"
-        cookieName="myAwesomeCookieName2"
-        style={{ background: `rgba(0,0,0,.900)` }}
-        buttonStyle={{ color: '#fff',background: '#165df5', fontSize: "13px",borderRadius:'5px' }}
-        expires={150}
-      >
-        {/* (settings?.site?.color) <div className="flex-grow">
-            <div className="flex flex-col md:flex-row max-w-7xl w-full mx-auto 0 px-5 xl:px-8 2xl:px-14">
-              <div className=" flex-col py-5  w-full "> */}
-                🍪 Cookies de navegação {" "} <br />
-                <span style={{ fontSize: "10px" }}>Este website utiliza cookies que visam melhorar o desempenho e a experiência de navegação dos nossos clientes/utilizadores. Pode consultar mais informações na nossa <a href=""><u>Politica de Privacidade</u></a>. </span>
-        {/* </div> </div> </div> */}
-      </CookieConsent>
     </div>
-    
   );
 };
 
