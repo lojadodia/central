@@ -67,7 +67,7 @@ const VerifyCheckout = () => {
               {
                 onSuccess: (data) => {
                   setCheckoutData(data);
-                  router.push("/checkout");
+                  //router.push("/checkout");
 
                 },
                 onError: (error) => {
@@ -101,11 +101,10 @@ const VerifyCheckout = () => {
                   setCheckoutData(data);
                   if (data['shipping_charge'] == 98765) {
                     toast.error("Para entregas nesta morada nos contacte: "+settings?.site?.phone);
-                    window.location.hash = "#"
-                    window.location.hash = "#target-address"
                   } else {
-
-                    router.push("/checkout");
+                    setModalView("ADD_CARD_INFO");
+                    openModal()
+                    //router.push("/checkout");
                   }
 
                 },
@@ -117,12 +116,8 @@ const VerifyCheckout = () => {
             if (settings?.scheduleType != "store") {
               if (!billing_address) {
                 toast.error("Clique sobre o seu Endereço para o Selecionar");
-                window.location.hash = "#"
-                window.location.hash ="#target-address"
               } else if (!delivery_time) {
                 toast.error("Selecione a Data e Hora");
-                window.location.hash = "#"
-                window.location.hash = "#target-schedule"
               }
             } else {
               toast.error("Adicione ou selecione o seu Endereço");
@@ -184,7 +179,7 @@ const VerifyCheckout = () => {
         onClick={handleVerifyCheckout}
         //disabled={isEmpty}
       >
-        Escolher Produtos →
+       Submeter Encomenda →
       </Button>
       )}
       {errorMessage && (

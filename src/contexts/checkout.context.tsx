@@ -64,6 +64,10 @@ type Action =
       type: "UPDATE_OBS";
       payload: any;
     }
+    | {
+      type: "UPDATE_PAYMENT_METHOD";
+      payload: any;
+    }
   |{
       type: "UPDATE_CLIENT";
       payload: any;
@@ -129,6 +133,12 @@ function checkoutReducer(state: State, action: Action) {
         obs: action.payload,
       };
     }
+    case "UPDATE_PAYMENT_METHOD": {
+      return {
+        ...state,
+        payment_method: action.payload,
+      };
+    }
     case "UPDATE_CLIENT": {
       return {
         ...state,
@@ -192,6 +202,9 @@ export const CheckoutProvider: FC = (props) => {
   const updateObs = (payload: any) =>
     dispatch({ type: "UPDATE_OBS", payload });
 
+  const updatePaymentMethod = (payload: any) =>
+    dispatch({ type: "UPDATE_PAYMENT_METHOD", payload });
+
   const updateClient = (payload: any) =>
     dispatch({ type: "UPDATE_CLIENT", payload });
 
@@ -219,12 +232,10 @@ export const CheckoutProvider: FC = (props) => {
     }
     dispatch({ type: 'SET_ORDER_TYPE', payload})
     if(payload=="takeaway"){
-      window.location.hash = "#" 
-      window.location.hash = "#target-schedule"
+      
     }
     if(payload=="delivery"){
-      window.location.hash = "#" 
-      window.location.hash = "#target-address"
+
     }
   }
   const setCheckoutData = (payload: any) =>
@@ -245,6 +256,7 @@ export const CheckoutProvider: FC = (props) => {
       updateDeliveryTime,
       updateDeliverySchedule,
       updateObs,
+      updatePaymentMethod,
       updateClient,
       setOrderType,
       setCheckoutData,

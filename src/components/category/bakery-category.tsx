@@ -9,6 +9,7 @@ import { ArrowNextIcon } from "@components/icons/arrow-next";
 import { ArrowPrevIcon } from "@components/icons/arrow-prev";
 import { useCategoriesQuery } from "@data/category/use-categories.query";
 import BakeryCategoryLoader from "@components/ui/loaders/bakery-category-loader";
+import TruncateSimple from "@components/ui/truncate-simple";
 
 SwiperCore.use([Navigation]);
  // Branch Admin 
@@ -76,11 +77,11 @@ const BakeryCategory = () => {
     },
 
     620: {
-      slidesPerView: 4,
+      slidesPerView: 3,
     },
 
-    820: {
-      slidesPerView: 5,
+    700: {
+      slidesPerView: 3,
     },
 
     1100: {
@@ -90,13 +91,17 @@ const BakeryCategory = () => {
     1280: {
       slidesPerView: 5,
     },
+
+    15280: {
+      slidesPerView: 5,
+    },
   };
 
   return (
     <div className="w-full px-0">
       {data?.categories?.data?.length ? (
 
-          <div className="relative w-full px-5">
+          <div className="relative w-full px-2 lg:px-5">
             <Swiper
               id="category-card-menu"
               navigation={{
@@ -106,17 +111,20 @@ const BakeryCategory = () => {
               className="w-full px-5"
               style={{height:"42px",width:"100% !important",paddingTop:"0px"}}
               breakpoints={breakpoints}
-              slidesPerView={5}
+              slidesPerView={3}
               spaceBetween={10}
             >
               {data?.categories?.data.map((category, idx) => (
                 <SwiperSlide key={idx} className="w-full ">
                     <a href={`#${category.slug}`} 
                       className={cn(
-                        "w-full  py-2 inline-block text-sm first-word border-gray-100 bg-white rounded-full text-heading dark:border-neutral-300 uppercase text-center ",
+                        "w-full  py-2 inline-block text-md first-word border-gray-100 bg-white rounded-full text-heading dark:border-neutral-300 uppercase text-center ",
                         location.hash == '#'+category.slug ? "dark:text-white dark:bg-primary" : "dark:text-white dark:bg-primary"
                       )}>
-                        {category.name?.replace(/ .*/,'')}
+                         <TruncateSimple character={9}>
+                            {category.name}
+                        </TruncateSimple>
+                       
                     </a>
                 </SwiperSlide>
               ))}

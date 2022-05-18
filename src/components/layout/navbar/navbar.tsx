@@ -8,6 +8,7 @@ import { useUI } from "@contexts/ui.context";
 import dynamic from "next/dynamic";
 import { ROUTES } from "@utils/routes";
 import Link from "@components/ui/link";
+
 const AuthorizedMenu = dynamic(
   () => import("@components/layout/navbar/authorized-menu"),
   { ssr: false }

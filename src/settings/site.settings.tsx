@@ -10,7 +10,7 @@ export const siteSettings = {
     url: "https://lojadodia.s3.eu-central-1.amazonaws.com/lojadodia/0121/1021/logo-lojadodia-central.png",
     alt: "LOJA DO DIA Central",
     href: "/",
-    width: 220,
+    width: 270,
     height: 40,
   },
   defaultLanguage: "pt",

@@ -426,7 +426,8 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
                       label="OBSERVAÇÕES"
                       variant="outline"
                       placeholder="Obs: Ex: sem alho, mal passado..."
-                      className="w-full col-span-4 mt-3"
+                      className="w-full col-span-4 mt-3 text-2xl"
+                      dimension="big"
                     />
                   )}
                 </div>

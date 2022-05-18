@@ -23,9 +23,10 @@ import {
 import { useTranslation } from "react-i18next";
 import i18next from "i18next";
 import axios from "axios";
-import OrderInformation from "@components/order/order-information";
+import { RiBankCardFill, RiHandCoinFill} from "react-icons/ri";
 import { useUI } from "@contexts/ui.context";
-
+import OrderResume from "@components/order/order-resume";
+import TextArea from "@components/ui/text-area";
 interface FormValues {
   payment_gateway: "cod";
   contact: string;
@@ -35,6 +36,7 @@ interface FormValues {
   order: string;
   order_type: string;
   message: string;
+  obs: string;
   card: {
     number: string;
     expiry: string;
@@ -95,6 +97,9 @@ export default function PaymentForm() {
   // Tradução
   useEffect(() => {
     translate();
+    if(!payment_method){
+      updatePaymentMethod("cod");
+    }
   }, []);
 
 
@@ -114,7 +119,6 @@ export default function PaymentForm() {
   const {
     billing_address,
     shipping_address,
-    obs,
     order_type,
     delivery_time,
     delivery_schedule,
@@ -123,6 +127,8 @@ export default function PaymentForm() {
     client,
     updateClient,
     discount,
+    payment_method,
+    updatePaymentMethod,
     clearCheckoutData
   } = useCheckout();
 
@@ -165,9 +171,9 @@ export default function PaymentForm() {
       delivery_way: checkoutData?.mail,
       delivery_time: delivery_time,
       delivery_schedule: delivery_schedule,
-      obs: obs,
+      obs: values.obs,
       client: client,
-      payment_gateway: values.payment_gateway,
+      payment_gateway: payment_method,
       billing_address: {
         ...(billing_address?.address && billing_address.address),
       },
@@ -213,13 +219,6 @@ export default function PaymentForm() {
       <div className="">
         <div className="flex items-center justify-between mb-2">
           <div className="flex mb-4 items-center mt-2 space-x-3 md:space-x-4">
-          <span className="rounded-full w-8 h-8 bg-primary flex items-center justify-center text-base lg:text-xl text-white">
-            -
-            </span>
-            <p className="text-lg lg:text-2xl text-heading dark:text-white">Finalizar</p>
-            {/* <Label>Escolha uma Forma de Pagamento</Label> */}
-          </div>   <h1 className="mt-5">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</h1>
-          
           <FormattedInput
             variant="outline"
             class="dark:bg-black dark:text-white -mt-2 dark:border-neutral-700 border border-gray-300 rounded dark:bg-black dark:text-white dark:border-neutral-700 focus:border-primary px-4 flex items-center w-full appearance-none transition duration-300 ease-in-out text-heading text-lg dark:text-white focus:outline-none focus:ring-0 h-12"
@@ -229,8 +228,34 @@ export default function PaymentForm() {
             {...register("nif")}
           />
 
+            {/* <Label>Escolha uma Forma de Pagamento</Label> */}
+          </div>   <h1 className="mt-5">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</h1>
+          
+        
         </div>
-        <OrderInformation />
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 ">
+          <div onClick={()=>updatePaymentMethod("cod")} className={`px-4 py-3 text-center text-lg ${payment_method == "cod" ? 'bg-primary display-inline text-white' : ''}  rounded  border-gray-200 border dark:border-neutral-700 cursor-pointer`}>
+            <RiHandCoinFill style={{ display: "inline-block", verticalAlign: '-2px' }} /> Dinheiro
+          </div>
+          <div onClick={()=>updatePaymentMethod("stripe")}  className={`px-4 py-3 text-center text-lg ${payment_method == "stripe" ? 'bg-primary display-inline text-white' : ''}  rounded   border-gray-200 border dark:border-neutral-700 cursor-pointer`}>
+            <RiBankCardFill style={{ display: "inline-block", verticalAlign: '-2px' }} />  Multibanco
+          </div> 
+         
+        </div>
+        <div className="mt-7">
+
+        <TextArea
+          label="NOTAS:"
+          {...register("obs")}
+          variant="outline"
+          placeholder="Ex. Troco de 5,00 €"
+          className="col-span-2 capitalize"
+          style={{fontSize:"1.125rem !important"}}
+        />
+
+        
+        </div>
+        <OrderResume />
       </div>
 
    
@@ -253,10 +278,10 @@ export default function PaymentForm() {
 
           <Button
                   loading={loading}
-                 type={isDisabledSubmitButton ? "submit" : "submit"}
-
+                 type={isDisabledSubmitButton ? "button" : "submit"}
+                  size="big"
                   disabled={!subtotal || total < 0}
-                  className="w-full text-xl py-8 mt-5"
+                  className="w-full text-xl py-12 mt-5"
 
                 >
                   Confirmar Encomenda →

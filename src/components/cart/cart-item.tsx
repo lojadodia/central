@@ -56,7 +56,7 @@ const CartItem = ({ item }: CartItemProps) => {
       variants={fadeInOut(0.25)}
       className="flex items-center py-3 px-4 sm:px-4 text-sm border-b dark:border-neutral-700 border-solid border-gray-200 border-opacity-75"
     >
-      <div className="flex-shrink-0 ">
+      <div className="flex-shrink-0 mr-4 lg:mr-0">
         <Counter
           value={item.quantity}
           onDecrement={handleRemoveClick}
@@ -65,7 +65,7 @@ const CartItem = ({ item }: CartItemProps) => {
           disabled={outOfStock}
         />
       </div>
-      <div className="w-10 sm:w-16 h-10 sm:h-16 flex items-center justify-center overflow-hidden  mx-4 flex-shrink-0 relative">
+      <div className="w-10 hidden lg:block sm:w-16 h-10 sm:h-16 flex items-center justify-center overflow-hidden  mx-4 flex-shrink-0 relative">
         <Image
           src={item?.image ?? siteSettings?.product?.placeholderImage}
           alt={item.name}

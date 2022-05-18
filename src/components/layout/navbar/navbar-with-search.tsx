@@ -10,8 +10,10 @@ import ProductTypeMenu from "@components/layout/navbar/product-type-menu";
 import { addActiveScroll } from "@utils/add-active-scroll";
 import dynamic from "next/dynamic";
 import Button from "@components/ui/button";
-import { RiUser3Fill, RiTruckFill, RiShoppingBag3Fill, RiTimeLine, RiCalendar2Fill, RiMapPin2Fill, RiExternalLinkLine, RiAlertFill } from "react-icons/ri";
+import { RiUser3Fill, RiFileList2Fill, RiTruckFill, RiShoppingBag3Fill, RiTimeLine, RiCalendar2Fill, RiMapPin2Fill, RiExternalLinkLine, RiAlertFill } from "react-icons/ri";
 import { useCheckout } from "@contexts/checkout.context";
+import { useCart } from "@contexts/quick-cart/cart.context";
+import usePrice from "@utils/use-price";
 
 const AuthorizedMenu = dynamic(
   () => import("@components/layout/navbar/authorized-menu"),
@@ -28,8 +30,10 @@ const NavbarWithSearch = () => {
 
   const { innerWidth: width} = window;
 
-
-
+  const { total } = useCart();
+  const { price: totalPrice } = usePrice({
+    amount: total,
+  });
   if(width > 900){
     if(displayHeaderSearch){
       var bg = "bg-white dark:bg-black border-b dark:border-neutral-700";
@@ -56,15 +60,22 @@ const NavbarWithSearch = () => {
           <>
             <Logo className="mx-auto lg:mx-0" />
             <div className="inline-block px-4 w-full">
+            {total > 0 && (
+                <Button className="px-4 uppercase py-3 mr-2 text-center display-inline text-sm bg-primary  text-white  rounded h-12  border-gray-200 border dark:border-neutral-700 dark:bg-neutral-600 cursor-pointer" size="small" >
+                  <RiFileList2Fill style={{ display: "inline-block", verticalAlign: '-2px' }} />&nbsp; {totalPrice}
+                </Button>
+              )
+
+              }
               {client?.name && (
-                <Button className="px-4 uppercase py-3 mr-2 text-center text-sm bg-primary display-inline text-white  rounded h-12  border-gray-200 border dark:border-neutral-700 cursor-pointer" size="small" >
+                <Button className="px-4 uppercase py-3 mr-2 text-center text-sm bg-primary display-inline text-white  rounded h-12  border-gray-200 border dark:border-neutral-700 dark:bg-neutral-600  cursor-pointer" size="small" >
                   <RiUser3Fill style={{ display: "inline-block", verticalAlign: '-2px' }} />&nbsp; {client?.name?.replace(/ .*/,'')}
                 </Button>
               )
 
               }
              {order_type && (
-              <Button className="px-4 py-3 mr-2 text-center text-sm bg-primary display-inline text-white  rounded h-12  border-gray-200 border dark:border-neutral-700 cursor-pointer" size="small" >
+              <Button className="px-4 py-3 mr-2 text-center text-sm bg-primary display-inline text-white  rounded h-12  border-gray-200 border dark:border-neutral-700 cursor-pointer dark:bg-neutral-600" size="small" >
                 { order_type == "takeaway" ?
                 (<><RiShoppingBag3Fill style={{ display: "inline-block", verticalAlign: '-2px' }} />&nbsp; TAKEAWAY</>)
                 :
@@ -73,20 +84,20 @@ const NavbarWithSearch = () => {
               </Button>
             )}
              {delivery_schedule && (
-              <Button className="px-4 py-3 mr-2 text-center text-sm bg-primary display-inline text-white  rounded h-12  border-gray-200 border dark:border-neutral-700 cursor-pointer" size="small" >
+              <Button className="px-4 py-3 mr-2 text-center text-sm bg-primary  hidden lg:display-inline  text-white  rounded h-12  border-gray-200 border dark:border-neutral-700 cursor-pointer dark:bg-neutral-600" size="small" >
                 { delivery_schedule == "schedule" ? "AGENDAMENTO" : "AGORA"}
               </Button>
               )}
 
             {delivery_time && (
-              <Button className="px-4 py-3 mr-2 text-center text-sm bg-primary display-inline text-white  rounded h-12  border-gray-200 border dark:border-neutral-700 cursor-pointer" size="small" >
+              <Button className="px-4 py-3 mr-2 text-center text-sm bg-primary hidden lg:display-inline  text-white  rounded h-12  border-gray-200 border dark:border-neutral-700 cursor-pointer dark:bg-neutral-600" size="small" >
                 { delivery_time }
               </Button>
               )}
             </div>
           
          
-            <ul className="hidden lg:flex items-center flex-shrink-0 space-x-10">
+            <ul className=" lg:flex items-center flex-shrink-0 space-x-10">
               {/* 
             <li key="track-orders">
                   <Link

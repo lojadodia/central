@@ -24,6 +24,10 @@ const ForgotPassword = dynamic(
 const OrderType = dynamic(
   () => import("@components/order/order-type")
 );
+
+const CustomerSearch = dynamic(
+  () => import("@components/customer/customer-search")
+);
 const ProductOffer = dynamic(
   () => import("@components/checkout/checkout-product-offer")
 );
@@ -113,6 +117,7 @@ const ModalContainer = () => {
       {modalView === "DELETE_ADDRESS" && <AddressDeleteView />}
       {modalView === "ADD_CARD_INFO" && <PaymentForm />}
       {modalView === "ORDER_TYPE" && <OrderType />}
+      {modalView === "CUSTOMER_SEARCH" && <CustomerSearch />}
       {modalView === "PRODUCT_OFFER" && <ProductOffer />}
       {modalView === "PRODUCT_DETAILS" && (
         <ProductDetailsModalView productSlug={modalData} />
