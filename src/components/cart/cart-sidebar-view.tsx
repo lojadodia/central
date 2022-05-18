@@ -10,11 +10,22 @@ import { useCart } from "@contexts/quick-cart/cart.context";
 import { formatString } from "@utils/format-string";
 import ButtonBuy from "@components/ui/button-buy";
 import Scrollbar from "@components/ui/scrollbar";
+import OrderCard from "@components/order/order-card";
+import React, { useEffect, useState } from "react";
+import { useOrdersQuery } from "@data/order/use-orders.query";
 
 const CartSidebarView = () => {
   const { items, totalUniqueItems } = useCart();
   const { closeSidebar } = useUI();
+  const [orders, setOrders] = useState<any>({});
 
+  const { data } = useOrdersQuery();
+
+  useEffect(() => {
+    if (data?.orders?.data) {
+      setOrders(data?.orders?.data);
+    }
+  }, [data?.orders?.data]);
   return (
     <>
     <section className="flex flex-col h-full relative dark:bg-neutral-900 border-l dark:border-neutral-700" >
@@ -28,26 +39,34 @@ const CartSidebarView = () => {
         <motion.div layout className="flex  dark:bg-neutral-900">
        
         <Scrollbar
-                className="w-full"
-                style={{ height: items.length > 0 ? "calc(100vh)" : "calc(100vh)",paddingTop:"78px",marginBottom:items.length > 0 ? "-197px" : "0px" }}>
+                className="w-full lg:mt-20 mt-5"
+                style={{ height: items.length > 0 ? "calc(100vh)" : "calc(100vh)",marginBottom:items.length > 0 ? "-197px" : "0px" }}>
                
           {items.length > 0 ? (
             items?.map((item) => <CartItem item={item} key={item.id} />)
           
           ) : (
-            <motion.div
-              layout
-              initial="from"
-              animate="to"
-              exit="from"
-              variants={fadeInOut(0.25)}
-              className=" w-full h-full flex flex-col items-center justify-center"
-            >
-              {/* <EmptyCartIcon width={500} height={176}  /> */}
-              <h4 className=" text-gray-500 font-semibold dark:text-gray">
-              Nenhum item selecionado
-              </h4>
-            </motion.div>
+            <div className=" mt-5">
+
+                <div className="px-5 pb-5">
+                  {orders?.length ? (
+                    orders?.map((_order: any, index: number) => (
+                      <OrderCard
+                        key={index}
+                        order={_order}
+                      />
+                    ))
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center my-auto">
+                      <h4 className="text-sm font-semibold dark:text-neutral text-body text-center">
+                      Você ainda não pediu nada
+                      </h4>
+                    </div>
+                  )}
+                </div>
+           
+          </div>
+        
           )}
             <div style={{height: items.length > 0 ? "97px" : "0px"}}></div>
           </Scrollbar>

@@ -85,7 +85,7 @@ export default function HomePage() {
         <div className="grid grid-cols-3 gap-0">
           
               <div className="col-span-2">
-                <div className="w-full dark:bg-neutral-900 py-3 px-5 border-b dark:border-neutral-700" style={{marginTop:"78px"}}>
+                <div className="w-full dark:bg-neutral-900 py-3 px-5 border-b dark:border-neutral-700 ">
                    <BakeryCategory /> 
                 </div> 
              

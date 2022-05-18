@@ -413,26 +413,13 @@ const When = () => {
     <div className="mb-5">
 
 
-    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 ">
-
-
-        <div onClick={() => { setOrderType("takeaway") }} className={`px-4 py-3 text-center text-sm ${order_type == "takeaway" ? 'bg-primary display-inline text-white' : ''}  rounded h-12  border-gray-200 border dark:border-neutral-700 cursor-pointer`}>
-          
-          <RiShoppingBag3Fill style={{ display: "inline-block", verticalAlign: '-2px' }} /> TAKEAWAY
-         
-        </div> 
-
-        <div onClick={() => { setOrderType("delivery") }} className={`px-4 py-3 text-center text-sm ${order_type == "delivery" ? 'bg-primary display-inline text-white' : ''}  rounded h-12  border-gray-200 border dark:border-neutral-700 cursor-pointer`}>
-          
-          <RiTruckFill style={{ display: "inline-block", verticalAlign: '-2px' }} /> ENTREGA
-         
-
-        </div>
-
-
-
-
-
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 ">
+          <div onClick={() => { setOrderType("takeaway") }} className={`px-4 py-3 text-center text-sm ${order_type == "takeaway" ? 'bg-primary display-inline text-white' : ''}  rounded h-12  border-gray-200 border dark:border-neutral-700 cursor-pointer`}>
+            <RiShoppingBag3Fill style={{ display: "inline-block", verticalAlign: '-2px' }} /> TAKEAWAY
+          </div> 
+          <div onClick={() => { setOrderType("delivery") }} className={`px-4 py-3 text-center text-sm ${order_type == "delivery" ? 'bg-primary display-inline text-white' : ''}  rounded h-12  border-gray-200 border dark:border-neutral-700 cursor-pointer`}>
+            <RiTruckFill style={{ display: "inline-block", verticalAlign: '-2px' }} /> ENTREGA
+          </div>
         </div>
 
         {order_type == 'delivery' && (
@@ -485,7 +472,7 @@ const When = () => {
         checkSchedule ?
           (<div className="flex flex-nowrap w-full">
             <div className="relative">
-              <div className="absolute top-0 left-0 right-0 bottom-0 bg-red-600 z-50 opacity-0" style={{width:'100%',height:'100%',zIndex:50}} onClick={() => datePickerRef.current.setFocus()}></div>
+              <div className="absolute top-0 left-0 right-0 bottom-0 bg-red-600 z-50" style={{width:'100%',height:'100%',zIndex:50,opacity:0}} onClick={() => datePickerRef.current.setFocus()}></div>
               <DatePicker
               locale="ptBR"
               ref={datePickerRef}
@@ -497,6 +484,8 @@ const When = () => {
               onKeyDown={handleKeyDown}
               filterDate={isWeekday}
               onChange={handleOnChange}
+
+              onInputClick={handleKeyDown}
               className={"px-3 h-12 w-24 text-center rounded outline-none dark:bg-black dark:text-white dark:border-neutral-700  appearance-none transition duration-300 ease-in-out text-heading text-sm dark:text-white focus:outline-none focus:ring-0 border border-gray-300 focus:border-primary".concat(startDate ? "" : "")}
             />
             </div>
@@ -504,7 +493,7 @@ const When = () => {
             {weekName && !!includeTimes.length &&
 
             <div className="relative">
-              <div className="absolute top-0 left-0 right-0 bottom-0 bg-red-600 z-50 opacity-0 " style={{width:'100%',height:'100%',zIndex:50}} onClick={() => hourPickerRef.current.setFocus()}></div>
+              <div className="absolute top-0 left-0 right-0 bottom-0 bg-black  " style={{width:'100%',height:'100%',zIndex:150,opacity:0}} onClick={() => hourPickerRef.current.setFocus()}></div>
             
             <DatePicker
               locale="ptBR"
@@ -538,10 +527,10 @@ const When = () => {
       <div className="bg-yellow-100 mt-5 border-t-4 dark:text-neutral-800 border-yellow-300 rounded-b text-teal-900 px-4 py-3 shadow-md" role="alert" style={{ borderColor: '#FBBF24' }}>
         <div className="flex">
           <div className="py-1">
-            <RiTimeLine className="fill-current h-8 w-8 text-teal-500 mr-4" style={{ display: "inline-block", verticalAlign: '-2px' }} />
+            <RiTimeLine className="fill-current h-7 w-7 text-teal-500 mr-4" style={{ display: "inline-block", verticalAlign: '-2px' }} />
           </div>
           <div>
-            <p className="uppercase pt-2">Tempo de {order_type == "delivery" ? "Entrega" : "Preparação "} <b>{timeInterval}min</b></p>
+            <p className="uppercase pt-2">Tempo de {order_type == "delivery" ? "Entrega " : "Preparação "} <b> {timeInterval}min</b></p>
           
           </div>
 
@@ -554,7 +543,7 @@ const When = () => {
         <div className="bg-yellow-100 dark:bg-yellow-400  dark:text-neutral-800 dark:border-yellow-600  mt-5 border-t-4 border-yellow-300 rounded-b text-teal-900  dark:text-black px-4 py-3 shadow-md" role="alert">
           <div className="flex">
             <div className="py-1">
-              <RiCalendar2Fill className="fill-current h-8 w-8 text-teal-500 mr-4" style={{ display: "inline-block", verticalAlign: '-2px' }} />
+              <RiCalendar2Fill className="fill-current h-7 w-7 text-teal-500 mr-4" style={{ display: "inline-block", verticalAlign: '-2px' }} />
             </div>
             <div>
             <p className="uppercase pt-2">AGENDAMENTOS DISPONÍVEIS</p>

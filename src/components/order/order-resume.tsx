@@ -16,7 +16,7 @@ interface Props {
   className?: string;
 }
 
-const OrderInformation = (props: Props) => {
+const OrderResume = (props: Props) => {
   const { items, isEmpty } = useCart();
   const settings = useSettings();
   const { checkoutData, discount, removeCoupon, coupon } = useCheckout();
@@ -66,23 +66,7 @@ const OrderInformation = (props: Props) => {
       <div className="flex flex-col border-b pb-2 border-rgb dark:border-neutral-700">
 
 
-      {
- (!isEmpty && (
-  items?.map((item: any) => {
-    const notAvailable = checkoutData?.unavailable_products?.find(
-      (d: any) => d === item.id
-    );
 
-    return (
-      <CheckoutCartItem
-        item={item}
-        key={item.id}
-        notAvailable={!!notAvailable}
-        isOffer={item.id.toString().indexOf(".offer") != -1}
-      />
-    );
- 
-     } )))}
        
 
 
@@ -90,27 +74,27 @@ const OrderInformation = (props: Props) => {
      {checkoutData && (     
         <div className="mt-2">
           <div className="flex justify-between mb-2">
-            <p className="text-sm text-body dark:text-neutral">Sub Total</p>
-            <span className="text-sm text-body dark:text-neutral">{sub_total}</span>
+            <p className="text-lg text-body dark:text-neutral">Sub Total</p>
+            <span className="text-lg text-body dark:text-neutral">{sub_total}</span>
           </div>
           <div className="flex justify-between mb-2">
-            <p className="text-sm text-body dark:text-neutral">{settings?.aux?.taxName ? settings?.aux?.taxName : "Taxas"}</p>
-            <span className="text-sm text-body dark:text-neutral">{tax}</span>
+            <p className="text-lg text-body dark:text-neutral">{settings?.aux?.taxName ? settings?.aux?.taxName : "Taxas"}</p>
+            <span className="text-lg text-body dark:text-neutral">{tax}</span>
           </div>
           <div className="flex justify-between mb-2">
-            <p className="text-sm text-body dark:text-neutral">Entrega</p>
-            <span className="text-sm text-body dark:text-neutral">{shipping}</span>
+            <p className="text-lg text-body dark:text-neutral">Entrega</p>
+            <span className="text-lg text-body dark:text-neutral">{shipping}</span>
           </div>
           {discount ? (
             <div className="flex justify-between mb-4">
-              <p className="text-sm text-body dark:text-neutral mr-4">Desconto</p>
-              <span className="text-sm font-semibold text-red-500 flex items-center mr-auto">
+              <p className="text-lg text-body dark:text-neutral mr-4">Desconto</p>
+              <span className="text-lg font-semibold text-red-500 flex items-center mr-auto">
                 ({coupon.code})
                 <button onClick={removeCoupon}>
                   <CloseIcon className="w-3 h-3 ml-2" />
                 </button>
               </span>
-              <span className="text-sm text-body dark:text-neutral">{discountPrice}</span>
+              <span className="text-lg text-body dark:text-neutral">{discountPrice}</span>
             </div>
           ) : (
             <div className="flex justify-between my-1">
@@ -118,8 +102,8 @@ const OrderInformation = (props: Props) => {
             </div>
           )}
           <div className="flex justify-between border-t-4 border-double border-rgb dark:border-neutral-700 pt-4">
-            <p className="text-base text-xl  font-semibold text-heading dark:text-white">Total</p>
-            <span className="text-base text-xl font-semibold text-heading dark:text-white">{total}</span>
+            <p className="text-base text-2xl  font-semibold text-heading dark:text-white">Total</p>
+            <span className="text-base text-2xl font-semibold text-heading dark:text-white">{total}</span>
           </div>
         </div>
       )}
@@ -127,4 +111,4 @@ const OrderInformation = (props: Props) => {
   );
 };
 
-export default OrderInformation;
+export default OrderResume;

@@ -35,7 +35,7 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({
   }
 
   return (
-    <div className="visible lg:hidden h-16 md:h-14 dark:bg-neutral-900">
+    <div className="hidden h-16 md:h-14 dark:bg-neutral-900">
       <nav className="h-16 md:h-14 w-full py-1.5 px-2 flex justify-between fixed left-0 bottom-0 border-t  dark:border-neutral-700 z-10 bg-white dark:bg-black shadow-400" style={{zIndex:80}}>
         <motion.button
           whileTap={{ scale: 0.88 }}

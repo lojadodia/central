@@ -17,7 +17,7 @@ const classes = {
   outline:
     "border border-gray-500 bg-transparent hover:text-white hover:bg-primary hover:border-primary",
   disabled:
-    "border border-gray-300 bg-gray-300 border-gray-400 text-gray-500 cursor-not-allowed",
+    "border border-gray-300 dark:bg-neutral-800 border-gray-400 text-gray-500 cursor-not-allowed",
   disabledOutline: "border border-gray-300 text-gray-400 cursor-not-allowed",
   small: "px-4 py-0 h-10 text-sm",
   medium: "px-5 py-0 h-12",

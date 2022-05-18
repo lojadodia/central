@@ -29,8 +29,7 @@ const RecommendationsModal = () => {
   function handleCheckout() {
       closeModal();
       
-      setModalView("ADD_CARD_INFO");
-      return openModal()
+      router.push("/finish");
   }
 
 
