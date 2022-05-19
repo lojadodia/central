@@ -46,13 +46,7 @@ export default function OrdersPage({ orders }: Props) {
                 ))
               ) : (
                 <div className="w-full h-full flex flex-col items-center justify-center py-10 my-auto">
-                  <div className="w-5/6 h-full flex items-center justify-center mb-7">
-                    <img
-                      src="/no-result.svg"
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
-                  <h4 className="text-sm font-semibold dark:text-neutral text-body text-center">
+                  <h4 className="text-sm font-semibold dark:text-neutral text-body text-center mt-22 pt-5">
                   Nenhum pedido realizado até então
                   </h4>
                 </div>
