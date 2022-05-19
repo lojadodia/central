@@ -41,7 +41,7 @@ const CartSidebarView = () => {
        
         <Scrollbar
                 className="w-full lg:mt-20 mt-5"
-                style={{ height: items.length > 0 ? "calc(100vh)" : "calc(100vh)",marginBottom:items.length > 0 ? "-197px" : "-0px" }}>
+                style={{ height: items.length > 0 ? "calc(100vh - 168px)" : "calc(100vh)",marginBottom:items.length > 0 ? "-120px" : "-0px" }}>
                
           {items.length > 0 ? (
             items?.map((item) => <CartItem item={item} key={item.id} />)
@@ -55,7 +55,7 @@ const CartSidebarView = () => {
           </div>
         
           )}
-            <div style={{height: items.length > 0 ? "97px" : "0px"}}></div>
+            <div style={{height: items.length > 0 ? "0px" : "0px"}}></div>
           </Scrollbar>
          
         </motion.div>

@@ -60,6 +60,7 @@
 
 .rc-table .rc-table-expanded-row-fixed::after {
   border-width: 0;
+  background: #111 !important
 }
 
 /* Product Single Page thumb slider style */
