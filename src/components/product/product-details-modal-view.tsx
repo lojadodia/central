@@ -22,6 +22,8 @@ import Input from "@components/ui/input";
 import { Dialog, Transition } from "@headlessui/react";
 import Cookies from "js-cookie";
 import SimpleModal from "./question-modal";
+import Scrollbar from "@components/ui/scrollbar";
+
 
 const RelatedProducts = dynamic(
   () => import("./product-details/related-products")
@@ -229,7 +231,7 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
 
       <div
         className={cn(
-          "h-auto  md:block bg-white dark:bg-neutral-900 fixed top-0 left-1/2 transform mx-auto -translate-x-1/2 z-50 px-10 py-4 dark:border-neutral-700 border-b transition-all duration-300",
+          "h-auto  md:block bg-white dark:bg-neutral-900 fixed top-0 left-1/2 transform mx-auto -translate-x-1/2 z-50 md:px-10 px-4 py-4 dark:border-neutral-700 border-b transition-all duration-300",
           {
             "visible opacity-100 translate-y-0": !displayModalStickyBar,
             "visible opacity-100 translate-y-0 transition-all":
@@ -241,10 +243,16 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
           { width: "calc(100%)" }
         }
       >
+
+
+
+
+
         <div className="flex items-center ">
+        
           <div
             className={cn(
-              "border border-gray-200 dark:border-neutral-700 border-opacity-70 rounded relative flex items-center justify-center overflow-hidden flex-shrink-0",
+              "hidden md:block border border-gray-200 dark:border-neutral-700 border-opacity-70 rounded relative flex items-center justify-center overflow-hidden flex-shrink-0",
               {
                 "w-24 h-24": isEmpty(variations),
                 "w-16 lg:w-24 h-16 lg:h-24": !isEmpty(variations),
@@ -260,7 +268,7 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
             />
           </div>
 
-          <div className="px-8 flex flex-col justify-center mr-auto overflow-hidden">
+          <div className="md:px-8 px-4 flex flex-col justify-center overflow-hidden">
             <h3
               className="font-semibold text-lg lg:text-xl tracking-tight text-heading dark:text-white truncate cursor-pointer"
               onClick={() => handleTitleClick(`/products/${slug}`)}
@@ -295,7 +303,7 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
             })}
           >
             {isEmpty(variations) && (
-              <span className="mr-8 flex items-center ">
+              <span className="mr-2 md:mr-2 flex items-center ">
                 <ins className="text-xl lg:text-2xl font-semibold text-primary no-underline">
                   {basePrice ? basePrice : price}
                 </ins>
@@ -315,21 +323,20 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
               ></div>
 
               <div
-                className={cn({ "mt-0 pr-5 hidden md:block": !isEmpty(variations) })}
+                className={cn({ "mt-0 pr-5 ": !isEmpty(variations) })}
               >
                  <div
-                className="pr-5 mr-10"
+                className=""
               >
               {quantity! > 0 ? (
                   <AddToCart
                     data={data}
                     obs={obs}
                     variant="big"
+                    
                     variation={selectedVariation}
                     disabled={selectedVariation?.is_disable || !isSelected}  />
             
-             
-                
                 ) : (
                   <div className="bg-red-500 rounded text-sm text-white px-3 py-2">
                     Fora de estoque
@@ -343,16 +350,19 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
       </div>
 
       {/* End of sticky bar */}
+      <Scrollbar
+                className="w-full "
+                style={{ height:"calc(100vh - 0px)" }}>
 
       {/* Main content */}
 
-      <div className=" border-gray-200 dark:border-neutral-700 border-opacity-70  pt-5 mt-10 product-card cart-type-neon">
+      <div className=" border-gray-200 dark:border-neutral-700 border-opacity-70  md:pt-5 mt-5 md:mt-10 product-card cart-type-neon">
         {/* <div className="lg:w-1/2 p-6 pt-8 lg:p-12 2xl:p-16 lg:border-r lg:border-gray-200 dark:border-neutral-700 lg:border-opacity-60"> */}
 
        
         {/* End of product image / gallery */}
 
-        <div className="w-full pt-5  px-10">
+        <div className="w-full md:pt-5 px-0 md:px-10">
           <div className="flex flex-col  overflow-hidden">
             <div className="w-full">
               <div className="px-3">
@@ -426,8 +436,7 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
                       label="OBSERVAÇÕES"
                       variant="outline"
                       placeholder="Obs: Ex: sem alho, mal passado..."
-                      className="w-full col-span-4 mt-3 text-2xl"
-                      dimension="big"
+                      className="w-full col-span-4 mt-3"
                     />
                   )}
                 </div>
@@ -452,7 +461,7 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
                           } 
                         />*/}
                       </div>
-                      {settings?.site?.stock == "on" ? (
+                      {/* {settings?.site?.stock == "on" ? (
                         <>
                           {quantity! > 0 ? (
                             <>
@@ -478,7 +487,7 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
                         </>
                       ) : (
                         ""
-                      )}
+                      )} */}
                     </>
                   )}
                 </div>
@@ -497,11 +506,13 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
         </div>
       </div>
       {related_products?.length! > 1 && (
-        <div className="py-8 px-10">
+        <div className="py-8 md:px-10">
+        <div className="px-4">
           <RelatedProducts products={related_products} currentProductId={id} />
         </div>
+        </div>
       )}
-
+</Scrollbar>
     </article>
   );
 };

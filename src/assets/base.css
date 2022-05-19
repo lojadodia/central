@@ -1,9 +1,9 @@
 :root {
-  --gossamer-500: #473bf0;
+  --gossamer-500: #165df5;
   --gossamer-600: #444;
   --bg-gray-100: #eee;
   --primary-2: #444;
-  --primary: #473bf0;
+  --primary: #165df5;
   --secondary: #000000;
   --secondary-2: #111;
   --text-base: #77798c;
@@ -16,7 +16,7 @@
   --gossamer-400: #a6a0fa;
   --gossamer-700: #6257f2;
   --gossamer-800: #574ced;
-  --gossamer-900: #473bf0;
+  --gossamer-900: #165df5;
   --gray-300: #222;
   --text-normal: #222;
   --text-dark: #222;

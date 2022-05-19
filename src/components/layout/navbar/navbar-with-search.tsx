@@ -60,6 +60,7 @@ const NavbarWithSearch = () => {
           <>
             <Logo className="mx-auto lg:mx-0" />
             <div className="inline-block px-4 w-full">
+            <div className="hidden md:block">
             {total > 0 && (
                 <Button className="px-4 uppercase py-3 mr-2 text-center display-inline text-sm bg-primary  text-white  rounded h-12  border-gray-200 border dark:border-neutral-700 dark:bg-neutral-600 cursor-pointer" size="small" >
                   <RiFileList2Fill style={{ display: "inline-block", verticalAlign: '-2px' }} />&nbsp; {totalPrice}
@@ -94,6 +95,7 @@ const NavbarWithSearch = () => {
                 { delivery_time }
               </Button>
               )}
+            </div>
             </div>
           
          

@@ -220,6 +220,7 @@ export default function PaymentForm() {
         <div className="flex items-center justify-between mb-2">
           <div className="flex mb-4 items-center mt-2 space-x-3 md:space-x-4">
           <FormattedInput
+          style={{width:"200px"}}
             variant="outline"
             class="dark:bg-black dark:text-white -mt-2 dark:border-neutral-700 border border-gray-300 rounded dark:bg-black dark:text-white dark:border-neutral-700 focus:border-primary px-4 flex items-center w-full appearance-none transition duration-300 ease-in-out text-heading text-lg dark:text-white focus:outline-none focus:ring-0 h-12"
             type="text"
@@ -229,7 +230,7 @@ export default function PaymentForm() {
           />
 
             {/* <Label>Escolha uma Forma de Pagamento</Label> */}
-          </div>   <h1 className="mt-5">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</h1>
+          </div>   <h1 className="mt-5">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</h1>
           
         
         </div>

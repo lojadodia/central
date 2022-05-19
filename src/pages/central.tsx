@@ -61,7 +61,7 @@ export default function HomePage() {
       >
        
         <main className="flex-1">
-        <div className="grid grid-cols-3 gap-0">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-0">
           
               <div className="col-span-2">
                 <div className="w-full dark:bg-neutral-900 py-3 px-0 lg:px-5 border-b dark:border-neutral-700 lg:mt-20 mt-5">
@@ -76,7 +76,7 @@ export default function HomePage() {
             </Scrollbar>
          
           </div>
-          <div className="relative">
+          <div className="relative hidden md:block">
 
               <CartSidebarView />
 

@@ -37,7 +37,7 @@ const variantClasses = {
     "order-5 sm:order-4 w-full sm:w-24 h-10 bg-primary text-white rounded-full",
   pillVertical:
     "flex-col-reverse items-center w-10 h-24 dark:bg-neutral-900 text-heading rounded-full",
-  big: "w-full h-14 md:rounded text-white bg-primary inline-flex justify-between add-cart-button",
+  big: "w-full h-14 md:rounded text-white bg-primary inline-flex justify-between",
 };
 
 const Counter: React.FC<CounterProps> = ({
