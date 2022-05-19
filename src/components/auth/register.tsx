@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import { useForm } from "react-hook-form";
@@ -29,7 +29,10 @@ const defaultValues = {
 
 const RegisterForm = () => {
 
-
+  const inputFocus = useRef(null)
+  useLayoutEffect(()=>{
+    inputFocus.current && setTimeout(() => inputFocus.current.focus(), 0)
+  }, [inputFocus.current])
 
 
   const { updateClient } = useCheckout();
@@ -92,7 +95,7 @@ const RegisterForm = () => {
           type="text"
           variant="outline"
           className="mb-3"
-          autoFocus="true"
+          ref={inputFocus}
           error={errors.name?.message}
         />
          <Input

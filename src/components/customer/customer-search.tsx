@@ -1,9 +1,7 @@
 
 import { useCheckout } from "@contexts/checkout.context";
 import { useUI } from "@contexts/ui.context";
-import { OrderDeliveryIcon } from "../icons/order-delivery";
-import { OrderTakeawayIcon } from "../icons/order-takeaway";
-import React, { useEffect, useState } from "react";
+import React, { useRef, useState, useLayoutEffect } from "react";
 import Input from "@components/ui/input";
 import { UserSearch } from '@data/customer/search'
 
@@ -11,6 +9,7 @@ const CustomerSearch = () => {
   const { closeModal } = useUI();
   const { client, updateClient } = useCheckout();
   const [users, setDataUsers] = useState<any>({});
+  const inputFocus = useRef(null)
   const onPuttingDataInput = async (e: any) => {
     const res: any = await UserSearch(e.target.value);
     const result = res?.data;
@@ -31,6 +30,10 @@ const CustomerSearch = () => {
     closeModal()
   };
 
+  useLayoutEffect(()=>{
+    inputFocus.current && setTimeout(() => inputFocus.current.focus(), 0)
+  }, [inputFocus.current])
+
 
 
   return (
@@ -45,6 +48,7 @@ const CustomerSearch = () => {
                   name="name"
                   placeholder="POR NOME, CONTATO OU E-MAIL"
                   variant="outline"
+                  ref={inputFocus}
                   onChange={onPuttingDataInput}
                   />
                   {users?.length >0 && (

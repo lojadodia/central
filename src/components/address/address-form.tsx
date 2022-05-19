@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import Button from "@components/ui/button";
 import Input from "@components/ui/input";
 import Label from "@components/ui/label";
@@ -79,6 +79,11 @@ const CreateOrUpdateAddressForm = () => {
   const [showInformLog, setShowInformLoc] = useState(false);
   const [dataAddress, setDataAddess] = useState<any>();
   const settings:any = useSettings();
+  const inputFocus = useRef(null)
+  useLayoutEffect(()=>{
+    inputFocus.current && setTimeout(() => inputFocus.current.focus(), 0)
+  }, [inputFocus.current])
+
 
   const {  updateBillingAddress } = useCheckout();
   const {
@@ -275,6 +280,7 @@ const CreateOrUpdateAddressForm = () => {
             placeholder={t('digite_codigo_postal')}
             className="w-full col-span-4"
             onChange={onPuttingDataInput}
+            ref={inputFocus}
           />
 
           <div className={dataAddress?.length > 0 ?"list-outside md:list-inside absolute top-120 bg-white dark:bg-black w-full w-88 border border-primary mt-1 z-50":""} >
