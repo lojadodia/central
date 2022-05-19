@@ -49,7 +49,7 @@ const CartSidebarView = () => {
           ) : (
             <div className=" mt-5 px-5">
 
-               <OrdersPage orders={data}/>
+               <OrdersPage orders={data} type="all"/>
                 
            
           </div>
