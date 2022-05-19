@@ -16,6 +16,7 @@ import VerifyCheckout from "@components/checkout/verify-checkout";
 import { RiUser3Fill, RiPencilFill } from "react-icons/ri";
 import Cookies from "js-cookie";
 import OrderInformation from "@components/order/order-information";
+import OrdersPage from "./orders";
 
 export default function HomePage() {
   const router = useRouter();
@@ -162,26 +163,10 @@ export default function HomePage() {
                     Histórico {client?.name} 
                   </h3>
                   <Scrollbar
-                    className="w-full"
+                    className="w-full px-5"
                     style={{ height: "calc(100% - 147px)" }}
                   >
-                    <div className="px-5 pb-5">
-                      {orders_client?.length ? (
-                        orders_client?.map((_order: any, index: number) => (
-                          <OrderCard
-                            key={index}
-                            order={_order}
-                          />
-                        ))
-                      ) : (
-                        <div className="w-full flex items-center justify-center my-auto pt-5 mt-10">
-                          <h4 className="text-lg px-5 dark:text-neutral text-body text-center">
-                                  {client?.name}  ainda não pediu nada
-                          </h4>
-
-                        </div>
-                      )}
-                    </div>
+                  <OrdersPage orders={orders_client}/> 
                     </Scrollbar>
                     </>
                 ):(
@@ -199,36 +184,7 @@ export default function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-1  lg:grid-cols-1 gap-0">
            
           </div>
-            <div className="relative hidden">
-            <div className="flex flex-col h-screen bg-white dark:bg-black">
-              <h3 className="text-xl dark:text-white pb-5 text-heading px-5 lg:mt-22 mt-10 ">
-                Em Curso...
-              </h3>
-              <Scrollbar
-                className="w-full"
-                style={{ height: "calc(100%)" }}
-              >
-                <div className="px-5 pb-5">
-                  {orders?.length ? (
-                    orders?.map((_order: any, index: number) => (
-                      <OrderCard
-                        key={index}
-                        order={_order}
-                      />
-                    ))
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center my-auto">
-                      <h4 className="text-sm font-semibold dark:text-neutral text-body text-center">
-                      Você ainda não pediu nada
-                      </h4>
-                    </div>
-                  )}
-                </div>
-                </Scrollbar>
-            </div>
-           
-          </div>
-        
+          
           </div>
           
         </main>

@@ -25,7 +25,7 @@ export const useSettingsQuery = () => {
 export const listCategory = async()=>{
   const url = Cookies.get("url_endpoint") ? Cookies.get("url_endpoint") : process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
   return new Promise ((resolve, rejeita )  =>  {
-    console.log(url, API_ENDPOINTS.PRODUCTS)
+
     axios.get(  `${url}${API_ENDPOINTS.PRODUCTS}?search=type.slug:home`).then((resp)=>{
       const data:Category[] = resp.data?.data;
       resolve(data);

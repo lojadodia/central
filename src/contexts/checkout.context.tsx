@@ -210,33 +210,7 @@ export const CheckoutProvider: FC = (props) => {
 
   const setOrderType = (payload: any) => {
     
-    if (!isEmpty) {
-      http.post(`${API_ENDPOINTS.CHECK_OFFER}`, {
-        order_type: payload,
-        amount: total
-      }).then(res => res.data).then((data ) => {
-        if (data.product) {
-          const item = generateCartItem(data.product)
-          item.id = `${item.id}.offer`
-          clearItemFromCart(item.id)
-
-         
-            item.price = 0
-            addItemToCart(item, data.qty)
-            setModalView("PRODUCT_OFFER")
-            setModalData({ item, offer: data.offer})
-            openModal()
-            Cookies.set('offer', data.offer?.code) // active a cookie
-        }
-      })
-    }
     dispatch({ type: 'SET_ORDER_TYPE', payload})
-    if(payload=="takeaway"){
-      
-    }
-    if(payload=="delivery"){
-
-    }
   }
   const setCheckoutData = (payload: any) =>
     dispatch({ type: "SET_CHECKOUT_DATA", payload });

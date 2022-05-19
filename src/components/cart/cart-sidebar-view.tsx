@@ -13,6 +13,7 @@ import Scrollbar from "@components/ui/scrollbar";
 import OrderCard from "@components/order/order-card";
 import React, { useEffect, useState } from "react";
 import { useOrdersQuery } from "@data/order/use-orders.query";
+import OrdersPage from "src/pages/orders";
 
 const CartSidebarView = () => {
   const { items, totalUniqueItems } = useCart();
@@ -40,30 +41,16 @@ const CartSidebarView = () => {
        
         <Scrollbar
                 className="w-full lg:mt-20 mt-5"
-                style={{ height: items.length > 0 ? "calc(100vh)" : "calc(100vh)",marginBottom:items.length > 0 ? "-197px" : "0px" }}>
+                style={{ height: items.length > 0 ? "calc(100vh)" : "calc(100vh)",marginBottom:items.length > 0 ? "-197px" : "-0px" }}>
                
           {items.length > 0 ? (
             items?.map((item) => <CartItem item={item} key={item.id} />)
           
           ) : (
-            <div className=" mt-5">
+            <div className=" mt-5 px-5">
 
-                <div className="px-5 pb-5">
-                  {orders?.length ? (
-                    orders?.map((_order: any, index: number) => (
-                      <OrderCard
-                        key={index}
-                        order={_order}
-                      />
-                    ))
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center my-auto">
-                      <h4 className="text-sm font-semibold dark:text-neutral text-body text-center">
-                      Você ainda não pediu nada
-                      </h4>
-                    </div>
-                  )}
-                </div>
+               <OrdersPage orders={data}/>
+                
            
           </div>
         
