@@ -75,8 +75,7 @@ export default function HomePage() {
 
   return (
     
-    <>
-     <Element
+    <Element
         name="grid"
         className="flex flex-1 border-t border-r border-solid border-theme dark:border-neutral-700 dark:bg-black border-opacity-70"
       >
@@ -85,7 +84,7 @@ export default function HomePage() {
         <div className="grid grid-cols-3 gap-0">
           
               <div className="col-span-2">
-                <div className="w-full dark:bg-neutral-900 py-3 px-5 border-b dark:border-neutral-700 ">
+                <div className="w-full dark:bg-neutral-900 py-3 px-0 lg:px-5 border-b dark:border-neutral-700 lg:mt-20 mt-5">
                    <BakeryCategory /> 
                 </div> 
              
@@ -106,8 +105,6 @@ export default function HomePage() {
 
         </main>
       </Element>
-     {width > 1023 && <CartCounterButton />} 
-    </>
   );
 }
 

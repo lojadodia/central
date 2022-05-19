@@ -69,7 +69,7 @@ export default function HomePage() {
         className="flex flex-1 border-t  border-solid border-theme dark:border-neutral-700 dark:bg-black border-opacity-70"
       >
         <main className="flex-1">
-          <div className="grid grid-cols-2 md:grid-cols-2  lg:grid-cols-3 gap-0">
+          <div className="grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3 gap-0">
          
             <div className="flex flex-col  border-r  dark:border-neutral-700"  style={{ height: "calc(100vh)",background:"#00021c"}}>
               <h3 className="text-xl dark:text-white pb-5 text-heading px-5 lg:mt-22 mt-10 ">
@@ -136,9 +136,9 @@ export default function HomePage() {
 
 
 
-         
+             <div style={{height:"60px"}}></div>
               </Scrollbar>
-             
+            
               <footer className="sticky left-0 bottom-0  w-full py-5 px-6 z-10 bg-white  dark:bg-neutral-900 border-t dark:border-neutral-700">
               <VerifyCheckout />
              
@@ -153,7 +153,10 @@ export default function HomePage() {
                 <h3 className="text-xl dark:text-white pb-5 text-heading lg:mt-22 mt-10 ">
                   O Pedido
                   </h3>
-                  <OrderInformation/>
+                  <div className="pb-5">
+                    <OrderInformation/>
+                  </div>
+                 
                 </div>
                 </div>
                 <div className="flex flex-col h-screen bg-white dark:bg-neutral-900 hidden lg:block">

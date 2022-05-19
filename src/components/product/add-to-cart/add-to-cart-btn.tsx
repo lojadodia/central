@@ -68,13 +68,13 @@ const AddToCartBtn: React.FC<Props> = ({ variant, onClick, disabled }) => {
           onClick={onClick}
           disabled={disabled}
           className={cn(
-            "add-cart-button py-4 px-5 h-14 w-full flex items-center text-white justify-center text-lg lg:text-base font-light md:rounded bg-primary hover:bg-primary-2 transition-colors duration-300 focus:outline-none focus:bg-primary-2 text-special-shadow",
+            "py-4 px-5 h-14 w-full flex items-center text-white justify-center text-lg lg:text-base font-light md:rounded bg-primary hover:bg-primary-2 transition-colors duration-300 focus:outline-none focus:bg-primary-2 text-special-shadow",
             {
               "border dark:text-neutral  dark:bg-neutral-700  border-black !text-gray-500 cursor-not-allowed": disabled,
             }
           )}
         >
-          <span>Adicionar ao Carrinho</span>
+          <span>Adicionar</span>
         </button>
       );
     default:

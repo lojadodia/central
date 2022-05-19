@@ -17,7 +17,7 @@ const RelatedProducts = ({
       <h2 className="text-lg text-heading dark:text-white tracking-tight font-semibold mb-6">
       Produtos Relacionados
       </h2>
-      <div style={{paddingBottom:'120px'}}
+      <div className="px-5" style={{paddingBottom:'120px'}}
         className={cn(
           "grid grid-cols-2 md:grid-cols-4 xl:grid-cols-4 gap-2",
           gridClassName
@@ -36,6 +36,7 @@ const RelatedProducts = ({
             </motion.div>
           );
         })}
+
       </div>
     </>
   );

@@ -10,6 +10,7 @@ export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   type?: string;
   value?: string;
   shadow?: boolean;
+  autoFocus?: boolean;
   variant?: "normal" | "solid" | "outline" | "line";
   dimension?: "small" | "medium" | "big";
 }
@@ -42,6 +43,7 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
       dimension = "medium",
       shadow = false,
       disabled = false,
+      autoFocus = false,
       type = "text",
       inputClassName,
       ...rest
@@ -73,6 +75,7 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
             inputClassName
           )}
           disabled={disabled}
+          autoFocus={autoFocus}
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="off"

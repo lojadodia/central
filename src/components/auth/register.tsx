@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import { useForm } from "react-hook-form";
@@ -28,6 +28,10 @@ const defaultValues = {
 };
 
 const RegisterForm = () => {
+
+
+
+
   const { updateClient } = useCheckout();
   const { mutate, isLoading: loading } = useRegisterMutation();
   const [errorMsg, setErrorMsg] = useState("");
@@ -88,6 +92,7 @@ const RegisterForm = () => {
           type="text"
           variant="outline"
           className="mb-3"
+          autoFocus="true"
           error={errors.name?.message}
         />
          <Input
