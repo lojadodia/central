@@ -10,15 +10,42 @@ import { ArrowPrevIcon } from "@components/icons/arrow-prev";
 import { useCategoriesQuery } from "@data/category/use-categories.query";
 import BakeryCategoryLoader from "@components/ui/loaders/bakery-category-loader";
 import TruncateSimple from "@components/ui/truncate-simple";
-
+import { Fragment, useEffect, useState } from "react";
+import {
+  useProductsQuery, 
+  useProductsTodayMenuQuery,
+} from "@data/product/use-products.query";
 SwiperCore.use([Navigation]);
  // Branch Admin 
 const BakeryCategory = () => {
   const router = useRouter();
-
+  const { pathname, query } = router;
   const { data, isLoading: loading, error } = useCategoriesQuery({
     type: "home",
   });
+
+  const {
+    isFetching: loading2,
+    isFetchingNextPage: loadingMore2,
+    fetchNextPage: fetchNextPage2,
+    hasNextPage: hasNextPage2,
+    isError: isError2,
+    data: data2,
+    error: error2,
+  } = useProductsTodayMenuQuery({
+    type: query.type as string,
+    text: query?.text as string,
+    category: query?.category as string,
+  });
+  const [cacheData2, setCacheData2] = useState<any>(data2 ?? []);
+
+  useEffect(() => {
+    if (data2 && data2.pages[0].data) {
+      let products = data2.pages[0].data;
+      setCacheData2(products);
+    }
+  }, [data2]);
+
 
   if (loading) {
     return (
@@ -31,7 +58,7 @@ const BakeryCategory = () => {
   }
   if (error) return <ErrorMessage message={error.message} />;
 
-  const { pathname, query } = router;
+ 
   const selectedQueries = query.category;
 
   const onCategoryClick = (slug: string) => {
@@ -114,6 +141,20 @@ const BakeryCategory = () => {
               slidesPerView={3}
               spaceBetween={10}
             >
+              {!!cacheData2?.length && (
+                <SwiperSlide  className="w-full ">
+                <a href={`#begin`} 
+                  className={cn(
+                    "w-full  py-2 inline-block text-md first-word border-gray-100 bg-white rounded-full text-heading dark:border-neutral-300 uppercase text-center ",
+                    location.hash == '#' ? "dark:text-white dark:bg-primary" : "dark:text-white dark:bg-primary"
+                  )}>
+                     <TruncateSimple character={9}>
+                        Pratos do Dia
+                    </TruncateSimple>
+                   
+                </a>
+            </SwiperSlide>
+              )}
               {data?.categories?.data.map((category, idx) => (
                 <SwiperSlide key={idx} className="w-full ">
                     <a href={`#${category.slug}`} 
