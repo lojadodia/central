@@ -11,12 +11,13 @@ import { useOrdersQuery } from "@data/order/use-orders.query";
 
 interface Props {
   orders: any;
+  type: string;
 }
 
-export default function OrdersPage({ orders }: Props) {
+export default function OrdersPage({ orders, type }: Props) {
   const [order, setOrder] = useState<any>({});
   const { data, isLoading: loading, error } = useOrdersQuery();
-  const data_orders = orders?.lenght ? orders : data?.orders?.data;
+  const data_orders = type == "all" ? data?.orders?.data : orders ;
   if (loading) return <Spinner showText={false} />;
   if (error) return <ErrorMessage message={error.message} />;
   return (

@@ -90,12 +90,13 @@ const RegisterForm = () => {
       )}
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Input
+         ref={inputFocus}
           placeholder="Nome"
           {...register("name")}
           type="text"
           variant="outline"
           className="mb-3"
-          ref={inputFocus}
+         
           error={errors.name?.message}
         />
          <Input
