@@ -72,7 +72,7 @@ const ModalContainer = () => {
         closeModal();
         url.pathname = '';
         window.history.replaceState({}, '', url);
-        console.log('fechou');
+
      // window.history.back()
      // return
       //window.history.pushState({}, '', url)
@@ -80,28 +80,29 @@ const ModalContainer = () => {
     }
   }
 
-  useEffect(() => {
-    let elements = items.filter(item => item.id.toString().indexOf(".offer") !== -1);
+  // useEffect(() => {
+  //   let elements = items.filter(item => item.id.toString().indexOf(".offer") !== -1);
     
     
-    if (isAuthorize) {
-        if (elements.length && order_type) {
-        Promise.all(elements.map(elem => {
+  //   if (isAuthorize) {
+  //       if (elements.length && order_type) {
+  //       Promise.all(elements.map(elem => {
 
-          return (http.post(`${API_ENDPOINTS.CHECK_OFFER}`, {
-            order_type: order_type,
-            amount: total
-          }).then(res => res.data).then((data ) => {
-            if(data?.message == "give_the_amount" || data?.message == "not_offer_found" || data?.message == "not_product_found"){
-              removeItemFromCart(elem.id)
-            }
-          })
-          )
-        }))
+  //         return (http.post(`${API_ENDPOINTS.CHECK_OFFER}`, {
+  //           order_type: order_type,
+  //           amount: total
+  //         }).then(res => res.data).then((data ) => {
+  //           if(data?.message == "give_the_amount" || data?.message == "not_offer_found" || data?.message == "not_product_found"){
+  //             removeItemFromCart(elem.id)
+  //           }
+  //         })
+          
+  //         )
+  //       }))
         
-      }
-    }
-  }, [total, order_type, items])
+  //     }
+  //   }
+  // }, [total, order_type, items])
   return (
     <Modal open={displayModal} lock={
         modalView === "ORDER_TYPE" 

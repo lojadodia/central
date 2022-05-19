@@ -15,7 +15,7 @@ const CustomerSearch = () => {
     const res: any = await UserSearch(e.target.value);
     const result = res?.data;
     const users: any = []
-    if(e.target.value.length > 3){
+    if(e.target.value.length > 2){
       for (let i in result) {
         if(result[i]){
           users.push(result[i]);

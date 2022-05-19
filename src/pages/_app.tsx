@@ -79,14 +79,14 @@ export default function CustomApp({ Component, pageProps }: AppProps) {
 
 
   setTimeout(() => {
-    console.log(Router?.query?.token)
+
       if(Router?.query?.token){
         const hash = new Buffer(Router?.query?.token, 'base64')
         const base64 = hash.toString();
         const get = base64.split("\\");
     
         if (typeof get[0] !== 'undefined' && typeof get[1] !== 'undefined') {
-          console.log(get[0])
+
           Cookies.set("auth_token", get[0]);
           Cookies.set("auth_permissions", {"super_admin":"SUPER_ADMIN"});
           Cookies.set("url_endpoint", get[1]);
