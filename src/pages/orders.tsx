@@ -16,7 +16,7 @@ interface Props {
 export default function OrdersPage({ orders }: Props) {
   const [order, setOrder] = useState<any>({});
   const { data, isLoading: loading, error } = useOrdersQuery();
-  const data_orders = orders || data?.orders?.data;
+  const data_orders = orders?.lenght ? orders : data?.orders?.data;
   if (loading) return <Spinner showText={false} />;
   if (error) return <ErrorMessage message={error.message} />;
   return (

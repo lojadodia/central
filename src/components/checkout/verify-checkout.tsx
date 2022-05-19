@@ -70,6 +70,16 @@ const VerifyCheckout = () => {
           return false;
         }
 
+        if (!order_type) {
+          toast.error("Selecione o Tipo de Encomenda");
+          return false;
+        }
+
+        if (!delivery_time) {
+          toast.error("Selecione a Data de Entrega");
+          return false;
+        }
+
         if (order_type == "takeaway") {
 
           if ((settings?.scheduleType != "store" && delivery_time) || ((settings?.scheduleType == "store"))) {

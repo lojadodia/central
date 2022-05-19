@@ -41,7 +41,7 @@ const CartSidebarView = () => {
        
         <Scrollbar
                 className="w-full lg:mt-20 mt-5"
-                style={{ height: items.length > 0 ? "calc(100vh - 168px)" : "calc(100vh)",marginBottom:items.length > 0 ? "-120px" : "-0px" }}>
+                style={{ height: items.length > 0 ? "calc(100vh - 168px)" : "calc(100vh - 79px)",marginBottom:items.length > 0 ? "-120px" : "0px" }}>
                
           {items.length > 0 ? (
             items?.map((item) => <CartItem item={item} key={item.id} />)
