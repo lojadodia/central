@@ -223,6 +223,7 @@ const When = () => {
   const handleOnChange = (date: any) => {
 
     setIsOpen(!isOpen);
+    setIsOpenHour(!isOpenHour)
     setStartDate(date!);
     // comentei updateDeliverytime porque adicionei no input de time, neste caso
     // a data só será actualizada quando a hora for actualizada
@@ -493,21 +494,23 @@ const When = () => {
         {startDate ? moment(startDate).format("DD/MM/YYYY") : "Data"}
       </button>
       {isOpen && (
-        <DatePicker
-        locale="ptBR"
-        ref={datePickerRef}
-        selected={startDate}
-        minDate={start}
-        // placeholderText="Escolha a Data"
-        placeholderText="Data"
-        dateFormat="P"
-        onKeyDown={handleKeyDown}
-        filterDate={isWeekday}
-        onChange={handleOnChange}
-        onInputClick={handleKeyDown}
-        inline
-        className={"px-3 h-12 w-32 text-center rounded outline-none dark:bg-black dark:text-white dark:border-neutral-700  appearance-none transition duration-300 ease-in-out text-heading text-sm dark:text-white focus:outline-none focus:ring-0 border border-gray-300 focus:border-primary".concat(startDate ? "" : "")}
-      />
+         <div  style={{position:"fixed",zoom:1.3,marginTop:"-150px",zIndex:1000000}}>
+            <DatePicker
+            locale="ptBR"
+            ref={datePickerRef}
+            selected={startDate}
+            minDate={start}
+            // placeholderText="Escolha a Data"
+            placeholderText="Data"
+            dateFormat="P"
+            onKeyDown={handleKeyDown}
+            filterDate={isWeekday}
+            onChange={handleOnChange}
+            onInputClick={handleKeyDown}
+            inline
+            className={"px-3 h-12 w-16 text-center rounded outline-none dark:bg-black dark:text-white dark:border-neutral-700  appearance-none transition duration-300 ease-in-out text-heading text-sm dark:text-white focus:outline-none focus:ring-0 border border-gray-300 focus:border-primary".concat(startDate ? "" : "")}
+          />
+      </div>
       )}
 
       
@@ -519,27 +522,31 @@ const When = () => {
               {/* <div className="absolute top-0 left-0 right-0 bottom-0 bg-black  " style={{width:'100%',height:'100%',zIndex:150,opacity:0}} onClick={() => hourPickerRef.current.setFocus()}></div> */}
             
               <button className="px-4 py-3 text-center text-sm  rounded  bg-black  h-12 text-white border-gray-200 border dark:border-neutral-700 cursor-pointer" onClick={handleClickHour}>
-        {times ? moment(times).format("hh:mm") : "Hora"}
+        {times ? moment(times).format("HH:mm") : "Hora"}
       </button>
       {isOpenHour && (
-        <DatePicker
-        locale="ptBR"
-        ref={hourPickerRef}
-        selected={times}
-        showTimeSelect
-        showTimeSelectOnly
-        //placeholderText="Escolha a Hora"
-        placeholderText="Hora"
-        includeTimes={includeTimes}
-        timeIntervals={15}
-        dateFormat="HH:mm"
-        filterDate={isWeekday}
-        onKeyDown={handleKeyDown}
-        tabIndex={-1}
-        onChange={handlerTime}
-        inline
-        className="px-3 text-center h-12 ml-2 w-16 rounded outline-none dark:bg-black dark:text-white dark:border-neutral-700  appearance-none transition duration-300 ease-in-out text-heading text-sm dark:text-white focus:outline-none focus:ring-0 border border-gray-300 focus:border-primary"
-      />
+       <div  style={{position:"fixed",zoom:1.3,marginTop:"-150px",zIndex:1000000}}>
+          <DatePicker
+                  locale="ptBR"
+                  ref={hourPickerRef}
+                  selected={times}
+                  showTimeSelect
+                  showTimeSelectOnly
+                  //placeholderText="Escolha a Hora"
+                  placeholderText="Hora"
+                  includeTimes={includeTimes}
+                  timeIntervals={15}
+                  dateFormat="HH:mm"
+                  filterDate={isWeekday}
+                  onKeyDown={handleKeyDown}
+                  tabIndex={-1}
+                  onChange={handlerTime}
+                  inline
+                  className="px-3 text-center h-12 ml-2 w-16 absolute rounded outline-none dark:bg-black dark:text-white dark:border-neutral-700  appearance-none transition duration-300 ease-in-out text-heading text-sm dark:text-white focus:outline-none focus:ring-0 border border-gray-300 focus:border-primary"
+                
+            />
+
+</div>
       )}
             
            

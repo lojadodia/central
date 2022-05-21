@@ -49,10 +49,8 @@ const BakeryCategory = () => {
 
   if (loading) {
     return (
-      <div className="hidden xl:block">
-        <div className="w-full h-52 flex justify-center mt-8 px-2">
-          <BakeryCategoryLoader />
-        </div>
+      <div className="hidden xl:block h-11">
+      
       </div>
     );
   }
