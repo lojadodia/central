@@ -23,7 +23,7 @@ export default function HomePage() {
   const [orders, setOrders] = useState<any>({});
   const [users, setDataUsers] = useState<any>({});
   const { data } = useOrdersQuery();
-  const { client, updateClient, setOrderType, updateDeliverySchedule } = useCheckout();
+  const { client, updateClient, clearCheckoutData, setOrderType, updateDeliverySchedule } = useCheckout();
   const { openModal, setModalView } = useUI();
   useEffect(() => {
     if (data?.orders?.data) {
@@ -49,6 +49,9 @@ export default function HomePage() {
     updateClient(null)
     setOrderType(null)
     updateDeliverySchedule(null)
+    clearCheckoutData()
+    setModalView("CUSTOMER_SEARCH");
+    return openModal();
   };
 
   const handleAddUser = () => {
@@ -139,7 +142,7 @@ export default function HomePage() {
              <div style={{height:"60px"}}></div>
               </Scrollbar>
             
-              <footer className="sticky left-0 bottom-0  w-full py-5 px-6 z-10 bg-white  dark:bg-neutral-900 border-t dark:border-neutral-700">
+              <footer className=" left-0 bottom-0  w-full py-5 px-6 z-10 bg-white  dark:bg-neutral-900 border-t dark:border-neutral-700">
               <VerifyCheckout />
              
             

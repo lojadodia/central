@@ -80,6 +80,11 @@ const VerifyCheckout = () => {
           return false;
         }
 
+
+        setModalView("ADD_CARD_INFO");
+        openModal();
+
+        
         if (order_type == "takeaway") {
 
           if ((settings?.scheduleType != "store" && delivery_time) || ((settings?.scheduleType == "store"))) {
@@ -99,8 +104,7 @@ const VerifyCheckout = () => {
               {
                 onSuccess: (data) => {
                   setCheckoutData(data);
-                  setModalView("ADD_CARD_INFO");
-                  openModal();
+                  
                   //router.push("/checkout");
 
                 },
@@ -136,8 +140,7 @@ const VerifyCheckout = () => {
                   if (data['shipping_charge'] == 98765) {
                     toast.error("Para entregas nesta morada nos contacte: "+settings?.site?.phone);
                   } else {
-                    setModalView("ADD_CARD_INFO");
-                    openModal();
+                   
                     //router.push("/checkout");
                   }
 

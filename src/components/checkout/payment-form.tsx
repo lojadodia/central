@@ -16,6 +16,7 @@ import { useCustomerQuery } from "@data/customer/use-customer.query";
 import { useSettings } from "@contexts/settings.context";
 import { toast } from "react-toastify";
 import usePrice from "@utils/use-price";
+import Spinner from "@components/ui/loaders/spinner/spinner";
 import {
   calculatePaidTotal,
   calculateTotal,
@@ -274,7 +275,7 @@ export default function PaymentForm() {
  
 
 
-       {isCashOnDelivery === "cod" && ( 
+       {checkoutData ? ( 
         <div className="w-full">
 
           <Button
@@ -289,8 +290,12 @@ export default function PaymentForm() {
             </Button>
         </div>
        
+     ) : (
+      <div className="text-center">
+        <Spinner className="h-12" text="Processando Encomenda..." />
+      </div>
      )}
-     
+       
     </form>
   );
 }
