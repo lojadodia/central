@@ -20,7 +20,7 @@ const Spinner = (props: Props) => {
             "w-full flex flex-col items-center justify-center",
             className
           )}
-          style={{ height: "calc(100vh - 200px)" }}
+          style={{ height: "calc( 200px)" }}
         >
           <div className={styles.loading} />
 

@@ -329,7 +329,7 @@ const When = () => {
         updateDeliveryTime(null);
         setCheckANow(false);
         updateDeliverySchedule("schedule")
-        
+        setIsOpen(!isOpen);
         const timeId = setTimeout(() => {
           //action && datePickerRef.current.setFocus();
           clearTimeout(timeId)
@@ -490,11 +490,11 @@ const When = () => {
             <div className="relative">
               {/* <div className="absolute top-0 left-0 right-0 bottom-0 bg-red-600 z-50" style={{width:'100%',height:'100%',zIndex:50,opacity:0}} onClick={() => datePickerRef.current.setFocus()}></div> */}
              
-<button className="px-4 py-3 w-32 text-center text-sm mr-4  rounded  bg-black  h-12 text-white border-gray-200 border dark:border-neutral-700 cursor-pointer" onClick={handleClickDate}>
-        {startDate ? moment(startDate).format("DD/MM/YYYY") : "Data"}
+<button className="px-2 w-24 py-3  text-center text-sm mr-4  rounded  bg-black  h-12 text-white border-gray-200 border dark:border-neutral-700 cursor-pointer" onClick={handleClickDate}>
+        {startDate ? moment(startDate).format("DD/MM") : "Data"}
       </button>
       {isOpen && (
-         <div  style={{position:"fixed",zoom:1.3,marginTop:"-150px",zIndex:1000000}}>
+         <div   style={{position:"fixed",zoom:1.3,top:"0px",margin:"20vh auto",zIndex:100000000000000}}>
             <DatePicker
             locale="ptBR"
             ref={datePickerRef}
@@ -508,7 +508,8 @@ const When = () => {
             onChange={handleOnChange}
             onInputClick={handleKeyDown}
             inline
-            className={"px-3 h-12 w-16 text-center rounded outline-none dark:bg-black dark:text-white dark:border-neutral-700  appearance-none transition duration-300 ease-in-out text-heading text-sm dark:text-white focus:outline-none focus:ring-0 border border-gray-300 focus:border-primary".concat(startDate ? "" : "")}
+
+            className={"px-3 h-12 w-12 text-center rounded outline-none dark:bg-black dark:text-white dark:border-neutral-700  appearance-none transition duration-300 ease-in-out text-heading text-sm dark:text-white focus:outline-none focus:ring-0 border border-gray-300 focus:border-primary".concat(startDate ? "" : "")}
           />
       </div>
       )}
@@ -525,7 +526,7 @@ const When = () => {
         {times ? moment(times).format("HH:mm") : "Hora"}
       </button>
       {isOpenHour && (
-       <div  style={{position:"fixed",zoom:1.3,marginTop:"-150px",zIndex:1000000}}>
+       <div  style={{position:"fixed",zoom:1.3,top:"0px",margin:"20vh auto",zIndex:1000000}}>
           <DatePicker
                   locale="ptBR"
                   ref={hourPickerRef}
