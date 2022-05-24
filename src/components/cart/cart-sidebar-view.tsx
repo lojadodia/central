@@ -47,13 +47,10 @@ const CartSidebarView = () => {
             items?.map((item) => <CartItem item={item} key={item.id} />)
           
           ) : (
-            <div className=" mt-5 px-5">
-
-               <OrdersPage orders={data} type="all"/>
-                
-           
+            <div className="mt-5 px-5 text-center">
+                <p className="dark:text-neutral" style={{marginTop:"42vh"}}>Nenhum Produto no Carrinho</p>
+               {/* <OrdersPage orders={data} type="all"/> */}
           </div>
-        
           )}
             <div style={{height: items.length > 0 ? "0px" : "0px"}}></div>
           </Scrollbar>
