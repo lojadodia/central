@@ -64,7 +64,7 @@ const VerifyCheckout = () => {
   async function handleVerifyCheckout() {
     if (loggedIn()) {
       // if (settings?.minAmount <= total) {
-
+        setCheckoutData(null);
         if (!client) {
           toast.error("Selecione o Cliente");
           return false;
@@ -138,12 +138,12 @@ const VerifyCheckout = () => {
                 onSuccess: (data) => {
                   setCheckoutData(data);
                   if (data['shipping_charge'] == 98765) {
+                    setCheckoutData(null);
+                    //setError("Não entregamos pra essa Morada");
                     toast.error("Para entregas nesta morada nos contacte: "+settings?.site?.phone);
                   } else {
-                   
                     //router.push("/checkout");
                   }
-
                 },
                 onError: (error) => {
                 },

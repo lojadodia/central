@@ -329,7 +329,7 @@ const When = () => {
         updateDeliveryTime(null);
         setCheckANow(false);
         updateDeliverySchedule("schedule")
-        setIsOpen(!isOpen);
+        //setIsOpen(!isOpen);
         const timeId = setTimeout(() => {
           //action && datePickerRef.current.setFocus();
           clearTimeout(timeId)
