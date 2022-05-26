@@ -60,7 +60,7 @@ export default function Modal({ open, onClose, lock = false, children }: any) {
                 aria-label="Close panel"
                 ref={cancelButtonRef}
                 className="inline-block mr-1 bg-white fixed bg-opacity-50 dark:bg-transparent  outline-none focus:outline-none p-4 mt-2 rounded-full  top-8 right-2 z-[60] x-close-icon"
-                style={{top:"10px"}}
+                style={{top:"10px",right:"70px"}}
             >
                 <CloseIcon className="w-8 h-8" />
               </button>)

@@ -167,7 +167,7 @@ const When = () => {
   useEffect(() => {
 
     if (isDateValid()) {
-      optionChecked("now");
+     // optionChecked("now");
       if(order_type == "delivery"){
         setTimeInterval(currentTime?.interval)
       }else{
@@ -243,12 +243,12 @@ const When = () => {
     const timesCalc = createSequenceOfTimesDelivery(time1, tinterval, Object.assign(currentDate), moment(date).format('DD-MM-YYYY'))
       .concat(createSequenceOfTimesDelivery(time2, tinterval, Object.assign( currentDate), moment(date).format('DD-MM-YYYY')))
     setIncludeTimes(timesCalc)
-    if (!timesCalc.length) {
-      return toast.info('Já não estamos a aceitar encomendas para hoje. Por-favor escolha uma data futura para agendar.',
-      {
-        autoClose: 12000
-      })
-    }
+    // if (!timesCalc.length) {
+    //   return toast.info('Já não estamos a aceitar encomendas para hoje. Por-favor escolha uma data futura para agendar.',
+    //   {
+    //     autoClose: 12000
+    //   })
+    // }
     const timeId = setTimeout(() => {
       setIsOpen(!isOpen);
 
@@ -256,8 +256,9 @@ const When = () => {
     }, 200)
   };
   function handlerTime(time: any) {
-    setIsOpenHour(!isOpenHour);
-    setTimes(time)
+   // console.log(time?.target.value)
+   // setIsOpenHour(!isOpenHour);
+    setTimes(time?.target.value)
     const datetime = moment(selectedDate + ' ' + moment(time).format('HH:mm'), 'DD-MM-YYYY HH:mm');
 
     updateDeliveryTime(moment(datetime).format("DD-MM-YYYY HH:mm"));
@@ -418,7 +419,7 @@ const When = () => {
 
     }
    
-    return aux
+    return "00:00"
   }
 
   
@@ -474,13 +475,14 @@ const When = () => {
     <div className="">
     <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 ">
 
-      { isDateValid() ? (
+      {/* { isDateValid() ? (
         <div onClick={() => { optionChecked("now", "click") }} className={`px-4 py-3 text-center text-sm ${checkNow ? 'bg-primary display-inline text-white' : ''}  rounded h-12  border-gray-200 border dark:border-neutral-700 cursor-pointer`}>{order_type != 'takeaway' ? (
           <><RiTruckFill style={{ display: "inline-block", verticalAlign: '-2px' }} /> </>)
           : (
             <><RiShoppingBag3Fill style={{ display: "inline-block", verticalAlign: '-2px' }} /> </>
           )}  AGORA</div>
       ) : null}
+       */}
       <div onClick={() => { optionChecked("schedule", "click") }} className={`px-4 py-3 text-center text-sm  rounded  ${checkSchedule ? 'bg-primary h-12 text-white' : ''} border-gray-200 border dark:border-neutral-700 cursor-pointer`}>
         <RiCalendar2Fill style={{ display: "inline-block", verticalAlign: '-2px' }} /> AGENDAR {order_type != 'takeaway' ? '' : ''}</div>
 
@@ -521,35 +523,9 @@ const When = () => {
 
             <div className="relative">
               {/* <div className="absolute top-0 left-0 right-0 bottom-0 bg-black  " style={{width:'100%',height:'100%',zIndex:150,opacity:0}} onClick={() => hourPickerRef.current.setFocus()}></div> */}
-            
-              <button className="px-4 py-3 text-center text-sm  rounded  bg-black  h-12 text-white border-gray-200 border dark:border-neutral-700 cursor-pointer" onClick={handleClickHour}>
-        {times ? moment(times).format("HH:mm") : "Hora"}
-      </button>
-      {isOpenHour && (
-       <div  style={{position:"fixed",zoom:1.3,top:"0px",margin:"20vh auto",zIndex:1000000}}>
-          <DatePicker
-                  locale="ptBR"
-                  ref={hourPickerRef}
-                  selected={times}
-                  showTimeSelect
-                  showTimeSelectOnly
-                  //placeholderText="Escolha a Hora"
-                  placeholderText="Hora"
-                  includeTimes={includeTimes}
-                  timeIntervals={15}
-                  dateFormat="HH:mm"
-                  filterDate={isWeekday}
-                  onKeyDown={handleKeyDown}
-                  tabIndex={-1}
-                  onChange={handlerTime}
-                  inline
-                  className="px-3 text-center h-12 ml-2 w-16 absolute rounded outline-none dark:bg-black dark:text-white dark:border-neutral-700  appearance-none transition duration-300 ease-in-out text-heading text-sm dark:text-white focus:outline-none focus:ring-0 border border-gray-300 focus:border-primary"
-                
-            />
-
-</div>
-      )}
-            
+              <input type="time" placeholder="Hora" className="px-0 py-3 text-center text-sm  rounded  bg-yellow-400  h-12 w-20 text-black border-gray-200 border dark:border-primary cursor-pointer text-center" onChange={handlerTime}/>
+   
+     
            
             </div>
             }

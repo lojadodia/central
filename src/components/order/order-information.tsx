@@ -28,7 +28,7 @@ const OrderInformation = (props: Props) => {
   );
   const { price: tax } = usePrice(
     checkoutData && {
-      amount: checkoutData.total_tax ?? 0,
+      amount: 0,
     }
   );
   const { price: shipping } = usePrice(
@@ -52,7 +52,7 @@ const OrderInformation = (props: Props) => {
       amount: calculatePaidTotal(
         {
           totalAmount: base_amount,
-          tax: checkoutData?.total_tax,
+          tax: 0,
           shipping_charge: checkoutData?.shipping_charge,
           coupon: coupon
         },
