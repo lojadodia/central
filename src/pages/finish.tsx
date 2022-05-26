@@ -97,6 +97,7 @@ export default function HomePage() {
           </button>
                  
                 </h3>
+                
                 {!client ? (
                 <div className="relative">
                     <div className="absolute top-0 left-0 right-0 bottom-0 bg-red-600 z-50" style={{width:'100%',height:'100%',zIndex:50,opacity:0}} onClick={handleCustomerSearch}></div>
