@@ -233,27 +233,9 @@ const When = () => {
     setSelectedDate(moment(date).format('DD-MM-YYYY'))
     setTimes(null)
     updateDeliveryTime(null);
-    const time1 = settings?.schedule[_weekName]?.time1
-    const time2 = settings?.schedule[_weekName]?.time2
-    const tinterval = settings?.schedule[_weekName]?.interval
 
-    if (!time1 && !time2) return setIncludeTimes([])
-    const currentDate = moment(settings?.now)
-   
-    const timesCalc = createSequenceOfTimesDelivery(time1, tinterval, Object.assign(currentDate), moment(date).format('DD-MM-YYYY'))
-      .concat(createSequenceOfTimesDelivery(time2, tinterval, Object.assign( currentDate), moment(date).format('DD-MM-YYYY')))
-    setIncludeTimes(timesCalc)
-    // if (!timesCalc.length) {
-    //   return toast.info('Já não estamos a aceitar encomendas para hoje. Por-favor escolha uma data futura para agendar.',
-    //   {
-    //     autoClose: 12000
-    //   })
-    // }
-    const timeId = setTimeout(() => {
-      setIsOpen(!isOpen);
+    setIncludeTimes("true")
 
-      clearTimeout(timeId)
-    }, 200)
   };
   function handlerTime(time: any) {
    // console.log(time?.target.value)
