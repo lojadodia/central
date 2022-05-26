@@ -6,7 +6,7 @@ import Input from "@components/ui/input";
 import { UserSearch } from '@data/customer/search'
 
 const CustomerSearch = () => {
-  const { closeModal } = useUI();
+  const { closeModal, openModal, setModalView } = useUI();
   const { client, updateClient } = useCheckout();
   const [users, setDataUsers] = useState<any>({});
   const inputFocus = useRef(null)
@@ -34,16 +34,29 @@ const CustomerSearch = () => {
     inputFocus.current && setTimeout(() => inputFocus.current.focus(), 0)
   }, [inputFocus.current])
 
-
+  const handleAddUser = () => {
+    closeModal()
+    setModalView("REGISTER");
+    return openModal();
+  };
 
   return (
     <div className="p-5 sm:p-8 bg-white border-gray-200 rounded-lg dark:bg-neutral-800 border dark:border-neutral-700">
-    <h1 className="text-heading dark:text-white font-semibold text-lg text-center mb-2 mt-2 sm:mb-6">
+    <h1 className="text-heading dark:text-white font-semibold text-lg text-center mb-1 mt-2 ">
       Procurar Cliente
     </h1>
-    <h1 className="mt-5">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</h1>
+    <button
+            className=" items-center w-full mb-0  text-left text-md font-semibold text-yellow transition-colors duration-200 focus:outline-none "
+             style={{color:"#fbbe24"}}
+             onClick={handleAddUser}
+          >
+           + NOVO
+          </button>
+    <h1 className="mt-0">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</h1>
     <div>
+   
     <div className="relative">
+      
                 <Input
                   name="name"
                   placeholder="POR NOME, CONTATO OU E-MAIL"
