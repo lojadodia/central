@@ -24,7 +24,7 @@ const AddToCartBtn: React.FC<Props> = ({ variant, onClick, disabled }) => {
            <span className="w-10 h-10 md:w-9 md:h-9 text-disabled grid place-items-center rounded-full transition-colors duration-200 group-hover:bg-gossamer-600 group-focus:bg-gossamer-600">
             <MinusIcon className="w-6 h-6 stroke-2" />
           </span>
-          <span className="flex-1">Adicionar</span>
+          <span className="flex-1">Adicio.</span>
           <span className="w-10 h-10 md:w-9 md:h-9  grid place-items-center  rounded-full transition-colors duration-200 group-hover:bg-gossamer-600 group-focus:bg-gossamer-600">
             <PlusIcon className="w-6 h-6 stroke-2" />
           </span>
@@ -74,7 +74,7 @@ const AddToCartBtn: React.FC<Props> = ({ variant, onClick, disabled }) => {
             }
           )}
         >
-          <span>Adicionar</span>
+          <span>Adicio.</span>
         </button>
       );
     default:
