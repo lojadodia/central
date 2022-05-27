@@ -167,7 +167,7 @@ const When = () => {
   useEffect(() => {
 
     if (isDateValid()) {
-     // optionChecked("now");
+      optionChecked("schedule");
       if(order_type == "delivery"){
         setTimeInterval(currentTime?.interval)
       }else{
