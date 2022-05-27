@@ -193,7 +193,7 @@ export default function PaymentForm() {
           autoClose: 7000,
           closeOnClick: true,
         });
-        if (order.status == "1") {
+        if (order.status == "2") {
           closeModal();
           updateClient(null);
           clearCheckoutData()
