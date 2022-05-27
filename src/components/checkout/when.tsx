@@ -241,7 +241,8 @@ const When = () => {
    // console.log(time?.target.value)
    // setIsOpenHour(!isOpenHour);
     setTimes(time?.target.value)
-    const datetime = moment(selectedDate + ' ' + moment(time).format('HH:mm'), 'DD-MM-YYYY HH:mm');
+
+    const datetime = moment(selectedDate + ' ' + time?.target.value, 'DD-MM-YYYY HH:mm');
 
     updateDeliveryTime(moment(datetime).format("DD-MM-YYYY HH:mm"));
   }
