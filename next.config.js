@@ -18,6 +18,7 @@ module.exports = withPWA({
       "localhost",
       "shopdodia.pt",
       "picsum.photos",
+      "maps.googleapis.com",
       "pickbazar-sail.test",
       "pickbazarlaravel.s3.ap-southeast-1.amazonaws.com",
       "lojadodia.s3.eu-central-1.amazonaws.com",

@@ -1,4 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios"
+import Cookies from 'js-cookie';
+import { resolve } from "path";
 
 export const addressInfo = (address:string,settings:any)=>{
 
@@ -14,7 +16,6 @@ export const addressInfo = (address:string,settings:any)=>{
 
        } catch (error) {
        }
-
      })
 }
 
@@ -33,6 +34,41 @@ export const addressInfoByCoords = (lat: any, lon:any)=>{
     }
 
   })
+}
+
+// Google Maps
+export const GoogleAddressInfo = (address:string,settings:any)=>{
+  const url = Cookies.get("url_endpoint") ? Cookies.get("url_endpoint") : process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
+  return new Promise(async(resolve, reject)=>{
+    try {
+     const config:AxiosRequestConfig = {
+         method: 'get',
+         url: url+`external/googlemaps?value=${address}&type=search`,
+         headers: {  }
+     }
+     const response =  await axios(config);
+     resolve(response)
+
+    } catch (error) {
+    }
+  })
+}
+
+export const GoogleAddressInfoById = (place_id: string)=>{
+  const url = Cookies.get("url_endpoint") ? Cookies.get("url_endpoint") : process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
+  const  axiosTest = async () =>{
+    try {
+      const {data:response} = await axios.get(url+`external/googlemaps?value=${place_id}&type=place_id`) //use data destructuring to get data from the promise object
+      console.log(response) 
+    }
+      
+    catch (error) {
+      console.log(error);
+    }
+  };
+
+
+
 }
 
 

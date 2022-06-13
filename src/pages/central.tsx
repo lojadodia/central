@@ -12,7 +12,7 @@ import React, { useEffect } from "react";
 import { fetchSettings } from "@data/settings/use-settings.query";
 import { GetServerSideProps } from "next";
 import Scrollbar from "@components/ui/scrollbar";
-
+import { RiRefreshLine } from 'react-icons/ri';
 const CartSidebarView = dynamic(
 	() => import('@components/cart/cart-sidebar-view')
 );
@@ -85,6 +85,9 @@ export default function HomePage() {
 
         </main>
       </Element>
+      <div style={{position:"fixed",bottom:"30px",left:"30px"}}>
+        <a href="" className="rounded-full bg-primary text-white text-xl py-4 px-3" style={{boxShadow:"0px 0px 25px rbga(0,0,0,.3)"}}><RiRefreshLine className="fill-current h-8 w-8 text-teal-500 " style={{ display: "inline-block", verticalAlign: '-7.5px' }} /></a>
+      </div>
      {width > 1023 && <CartCounterButton />} 
     </>
   );

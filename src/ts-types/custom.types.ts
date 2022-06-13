@@ -4,6 +4,7 @@ export type CategoriesQueryOptionsType = {
   type: string;
   text?: string;
   category?: string;
+  origin?: string;
   status?: string;
   limit?: number;
 };

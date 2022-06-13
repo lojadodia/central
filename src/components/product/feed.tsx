@@ -46,6 +46,7 @@ const Feed = () => {
   } = useProductsQuery({
     type: query.type as string,
     text: query?.text as string,
+    origin: "central" as string,
     category: query?.category as string,
   });
   const [cacheData, setCacheData] = useState<Category[]>([]);

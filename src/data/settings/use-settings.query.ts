@@ -26,7 +26,7 @@ export const listCategory = async()=>{
   const url = Cookies.get("url_endpoint") ? Cookies.get("url_endpoint") : process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
   return new Promise ((resolve, rejeita )  =>  {
 
-    axios.get(  `${url}${API_ENDPOINTS.PRODUCTS}?search=type.slug:home`).then((resp)=>{
+    axios.get(  `${url}${API_ENDPOINTS.PRODUCTS}?search=type.slug:home&origin=central`).then((resp)=>{
       const data:Category[] = resp.data?.data;
       resolve(data);
     }).catch((error)=>{

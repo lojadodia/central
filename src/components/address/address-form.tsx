@@ -8,15 +8,14 @@ import { useUpdateCustomerMutation } from "@data/customer/use-update-customer.mu
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { addressInfo, addressInfoByCoords } from '@data/location/location'
+import { addressInfo, addressInfoByCoords, GoogleAddressInfo, GoogleAddressInfoById } from '@data/location/location'
 import { Address } from '@ts-types/generated';
 import { useSettings } from "@contexts/settings.context";
-import { OrderAddressIcon } from "../icons/order-address";
-import { RiMapPin2Fill } from "react-icons/ri";
 import { useCheckout } from "@contexts/checkout.context";
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
-
+import axios from "axios";
+import Cookies from "js-cookie";
 
 //import './address-form.css 
 type FormValues = {
@@ -76,6 +75,7 @@ const addressSchema = yup.object().shape({
 const CreateOrUpdateAddressForm = () => {
   const [showImg, setShowImg] = useState(false);
 
+  const [google_address, setGoogleAddress] = useState(null);
   const [showInformLog, setShowInformLoc] = useState(false);
   const [dataAddress, setDataAddess] = useState<any>();
   const settings:any = useSettings();
@@ -135,16 +135,26 @@ const CreateOrUpdateAddressForm = () => {
 
     return closeModal();
   }
+  // tomtom | google
+  const default_map:string = settings?.env?.DEFAULT_MAP_SEARCH;
+
   const onPuttingDataInput = async (e: any) => {
-    const res: any = await addressInfo(e.target.value,settings);
+    const res: any = default_map == "tomtom" ? await addressInfo(e.target.value,settings) : await GoogleAddressInfo(e.target.value,settings);
     const result = res?.data?.results;
     const address: Array<Address> = []
 
-
-    for (let i in result) {
+    if(default_map == "tomtom"){
+      for (let i in result) {
         if(result[i].address.streetName){
           address.push(result[i]);
         }
+      }
+    }else{
+      for (let i in result) {
+        if(result[i]){
+          address.push(result[i]);
+        }
+      }
     }
     setDataAddess(address);
 
@@ -159,22 +169,33 @@ const CreateOrUpdateAddressForm = () => {
   }
 
   const getAddress = (data: DataAddressInfo) => {
-    if(!data.position?.lat){
-      const data_position = data.position.split(',');
-      setValue("address.lat", data_position[0]);
-      setValue("address.lng", data_position[1]);
+    if(default_map == "tomtom"){
+      if(!data.position?.lat){
+        const data_position = data.position.split(',');
+        setValue("address.lat", data_position[0]);
+        setValue("address.lng", data_position[1]);
+      }else{
+        setValue("address.lat", data.position?.lat);
+        setValue("address.lng", data.position?.lon);
+      }
+      setValue("address.zip", data.address?.extendedPostalCode?.split(",").splice(0,1).join(""));
+      setValue("address.city", data.address?.municipality);
+      setValue("address.state", settings?.env?.SHIPPING_COUNTRY == "PT" ? data.address?.countrySecondarySubdivision : data?.address?.countrySubdivision);
+      setValue("address.country", data.address?.country);
+      setValue("address.door", data.address?.streetNumber);
+      setValue("address.street_address", data.address?.streetName)
+      setShowInformLoc(true);
+      setDataAddess(null);
     }else{
-      setValue("address.lat", data.position?.lat);
-      setValue("address.lng", data.position?.lon);
+      if(data?.place_id){
+        const url = Cookies.get("url_endpoint") ? Cookies.get("url_endpoint") : process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
+          axios.get(url+`external/googlemaps?value=${data?.place_id}&type=place_id`)
+          .then(function (response) {
+            setGoogleAddress(response?.data?.result)
+          })
+      }
     }
-    setValue("address.zip", data.address?.extendedPostalCode?.split(",").splice(0,1).join(""));
-    setValue("address.city", data.address?.municipality);
-    setValue("address.state", settings?.env?.SHIPPING_COUNTRY == "PT" ? data.address?.countrySecondarySubdivision : data?.address?.countrySubdivision);
-    setValue("address.country", data.address?.country);
-    setValue("address.door", data.address?.streetNumber);
-    setValue("address.street_address", data.address?.streetName)
-    setShowInformLoc(true);
-    setDataAddess(null);
+   
   }
   useEffect(() => {
     if(address){
@@ -184,6 +205,38 @@ const CreateOrUpdateAddressForm = () => {
     }
     translate();
   },[]); 
+
+
+  useEffect(() => {
+    if(google_address){
+      const address:any = google_address;
+      console.log(google_address)
+      let i = 0;
+    
+      if(isNaN(address?.address_components[0].long_name)){
+        i = 0;
+      }else{
+        i = 1;
+        setValue("address.door", address?.address_components[0].long_name);
+
+      }
+      setValue("address.lat", address?.geometry?.location?.lat);
+      setValue("address.lng", address?.geometry?.location?.lng);
+  
+
+      setValue("address.street_address", address?.address_components[i]?.long_name)
+
+     
+      setValue("address.city", address?.address_components[i+1]?.long_name);
+      setValue("address.state", address?.address_components[i+2]?.long_name);
+      setValue("address.country", address?.address_components[i+3]?.long_name);
+      setValue("address.zip", address?.address_components[i+4]?.long_name);
+
+      setShowInformLoc(true);
+      setGoogleAddress(null);
+      setDataAddess(null);
+    }
+  },[google_address]); 
   
   // Tradução
   useEffect(() => {
@@ -280,7 +333,7 @@ const CreateOrUpdateAddressForm = () => {
             placeholder={t('digite_codigo_postal')}
             className="w-full col-span-4"
             onChange={onPuttingDataInput}
-            ref={inputFocus}
+            //ref={inputFocus}
           />
 
           <div className={dataAddress?.length > 0 ?"list-outside md:list-inside absolute top-120 bg-white dark:bg-black w-full w-88 border border-primary mt-1 z-50":""} >
@@ -293,8 +346,23 @@ const CreateOrUpdateAddressForm = () => {
                       {
                         item ? (
                           <ul key={item?.id}>
-                            <li onClick={() => getAddress(item)} className="px-5 py-2 border-b hover:bg-gray-100 dark:md:hover:bg-neutral-700 dark:text-gray  dark:border-neutral-700 cursor-pointer">
-                              <span style={{ overflow: 'hidden', display: '-webkit-box', '-webkit-line-clamp': '1', textOverflow: 'ellipsis', '-webkit-box-orient': 'vertical' }}><b className='dark:text-white'>{item?.address?.streetName}</b> {item?.address?.streetNumber} {item?.address?.municipality}, {settings?.env?.SHIPPING_COUNTRY == "PT" ? item?.address?.countrySecondarySubdivision : item?.address?.countrySubdivision}, {item?.address?.country}</span>
+                            <li onClick={() => getAddress(item)} className="px-5 py-2 border-b hover:bg-gray-100 dark:hover:bg-primary dark:text-gray  dark:border-neutral-700 cursor-pointer text-sm py-5 z-100">
+                              <span style={{ overflow: 'hidden', display: '-webkit-box', '-webkit-line-clamp': '1', textOverflow: 'ellipsis', '-webkit-box-orient': 'vertical' }}>
+                                {default_map == "tomtom" ?
+                                (
+                                  <>
+                                    <b className='dark:text-white'>  {item?.address?.streetName}</b> {item?.address?.streetNumber} {item?.address?.municipality}, {settings?.env?.SHIPPING_COUNTRY == "PT" ? item?.address?.countrySecondarySubdivision : item?.address?.countrySubdivision}, {item?.address?.country}
+                                  </>
+                                ):
+                                (
+                                  <>
+                                    <span className='dark:text-white'>  {item?.formatted_address}</span>
+                                  </>
+                                )
+                                  
+                                }
+                                
+                              </span>
                             </li>
                           </ul>
                         ) : null
@@ -426,7 +494,7 @@ const CreateOrUpdateAddressForm = () => {
           value="Portugal"
         /> */}
             </div>
-            <Button className="w-full add-cart-button col-span-4">
+            <Button className="w-full add-cart-button col-span-4 z-2">
               {address ? "Atualizar" : "Guardar"} Endereço
             </Button>
 
