@@ -34,7 +34,7 @@ export class CoreApi {
       category,
       status,
     });
-    const queryString = `?search=${searchString}&searchJoin=and&limit=${limit}`;
+    const queryString = `?search=${searchString}&searchJoin=and&origin=central&limit=${limit}`;
     return this.http.get(this._base_path + queryString);
   }
   findAll() {

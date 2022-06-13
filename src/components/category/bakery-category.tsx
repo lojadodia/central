@@ -22,6 +22,7 @@ const BakeryCategory = () => {
   const { pathname, query } = router;
   const { data, isLoading: loading, error } = useCategoriesQuery({
     type: "home",
+   
   });
 
   const {

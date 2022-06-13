@@ -15,6 +15,7 @@ export const fetchCategories = async ({ queryKey }: QueryParamsType) => {
   if (params.type === undefined) {
     params.type = 'home'
   }
+  params.origin = 'central'
   const {
     data: { data },
   } = await CategoryService.find(params as CategoriesQueryOptionsType);

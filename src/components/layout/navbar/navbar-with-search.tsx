@@ -10,10 +10,12 @@ import ProductTypeMenu from "@components/layout/navbar/product-type-menu";
 import { addActiveScroll } from "@utils/add-active-scroll";
 import dynamic from "next/dynamic";
 import Button from "@components/ui/button";
-import { RiUser3Fill, RiFileList2Fill, RiTruckFill, RiShoppingBag3Fill, RiTimeLine, RiCalendar2Fill, RiMapPin2Fill, RiExternalLinkLine, RiAlertFill } from "react-icons/ri";
+import { RiArrowLeftLine, RiUser3Fill, RiFileList2Fill, RiTruckFill, RiShoppingBag3Fill } from "react-icons/ri";
 import { useCheckout } from "@contexts/checkout.context";
 import { useCart } from "@contexts/quick-cart/cart.context";
 import usePrice from "@utils/use-price";
+import router from "next/router";
+import { useRouter } from "next/router";
 
 const AuthorizedMenu = dynamic(
   () => import("@components/layout/navbar/authorized-menu"),
@@ -23,6 +25,7 @@ const AuthorizedMenu = dynamic(
 type DivElementRef = React.MutableRefObject<HTMLDivElement>;
 
 const NavbarWithSearch = () => {
+  const router = useRouter();
   const navbarRef = useRef() as DivElementRef;
   const { isAuthorize, displayHeaderSearch, displayMobileSearch } = useUI();
   const { client, delivery_schedule, order_type, delivery_time } = useCheckout();
@@ -44,6 +47,10 @@ const NavbarWithSearch = () => {
       var bg = "bg-white dark:bg-black border-b dark:border-neutral-700";
   }
 
+  const hadleBack = () => {
+    router.push("/central");
+  };
+
   return (
     <header
       ref={navbarRef}
@@ -61,6 +68,9 @@ const NavbarWithSearch = () => {
             <Logo className="mx-auto lg:mx-0" />
             <div className="inline-block px-4 w-full">
             <div className="hidden md:block">
+            <Button onClick={hadleBack} className="px-4 uppercase py-3 mr-2 text-center display-inline text-sm bg-primary  text-white  rounded h-12  border-gray-200 border dark:border-neutral-700 dark:bg-primary cursor-pointer" size="small" >
+              <RiArrowLeftLine style={{ display: "inline-block", verticalAlign: '-2px' }} />&nbsp;Voltar
+            </Button>
             {total > 0 && (
                 <Button className="px-4 uppercase py-3 mr-2 text-center display-inline text-sm bg-primary  text-white  rounded h-12  border-gray-200 border dark:border-neutral-700 dark:bg-neutral-600 cursor-pointer" size="small" >
                   <RiFileList2Fill style={{ display: "inline-block", verticalAlign: '-2px' }} />&nbsp; {totalPrice}
