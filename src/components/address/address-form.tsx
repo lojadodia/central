@@ -340,7 +340,7 @@ const CreateOrUpdateAddressForm = () => {
             {
               dataAddress?.map((item: DataAddressInfo, index: number) => {
                 //{const addressText =  item.streetName.length+" "+ item.municipality + " " + " " + item.countrySecondarySubdivision + " " +  item.country);
-                if(index <=5){
+                //if(index <=5){
                 return (
                     <>
                       {
@@ -369,7 +369,7 @@ const CreateOrUpdateAddressForm = () => {
                       }
                     </>
                   )
-                  }
+                  //}
               })
             }
           </div>

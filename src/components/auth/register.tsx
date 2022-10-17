@@ -42,14 +42,25 @@ const RegisterForm = () => {
     register,
     handleSubmit,
     setError,
-
+    setValue,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues,
     resolver: yupResolver(registerFormSchema),
   });
+
+ 
+  const { authorize, closeModal, setModalView, modalData } = useUI();
   const router = useRouter();
-  const { authorize, closeModal, setModalView } = useUI();
+  
+  useEffect(() => {
+    if(isNaN(modalData)){
+      setValue("name",modalData)
+    }else{
+      setValue("contact",modalData)
+    }
+  },[]); 
+
   function handleNavigate(path: string) {
     router.push(`/${path}`);
     closeModal();
