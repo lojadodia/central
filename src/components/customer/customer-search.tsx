@@ -6,9 +6,10 @@ import Input from "@components/ui/input";
 import { UserSearch } from '@data/customer/search'
 
 const CustomerSearch = () => {
-  const { closeModal, openModal, setModalView } = useUI();
+  const { closeModal, openModal, setModalView, setModalData } = useUI();
   const { client, updateClient } = useCheckout();
   const [users, setDataUsers] = useState<any>({});
+  const [user, setDataUser] = useState<any>({});
   const inputFocus = useRef(null)
   const onPuttingDataInput = async (e: any) => {
     const res: any = await UserSearch(e.target.value);
@@ -21,6 +22,7 @@ const CustomerSearch = () => {
         }
     }
     }
+    setDataUser(e.target.value);
     setDataUsers(users);
   }
 
@@ -36,6 +38,7 @@ const CustomerSearch = () => {
 
   const handleAddUser = () => {
     closeModal()
+    setModalData(user);
     setModalView("REGISTER");
     return openModal();
   };
@@ -68,7 +71,7 @@ const CustomerSearch = () => {
                       <div className={users?.length >0?"list-outside md:list-inside absolute top-120 bg-white dark:bg-black w-full w-88 border border-primary mt-1 z-50":""} >
                       {
                         users?.map((item: any, index: number) => {
-                          if(index <=5){
+                          //if(index <=5){
                           return (
                               <>
                                 {
@@ -84,7 +87,7 @@ const CustomerSearch = () => {
                                 }
                               </>
                             )
-                            }
+                            //}
                         })
                       }
                       </div>  
