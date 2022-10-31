@@ -28,6 +28,9 @@ const OrderType = dynamic(
 const CustomerSearch = dynamic(
   () => import("@components/customer/customer-search")
 );
+const UpdateDeliveryFee = dynamic(
+  () => import("@components/customer/update-delivery-fee")
+);
 const ProductOffer = dynamic(
   () => import("@components/checkout/checkout-product-offer")
 );
@@ -105,7 +108,8 @@ const ModalContainer = () => {
   // }, [total, order_type, items])
   return (
     <Modal open={displayModal} lock={
-        modalView === "ORDER_TYPE" 
+        modalView === "ORDER_TYPE" ||
+        modalView === "UPDATE_DELIVERY_FEE" 
         // ||
         // modalView === "LOGIN_VIEW" ||
         // modalView === "REGISTER" 
@@ -119,6 +123,7 @@ const ModalContainer = () => {
       {modalView === "ADD_CARD_INFO" && <PaymentForm />}
       {modalView === "ORDER_TYPE" && <OrderType />}
       {modalView === "CUSTOMER_SEARCH" && <CustomerSearch />}
+      {modalView === "UPDATE_DELIVERY_FEE" && <UpdateDeliveryFee />}
       {modalView === "PRODUCT_OFFER" && <ProductOffer />}
       {modalView === "PRODUCT_DETAILS" && (
         <ProductDetailsModalView productSlug={modalData} />

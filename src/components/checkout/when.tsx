@@ -471,11 +471,11 @@ const When = () => {
 
       {
         checkSchedule ?
-          (<div className="flex flex-nowrap w-full">
+          (<div className="w-full">
             <div className="relative">
               {/* <div className="absolute top-0 left-0 right-0 bottom-0 bg-red-600 z-50" style={{width:'100%',height:'100%',zIndex:50,opacity:0}} onClick={() => datePickerRef.current.setFocus()}></div> */}
              
-<button className="px-2 w-24 py-3  text-center text-sm mr-4  rounded  bg-black  h-12 text-white border-gray-200 border dark:border-neutral-700 cursor-pointer" onClick={handleClickDate}>
+<button className="px-2 w-full py-3 mb-5 text-center text-sm mr-4  rounded  bg-black  h-12 text-white border-gray-200 border dark:border-neutral-700 cursor-pointer" onClick={handleClickDate}>
         {startDate ? moment(startDate).format("DD/MM") : "Data"}
       </button>
       {isOpen && (
@@ -506,7 +506,7 @@ const When = () => {
 
             <div className="relative">
               {/* <div className="absolute top-0 left-0 right-0 bottom-0 bg-black  " style={{width:'100%',height:'100%',zIndex:150,opacity:0}} onClick={() => hourPickerRef.current.setFocus()}></div> */}
-              <input type="time" placeholder="Hora" className="px-0 py-3 text-center text-sm  rounded  bg-yellow-400  h-12 w-20 text-black border-gray-200 border dark:border-primary cursor-pointer text-center" onChange={handlerTime}/>
+              <input type="time" placeholder="Hora" className="px-3 py-3 text-center text-sm  rounded  bg-yellow-400  h-12 w-full text-black border-gray-200 border dark:border-primary cursor-pointer text-center" onChange={handlerTime}/>
    
      
            
