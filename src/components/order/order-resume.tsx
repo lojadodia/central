@@ -1,13 +1,12 @@
-import CheckoutCartItem from "@components/checkout/checkout-cart-item";
-import Coupon from "@components/checkout/coupon";
+
 import { useCheckout } from "@contexts/checkout.context";
 import usePrice from "@utils/use-price";
-import EmptyCartIcon from "@components/icons/empty-cart";
 import { CloseIcon } from "@components/icons/close-icon";
 import { useCart } from "@contexts/quick-cart/cart.context";
 import { useSettings } from "@contexts/settings.context";
-import Button from "@components/ui/button";
-import React, { useState } from "react";
+import { useUI } from "@contexts/ui.context";
+import { RiPencilFill } from "react-icons/ri";
+import React from "react";
 import {
   calculatePaidTotal,
   calculateTotal,
@@ -20,8 +19,11 @@ const OrderResume = (props: Props) => {
   const { items, isEmpty } = useCart();
   const settings = useSettings();
   const { checkoutData, discount, removeCoupon, coupon } = useCheckout();
-  
-
+  const { setModalView, openModal } = useUI();
+  const updateDeliveryFee = () => {
+    setModalView("UPDATE_DELIVERY_FEE");
+    return openModal();
+  };
 
   const available_items = items?.filter(
     (item: any) => !checkoutData?.unavailable_products?.includes(item.id)
@@ -83,7 +85,13 @@ const OrderResume = (props: Props) => {
           </div>
           <div className="flex justify-between mb-2">
             <p className="text-lg text-body dark:text-neutral">Entrega</p>
-            <span className="text-lg text-body dark:text-neutral">{shipping}</span>
+            <span className="text-lg text-body dark:text-neutral">{shipping} 
+            
+                <span className="pt-2 inline-block">
+                    <a href="#"  onClick={updateDeliveryFee} className="px-2 py-1 text-2xl bg-yellow-400 text-black ml-3 rounded"><RiPencilFill style={{ display: "inline-block", verticalAlign: '-2px' }} /></a>
+                    </span>
+            
+            </span>
           </div>
           {discount ? (
             <div className="flex justify-between mb-4">

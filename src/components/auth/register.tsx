@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { useRouter } from "next/router";
-import Cookies from "js-cookie";
 import { useForm } from "react-hook-form";
 import { useRegisterMutation } from "@data/auth/use-register.mutation";
 import Alert from "@components/ui/alert";
 import Input from "@components/ui/input";
 import Button from "@components/ui/button";
 import { useUI } from "@contexts/ui.context";
-import { CUSTOMER, SUPER_ADMIN } from "@utils/constants";
 import { useCheckout } from "@contexts/checkout.context";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -31,7 +29,7 @@ const RegisterForm = () => {
 
   const inputFocus = useRef(null)
   useLayoutEffect(()=>{
-    inputFocus.current && setTimeout(() => inputFocus.current.focus(), 0)
+    inputFocus.current && setTimeout(() => inputFocus?.current.focus(), 0)
   }, [inputFocus.current])
 
 
