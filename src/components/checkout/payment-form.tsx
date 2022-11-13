@@ -172,7 +172,9 @@ export default function PaymentForm() {
       delivery_way: checkoutData?.mail,
       delivery_time: delivery_time,
       delivery_schedule: delivery_schedule,
-      obs: values.obs,
+      obs: {
+        note: values.obs,
+      },
       client: client,
       payment_gateway: payment_method,
       billing_address: {
