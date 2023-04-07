@@ -70,8 +70,7 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
     closeModal();
   };
 
-
-  console.log(custom_variation)
+  console.log(custom_variation);
 
   useEffect(() => {
     for (let key in variations) {
@@ -125,9 +124,10 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
 
   const handleVerifyOptions = () => {
     const checks = [];
-    const notExtras = data?.custom_variation.filter((item) => !item.is_extra);
+    const notExtras =
+      data?.custom_variation?.filter((item) => !item.is_extra) ?? [];
 
-    if (notExtras.length === 0) return true
+    if (notExtras.length === 0) return true;
 
     if (Object.keys(attributes).length === 0) return false;
 

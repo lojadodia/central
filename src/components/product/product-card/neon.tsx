@@ -5,14 +5,16 @@ import usePrice from "@utils/use-price";
 import { AddToCart } from "@components/product/add-to-cart/add-to-cart";
 import { useUI } from "@contexts/ui.context";
 import { useSettings } from "@contexts/settings.context";
+import { RiListCheck2 } from "react-icons/ri";
 
 type NeonProps = {
   product: any;
   className?: string;
 };
- 
+
 const Neon: React.FC<NeonProps> = ({ product, className }) => {
-  const { name, image, quantity, product_type } = product ?? {};
+  const { name, custom_variation, attributes, image, quantity, product_type } =
+    product ?? {};
   const { price, basePrice, discount } = usePrice({
     amount: product.price,
     baseAmount: product.sale_price,
@@ -20,18 +22,41 @@ const Neon: React.FC<NeonProps> = ({ product, className }) => {
   const { price: min_price } = usePrice({
     amount: +product.min_price,
   });
+
+  const { options } = product ?? {};
   const { openModal, setModalView, setModalData } = useUI();
 
+  const handleVerifyOptions = () => {
+    const checks = [];
+    const notExtras = custom_variation?.filter((item) => !item.is_extra) ?? [];
+
+    if (notExtras.length === 0) return true;
+
+    if (Object.keys(attributes).length === 0) return false;
+
+    Object.values(attributes).forEach((item) =>
+      item.forEach((subitem) => {
+        subitem.selected ? checks.push("ok") : null;
+      })
+    );
+
+    if (checks.length === notExtras.length) {
+      return true;
+    }
+
+    return false;
+  };
+
   function handleProductQuickView() {
-    const url: URL = new URL(window.location)
-    url.pathname = `/a/${product.slug}`
-    window.history.pushState({}, product.slug, url)
+    const url: URL = new URL(window.location);
+    url.pathname = `/a/${product.slug}`;
+    window.history.pushState({}, product.slug, url);
     setModalData(product.slug);
     setModalView("PRODUCT_DETAILS");
     return openModal();
   }
-  const settings  = useSettings();
-  
+  const settings = useSettings();
+
   return (
     <article
       className={cn(
@@ -44,7 +69,7 @@ const Neon: React.FC<NeonProps> = ({ product, className }) => {
         onClick={handleProductQuickView}
       >
         <Image
-          src={(image?.original ?? "/dark/product-placeholder.svg")}
+          src={image?.original ?? "/dark/product-placeholder.svg"}
           alt={name}
           layout="fill"
           objectFit="contain"
@@ -66,36 +91,66 @@ const Neon: React.FC<NeonProps> = ({ product, className }) => {
           {name}
         </h3>
         <div className="flex items-center mb-2">
-          
           <span className=" md:text-base text-heading dark:text-white ">
-          { product?.price == 0 ? "" : product_type == "simple" ? ( basePrice ? basePrice : price ) : (<>{min_price} <sup className="text-body" style={{fontSize:'9px'}}>DESDE</sup></>)}
+            {product_type == "simple" ? (
+              basePrice ? (
+                basePrice
+              ) : (
+                price
+              )
+            ) : (
+              <span className="text-body text-xs">
+                {" "}
+                <RiListCheck2
+                  style={{ display: "inline-block", verticalAlign: "-2px" }}
+                />{" "}
+                Opções de Escolha
+              </span>
+            )}
           </span>
           {discount && (
-            <del className="text-xs md:text-sm text-gray-400 dark:text-neutral  ml-2">{price}</del>
+            <del className="text-xs md:text-sm text-gray-400 dark:text-neutral  ml-2">
+              {price}
+            </del>
           )}
         </div>
         {/* End of product price */}
 
-       
         {/* End of product title */}
-        { product?.price == 0 ? (
-          <div className="bg-primary rounded text-xs text-center text-white px-2 py-1.5 sm:py-2.5" onClick={handleProductQuickView}>
-            Saber mais
-          </div>  
-        )
-      : (
-        quantity > 0 ? (
+        {product?.price == 0 ? (
+          product?.product_type != "variable" ? (
+            <div
+              className="bg-primary rounded text-xs text-center text-white px-2 py-1.5 sm:py-2.5"
+              onClick={handleProductQuickView}
+            >
+              Saber mais
+            </div>
+          ) : (
+            <div>
+              <AddToCart
+                variant="neon"
+                data={product}
+                isOpen={product_type !== "simple" || options}
+                handleVerifyOptions={handleVerifyOptions}
+                handlerModal={handleProductQuickView}
+              />
+            </div>
+          )
+        ) : quantity > 0 ? (
           <div>
-            <AddToCart variant="neon" data={product} isOpen={product_type !== "simple" } handlerModal={handleProductQuickView} />          
-
-          </div> 
+            <AddToCart
+              variant="neon"
+              data={product}
+              isOpen={product_type !== "simple" || options}
+              handleVerifyOptions={handleVerifyOptions}
+              handlerModal={handleProductQuickView}
+            />
+          </div>
         ) : (
           <div className="bg-red-500 rounded text-xs text-center text-white px-2 py-1.5 sm:py-2.5">
             Fora de estoque
           </div>
-        )
-          
-      )}
+        )}
         {/* End of add to cart */}
       </header>
     </article>
