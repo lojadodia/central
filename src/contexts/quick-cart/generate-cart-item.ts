@@ -21,6 +21,7 @@ interface Item {
     thumbnail: string;
     [key: string]: unknown;
   };
+  custom_variation: any[];
   price: number;
   sale_price?: number;
   quantity?: number;
@@ -37,44 +38,91 @@ interface Variation {
   [key: string]: unknown;
 }
 export function generateCartItem(item: Item, variation: Variation) {
-  const { id, name, slug, image, price, sale_price, quantity, unit, extras, obs = '' } = item;
+  const { id, name, slug, image, price, sale_price, quantity, unit, extras, custom_variation, obs = '' } = item;
   let totalExtras = 0
-  let extra: Extra[] = [];
- for (let prop in extras) {
-   
-   extra.push({
-    id: extras[prop]?.id,
-    sync_id: extras[prop]?.sync_id,
-    sync_price: extras[prop]?.sync_price,
-    sync_tax_rate: extras[prop]?.sync_tax_rate,
-    value: extras[prop]?.value,
-    attribute: {
-      id: extras[prop].attribute?.id,
-      name: extras[prop].attribute?.name,
-      sync_id: extras[prop].attribute?.sync_id
-    }
-   })
+  let options_variation: Extra[] = []
+  let customId: string = ''
+  let total_price = 0
+  //let extra: Extra[] = [];
+  if (custom_variation) {
 
-   totalExtras += (Number(extras[prop].sync_price))
+
+    variation && Object.keys(variation).forEach((key) => {
+      let products: any[] = variation[key];
+
+      if (products.length) {
+        customId += `-${key}`;
+
+      }
+      products.forEach(item => {
+        customId += `.${item.id.toString()}`;
+      });
+
+      // codigo em analise, calcular o preço total
+      total_price += products.reduce(
+        (first, second) => first + Number(second.price),
+        0);
+
+      
+        products.map((product: Extra) => ({
+          menuId: id,
+          group_id: custom_variation[key].id,
+          group_name: custom_variation[key].name,
+          group_is_extra: custom_variation[key].is_extra,
+          id: product.id,
+          name: product.name,
+          price: product.price,
+        })).forEach((item: any) => {
+          options_variation.push({...item})
+        });
+
+      if (!custom_variation[key].is_extra) return;
+      totalExtras += products.reduce(
+        (acc, product) => Number(product.price) + Number(acc),
+        0);
+
+
+
+    });
+
+    /*
+    variation[id] && variation[id].forEach(_extra => {
+
+
+      _extra.products.forEach((product: { price: number }) => {
+
+        totalExtras += (Number(product.price))
+      });
+
+      // console.log(totalExtras)
+    })
+    */
+
   }
-  let buildId = ""
-  let extrasKeys = extra.length > 0 ? Object.keys(extras).join('.') : null
-  if (extrasKeys) {
-    buildId = '-'.concat(extrasKeys) ?? ''
-  }
+
+  /*
+    let buildId = ""
+    let extrasKeys = extra.length > 0 ? Object.keys(extras).join('.') : null
+    if (extrasKeys) {
+      buildId = '-'.concat(extrasKeys) ?? ''
+    }
+    */
+ 
+ 
   if (!isEmpty(variation)) {
 
     return {
-      id: `${id}.${variation.id}${buildId}`,
+      id: `${id}${customId}`,
       productId: id,
-      name: `${name} - ${variation.title}`,
+      name: `${name}`,
       slug,
-      extras: extra,
+      extras: options_variation,
       obs,
       unit,
       stock: variation.quantity,
-      price: Number(variation.sale_price ? variation.sale_price : variation.price) + totalExtras,
-      price_total: Number(variation.sale_price ? variation.sale_price : variation.price),
+      price_extra: totalExtras,
+      price: Number(item.price),
+      price_total: Number(item.price) + Number(total_price),
       image: image?.thumbnail,
       variationId: variation.id,
     };
@@ -86,11 +134,11 @@ export function generateCartItem(item: Item, variation: Variation) {
     name,
     slug,
     unit,
-    extras: extra,
+    extras: options_variation,
     obs,
     image: image?.thumbnail,
     stock: quantity,
-    price: Number(sale_price ? sale_price : price) + totalExtras,
-    price_total: Number(sale_price ? sale_price : price)
+    price: Number(price) + total_price,
+    price_total: Number(price) + Number(total_price)
   };
 }

@@ -23,6 +23,7 @@ interface Props {
   disabled?: boolean;
   isOpen?: boolean;
   handlerModal?: () => void
+  handleVerifyOptions?: () => boolean
 }
 
 export const AddToCart = ({
@@ -34,6 +35,7 @@ export const AddToCart = ({
   variation,
   disabled,
   isOpen = false,
+  handleVerifyOptions,
   handlerModal
 }: Props) => {
   const {
@@ -49,6 +51,16 @@ export const AddToCart = ({
     e: React.MouseEvent<HTMLButtonElement | MouseEvent>
     ) => {
       e.stopPropagation();
+      if (handleVerifyOptions() === false) {
+        var hash = window.location.hash;
+        window.location.hash = "#";
+        toast.error("Selecione todas as Opções Obrigatórias (*)", {autoClose: 8000});
+        setTimeout(() => {
+          window.location.hash = hash;
+        }, 200);
+       
+        return
+      }
       if (Number(item.price) <= 0) {
         toast.error("Após a pagina recarregar, tente denovo.", {autoClose: 8000});
         location.href=""

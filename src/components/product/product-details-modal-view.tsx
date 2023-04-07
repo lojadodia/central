@@ -5,25 +5,21 @@ import cn from "classnames";
 import { AddToCart } from "@components/product/add-to-cart/add-to-cart";
 import { useUI } from "@contexts/ui.context";
 import usePrice from "@utils/use-price";
-import { ThumbsCarousel } from "@components/ui/carousel";
 import { getVariations } from "@utils/get-variations";
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState } from "react";
 import isEqual from "lodash/isEqual";
 import isEmpty from "lodash/isEmpty";
 import Spinner from "@components/ui/loaders/spinner/spinner";
-import { Waypoint } from "react-waypoint";
-import Truncate from "@components/ui/truncate-scroll";
 import dynamic from "next/dynamic";
 import ProductAttributes from "./product-details/product-attributes";
-import ProductCategories from "./product-details/product-categories";
 import VariationPrice from "./product-details/product-variant-price";
 import { useSettings } from "@contexts/settings.context";
 import Input from "@components/ui/input";
-import { Dialog, Transition } from "@headlessui/react";
 import Cookies from "js-cookie";
 import SimpleModal from "./question-modal";
 import Scrollbar from "@components/ui/scrollbar";
-
+import { generateCartItem } from "@contexts/quick-cart/generate-cart-item";
+import { formmatPrice } from "@utils/formmat-price";
 
 const RelatedProducts = dynamic(
   () => import("./product-details/related-products")
@@ -40,13 +36,15 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
   } = useUI();
 
   const { data, isLoading: loading } = useProductQuery(productSlug);
-  const [attributes, setAttributes] = useState<{ [key: string]: string }>({});
+  const [attributes, setAttributes] = useState<{ [key: number]: [] }>({});
   const [extras, setAttributeExtras] = useState<{ [key: string]: any }>({});
   const [obs, setObs] = useState<string>("");
   const [totalExtras, setTotalExtras] = useState<number>(0);
   const variations = getVariations(data?.variations!);
   const variationsExtra = getVariations(data?.variations!);
   const [modaL, setModal] = useState(false);
+
+  const [totalPriceExtra, setPriceExtra] = useState<number>(10);
 
   const {
     id,
@@ -60,6 +58,8 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
     type,
     options,
     quantity,
+    custom_variation,
+    product_type,
     min_price,
     max_price,
     related_products,
@@ -70,18 +70,27 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
     closeModal();
   };
 
+
+  console.log(custom_variation)
+
   useEffect(() => {
     for (let key in variations) {
-      let length = variations[key].length;
+      if (product_type === "variable") {
+        let length = custom_variation[key]?.products.length;
 
-      if (length === 1) {
-        setAttributes((prev) => ({
-          ...prev,
-          [key]: variations[key][0].value,
-        }));
+        if (length === 1) {
+          setAttributes((prev) => ({
+            ...prev,
+            [key]: {
+              name: custom_variation[key]?.products[0].name,
+              id: custom_variation[key]?.products[0].id,
+              price: custom_variation[key]?.products[0].price,
+            },
+          }));
+        }
       }
     }
-  }, [data?.variations]);
+  }, [custom_variation]);
 
   useEffect(() => {
     let total = 0;
@@ -114,6 +123,27 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
     };
   }, []);
 
+  const handleVerifyOptions = () => {
+    const checks = [];
+    const notExtras = data?.custom_variation.filter((item) => !item.is_extra);
+
+    if (notExtras.length === 0) return true
+
+    if (Object.keys(attributes).length === 0) return false;
+
+    Object.values(attributes).forEach((item) =>
+      item.forEach((subitem) => {
+        subitem.selected ? checks.push("ok") : null;
+      })
+    );
+
+    if (checks.length === notExtras.length) {
+      return true;
+    }
+
+    return false;
+  };
+
   const toggleExtra = (prop: { id: number }) => {
     // Remove Long Elements
 
@@ -142,10 +172,9 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
       };
     }
 
-    data.extras = selected;
-    setAttributeExtras(selected);
+    // data.extras = selected;
+    // setAttributeExtras(selected);
   };
-  const [totalPriceExtra, setPriceExtra] = useState<number>(10);
 
   const { price, basePrice, discount } = usePrice({
     amount: data?.price!,
@@ -154,61 +183,61 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
 
   //-----------------------
 
-  Object.keys(variations).map(
-    (variationName) =>
-      variations[variationName][0].attribute?.name == "Extras" &&
-      delete variations[variationName]
-  );
+  // Object.keys(variations).map(
+  //   (variationName) =>
+  //     variations[variationName][0].attribute?.name == "Extras" &&
+  //     delete variations[variationName]
+  // );
 
-  Object.keys(variationsExtra).map(
-    (extraName) =>
-      variationsExtra[extraName][0].attribute?.name != "Extras" &&
-      delete variationsExtra[extraName]
-  );
+  // Object.keys(variationsExtra).map(
+  //   (extraName) =>
+  //     variationsExtra[extraName][0].attribute?.name != "Extras" &&
+  //     delete variationsExtra[extraName]
+  // );
 
   //-----------------------
 
-  const isSelected = !isEmpty(variations)
-    ? !isEmpty(attributes) &&
-      Object.keys(variations).every((variation) =>
-        attributes.hasOwnProperty(variation)
-      )
-    : true;
+  // const isSelected = !isEmpty(variations)
+  //   ? !isEmpty(attributes) &&
+  //     Object.keys(variations).every((variation) =>
+  //       attributes.hasOwnProperty(variation)
+  //     )
+  //   : true;
 
-  let selectedVariation = {};
-  if (isSelected) {
-    selectedVariation = data?.variation_options?.find((o) =>
-      isEqual(
-        o.options.map((v: any) => v.value).sort(),
-        Object.values(attributes).sort()
-      )
-    );
-  } else {
-    // console.log(attributes)
-    itemVariationSelected = Object.keys(attributes).map((key) => {
-      let v: { sync_price: number; value: string } | undefined = variations[
-        key
-      ].find((item) => item.value.localeCompare(attributes[key]) === 0);
-      return (
-        v && {
-          sync_price: Number(v?.sync_price),
-          value: v?.value,
-        }
-      );
-    });
-  }
+  // let selectedVariation = {};
+  // if (isSelected) {
+  //   selectedVariation = data?.variation_options?.find((o) =>
+  //     isEqual(
+  //       o.options.map((v: any) => v.value).sort(),
+  //       Object.values(attributes).sort()
+  //     )
+  //   );
+  // } else {
+  //   // console.log(attributes)
+  //   itemVariationSelected = Object.keys(attributes).map((key) => {
+  //     let v: { sync_price: number; value: string } | undefined = variations[
+  //       key
+  //     ].find((item) => item.value.localeCompare(attributes[key]) === 0);
+  //     return (
+  //       v && {
+  //         sync_price: Number(v?.sync_price),
+  //         value: v?.value,
+  //       }
+  //     );
+  //   });
+  // }
 
   const settings = useSettings();
 
-  useEffect(() => {
-    let total = 0;
-    for (let prop in extras) {
-      total = parseFloat(extras[prop].sync_price) + total;
-    }
-    setPriceExtra(total);
-  }, [extras]);
+  // useEffect(() => {
+  //   let total = 0;
+  //   for (let prop in extras) {
+  //     total = parseFloat(extras[prop].sync_price) + total;
+  //   }
+  //   setPriceExtra(total);
+  // }, [extras]);
 
-  
+  let calculateItem = data && generateCartItem(data, attributes);
 
   if (loading)
     return (
@@ -219,13 +248,17 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
   return (
     <article className="bg-white dark:bg-neutral-900 w-full h-full  dark:border dark:border-neutral-700 relative lg:rounded-lg z-[59] overflow-y-auto">
       <div>
-        {modaL &&
-            <div style={Cookies.get('alcohol') !== 'true' ? { position: "absolute", top: -20, left: -470, zIndex:999} : {display: 'none'} }>
-              
-              <SimpleModal />
-             
-            </div>
-        }
+        {modaL && (
+          <div
+            style={
+              Cookies.get("alcohol") !== "true"
+                ? { position: "absolute", top: -20, left: -470, zIndex: 999 }
+                : { display: "none" }
+            }
+          >
+            <SimpleModal />
+          </div>
+        )}
       </div>
       {/* Sticky bar  |||   max-w-6xl */}
 
@@ -239,17 +272,9 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
           }
         )}
         //style={{ width: "calc(100% - 40px)" }}
-        style={
-          { width: "calc(100%)" }
-        }
+        style={{ width: "calc(100%)" }}
       >
-
-
-
-
-
         <div className="flex items-center ">
-        
           <div
             className={cn(
               "hidden md:block border border-gray-200 dark:border-neutral-700 border-opacity-70 rounded relative flex items-center justify-center overflow-hidden flex-shrink-0",
@@ -277,7 +302,7 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
               {name}
             </h3>
             {description}
-            {unit && isEmpty(variations) ? (
+            {/* {unit && isEmpty(variations) ? (
               <span className="text-sm font-normal text-body dark:text-neutral mt-2 block">
                 {unit}
               </span>
@@ -293,19 +318,21 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
                   />
                 )}
               </span>
-            )}
+            )} */}
           </div>
 
           <div
             className={cn("w-full flex flex-shrink-0", {
-              "max-w-max": isEmpty(variations),
-              "max-w-[40%]": !isEmpty(variations),
+              "max-w-max": isEmpty(data?.custom_variation),
+              "max-w-[40%]": !isEmpty(data?.custom_variation),
             })}
           >
             {isEmpty(variations) && (
               <span className="mr-2 md:mr-2 flex items-center ">
                 <ins className="text-xl lg:text-2xl font-semibold text-primary no-underline">
-                  {basePrice ? basePrice : price}
+                  {basePrice
+                    ? basePrice
+                    : formmatPrice(calculateItem?.price_total)}
                 </ins>
                 {discount && (
                   <del className="text-sm lg:text-base font-normal text-gray-400 dark:text-neutral ml-2">
@@ -323,25 +350,25 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
               ></div>
 
               <div
-                className={cn({ "mt-0 pr-5 ": !isEmpty(variations) })}
+                className={cn({
+                  "mt-0 pr-5 ": !isEmpty(data?.custom_variation),
+                })}
               >
-                 <div
-                className=""
-              >
-              {quantity! > 0 ? (
-                  <AddToCart
-                    data={data}
-                    obs={obs}
-                    variant="big"
-                    
-                    variation={selectedVariation}
-                    disabled={selectedVariation?.is_disable || !isSelected}  />
-            
-                ) : (
-                  <div className="bg-red-500 rounded text-sm text-white px-3 py-2">
-                    Fora de estoque
-                  </div>
-                )}  
+                <div className="">
+                  {quantity! > 0 ? (
+                    <AddToCart
+                      data={data}
+                      obs={obs}
+                      variant="big"
+                      handleVerifyOptions={handleVerifyOptions}
+                      // variation={selectedVariation}
+                      // disabled={selectedVariation?.is_disable || !isSelected}
+                    />
+                  ) : (
+                    <div className="bg-red-500 rounded text-sm text-white px-3 py-2">
+                      Fora de estoque
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -350,23 +377,19 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
       </div>
 
       {/* End of sticky bar */}
-      <Scrollbar
-                className="w-full "
-                style={{ height:"calc(100vh - 0px)" }}>
+      <Scrollbar className="w-full " style={{ height: "calc(100vh - 0px)" }}>
+        {/* Main content */}
 
-      {/* Main content */}
+        <div className=" border-gray-200 dark:border-neutral-700 border-opacity-70  md:pt-5 mt-5 md:mt-10 product-card cart-type-neon">
+          {/* <div className="lg:w-1/2 p-6 pt-8 lg:p-12 2xl:p-16 lg:border-r lg:border-gray-200 dark:border-neutral-700 lg:border-opacity-60"> */}
 
-      <div className=" border-gray-200 dark:border-neutral-700 border-opacity-70  md:pt-5 mt-5 md:mt-10 product-card cart-type-neon">
-        {/* <div className="lg:w-1/2 p-6 pt-8 lg:p-12 2xl:p-16 lg:border-r lg:border-gray-200 dark:border-neutral-700 lg:border-opacity-60"> */}
+          {/* End of product image / gallery */}
 
-       
-        {/* End of product image / gallery */}
-
-        <div className="w-full md:pt-5 px-0 md:px-10">
-          <div className="flex flex-col  overflow-hidden">
-            <div className="w-full">
-              <div className="px-3">
-                {/* <h1
+          <div className="w-full md:pt-5 px-0 md:px-10">
+            <div className="flex flex-col  overflow-hidden">
+              <div className="w-full">
+                <div className="px-3">
+                  {/* <h1
                   className="font-bold mb-1 mt-3 text-2xl md:text-xl xl:text-2xl tracking-tight text-heading dark:text-white absolute-capitalize"
                   title={name}
                 >
@@ -401,57 +424,58 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
                   )}
                 </div> 
 */}
-     <h1 className="mt-5">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-     &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-   </h1>
-                {unit && isEmpty(variations) && (
-                  <span className="text-sm font-normal text-body dark:text-neutral mt-2 md:mt-3 block hidden">
-                    {unit}
-                  </span>
-                )}
-
-
-              </div>
-
-        
-              <div>
-                <ProductAttributes
-                  product={slug}
-                  variations={variations}
-                  extras={variationsExtra}
-                  selectedExtras={extras}
-                  attributes={attributes}
-                  setAttributes={setAttributes}
-                  toggleExtra={toggleExtra}
-                  activeExtra={selectedVariation?.is_disable || !isSelected}
-                />
-
-                <div className="px-3 pt-2">
-                  {(!settings?.site?.obs || settings?.site?.obs == "block") && (
-                    <Input
-                      name="obs"
-                      value={obs}
-                      maxLength={25}
-                      onInput={(e) => setObs(e.target.value)}
-                      label="OBSERVAÇÕES"
-                      variant="outline"
-                      placeholder="Obs: Ex: sem alho, mal passado..."
-                      className="w-full col-span-4 mt-3"
-                    />
+                  <h1 className="mt-5">
+                    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                  </h1>
+                  {unit && isEmpty(data?.custom_variation) && (
+                    <span className="text-sm font-normal text-body dark:text-neutral mt-2 md:mt-3 block hidden">
+                      {unit}
+                    </span>
                   )}
                 </div>
-                <div className="mt-4 md:mt-6 flex flex-col lg:flex-row items-center">
-                  {data?.price == 0 ? (
-                    <a
-                      href="/contact"
-                      className="bg-primary w-full rounded text-center text-white px-2 py-4 "
-                    >
-                      Contacte-nos →
-                    </a>
-                  ) : (
-                    <>
-                      <div className="mb-3 lg:mb-0 w-full">
-                        {/* <AddToCart
+
+                <div>
+                  <ProductAttributes
+                    product={slug}
+                    variations={data?.custom_variation}
+                    extras={custom_variation?.filter(
+                      (item: { is_extra: boolean }) => item.is_extra
+                    )}
+                    selectedExtras={extras}
+                    attributes={attributes}
+                    setAttributes={setAttributes}
+                    toggleExtra={toggleExtra}
+                    // activeExtra={selectedVariation?.is_disable || !isSelected}
+                  />
+
+                  <div className="px-3 pt-2">
+                    {(!settings?.site?.obs ||
+                      settings?.site?.obs == "block") && (
+                      <Input
+                        name="obs"
+                        value={obs}
+                        maxLength={25}
+                        onInput={(e) => setObs(e.target.value)}
+                        label="OBSERVAÇÕES"
+                        variant="outline"
+                        placeholder="Obs: Ex: sem alho, mal passado..."
+                        className="w-full col-span-4 mt-3"
+                      />
+                    )}
+                  </div>
+                  <div className="mt-4 md:mt-6 flex flex-col lg:flex-row items-center">
+                    {data?.price == 0 ? (
+                      <a
+                        href="/contact"
+                        className="bg-primary w-full rounded text-center text-white px-2 py-4 "
+                      >
+                        Contacte-nos →
+                      </a>
+                    ) : (
+                      <>
+                        <div className="mb-3 lg:mb-0 w-full">
+                          {/* <AddToCart
                           data={data}
                           obs={obs}
                           variant="big"
@@ -460,8 +484,8 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
                             selectedVariation?.is_disable || !isSelected
                           } 
                         />*/}
-                      </div>
-                      {/* {settings?.site?.stock == "on" ? (
+                        </div>
+                        {/* {settings?.site?.stock == "on" ? (
                         <>
                           {quantity! > 0 ? (
                             <>
@@ -488,12 +512,12 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
                       ) : (
                         ""
                       )} */}
-                    </>
-                  )}
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-            {/* <div className="px-2 mb-4">
+              {/* <div className="px-2 mb-4">
               {!!categories?.length && (
                 <ProductCategories
                   categories={categories}
@@ -502,17 +526,20 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
                 />
               )}
             </div> */}
+            </div>
           </div>
         </div>
-      </div>
-      {related_products?.length! > 1 && (
-        <div className="py-8 md:px-10">
-        <div className="px-4">
-          <RelatedProducts products={related_products} currentProductId={id} />
-        </div>
-        </div>
-      )}
-</Scrollbar>
+        {related_products?.length! > 1 && (
+          <div className="py-8 md:px-10">
+            <div className="px-4">
+              <RelatedProducts
+                products={related_products}
+                currentProductId={id}
+              />
+            </div>
+          </div>
+        )}
+      </Scrollbar>
     </article>
   );
 };
