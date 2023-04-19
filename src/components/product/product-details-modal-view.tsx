@@ -6,7 +6,7 @@ import { AddToCart } from "@components/product/add-to-cart/add-to-cart";
 import { useUI } from "@contexts/ui.context";
 import usePrice from "@utils/use-price";
 import { getVariations } from "@utils/get-variations";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import isEqual from "lodash/isEqual";
 import isEmpty from "lodash/isEmpty";
 import Spinner from "@components/ui/loaders/spinner/spinner";
@@ -21,9 +21,6 @@ import Scrollbar from "@components/ui/scrollbar";
 import { generateCartItem } from "@contexts/quick-cart/generate-cart-item";
 import { formmatPrice } from "@utils/formmat-price";
 
-const RelatedProducts = dynamic(
-  () => import("./product-details/related-products")
-);
 
 const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
   const router = useRouter();
@@ -43,7 +40,9 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
   const variations = getVariations(data?.variations!);
   const variationsExtra = getVariations(data?.variations!);
   const [modaL, setModal] = useState(false);
-
+  
+  let calculateItem = data && generateCartItem(data, attributes);
+  
   const [totalPriceExtra, setPriceExtra] = useState<number>(10);
 
   const {
@@ -70,11 +69,11 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
     closeModal();
   };
 
-  console.log(custom_variation);
+ 
 
   useEffect(() => {
-    for (let key in variations) {
-      if (product_type === "variable") {
+    for (let key in custom_variation) {
+      if (product_type == "variable") {
         let length = custom_variation[key]?.products.length;
 
         if (length === 1) {
@@ -122,10 +121,12 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
     };
   }, []);
 
+  
+
   const handleVerifyOptions = () => {
     const checks = [];
 
-    if(data?.product_type == "variable"){
+    if (data?.product_type == "variable") {
       const notExtras =
         data?.custom_variation?.filter((item) => !item.is_extra) ?? [];
 
@@ -142,12 +143,8 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
       if (checks.length === notExtras.length) {
         return true;
       }
-       return false;
+      return false;
     }
-    
-   
-
-   
   };
 
   const toggleExtra = (prop: { id: number }) => {
@@ -177,9 +174,6 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
         [prop.id]: prop,
       };
     }
-
-    // data.extras = selected;
-    // setAttributeExtras(selected);
   };
 
   const { price, basePrice, discount } = usePrice({
@@ -187,63 +181,9 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
     baseAmount: data?.sale_price!,
   });
 
-  //-----------------------
-
-  // Object.keys(variations).map(
-  //   (variationName) =>
-  //     variations[variationName][0].attribute?.name == "Extras" &&
-  //     delete variations[variationName]
-  // );
-
-  // Object.keys(variationsExtra).map(
-  //   (extraName) =>
-  //     variationsExtra[extraName][0].attribute?.name != "Extras" &&
-  //     delete variationsExtra[extraName]
-  // );
-
-  //-----------------------
-
-  // const isSelected = !isEmpty(variations)
-  //   ? !isEmpty(attributes) &&
-  //     Object.keys(variations).every((variation) =>
-  //       attributes.hasOwnProperty(variation)
-  //     )
-  //   : true;
-
-  // let selectedVariation = {};
-  // if (isSelected) {
-  //   selectedVariation = data?.variation_options?.find((o) =>
-  //     isEqual(
-  //       o.options.map((v: any) => v.value).sort(),
-  //       Object.values(attributes).sort()
-  //     )
-  //   );
-  // } else {
-  //   // console.log(attributes)
-  //   itemVariationSelected = Object.keys(attributes).map((key) => {
-  //     let v: { sync_price: number; value: string } | undefined = variations[
-  //       key
-  //     ].find((item) => item.value.localeCompare(attributes[key]) === 0);
-  //     return (
-  //       v && {
-  //         sync_price: Number(v?.sync_price),
-  //         value: v?.value,
-  //       }
-  //     );
-  //   });
-  // }
-
   const settings = useSettings();
 
-  // useEffect(() => {
-  //   let total = 0;
-  //   for (let prop in extras) {
-  //     total = parseFloat(extras[prop].sync_price) + total;
-  //   }
-  //   setPriceExtra(total);
-  // }, [extras]);
-
-  let calculateItem = data && generateCartItem(data, attributes);
+  
 
   if (loading)
     return (
@@ -343,7 +283,7 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
                 </ins>
                 {discount && (
                   <del className="text-sm lg:text-base font-normal text-gray-400 dark:text-neutral ml-2">
-                    {price}
+                    {calculateItem?.price_total}
                   </del>
                 )}
               </span>
@@ -366,6 +306,7 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
                     <AddToCart
                       data={data}
                       obs={obs}
+                      total={calculateItem}
                       variant="big"
                       handleVerifyOptions={handleVerifyOptions}
                       // variation={selectedVariation}
@@ -444,20 +385,19 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
 
                 <div>
                   {product_type == "variable" && (
- <ProductAttributes
-                    product={slug}
-                    variations={data?.custom_variation}
-                    extras={custom_variation?.filter(
-                      (item: { is_extra: boolean }) => item.is_extra
-                    )}
-                    selectedExtras={extras}
-                    attributes={attributes}
-                    setAttributes={setAttributes}
-                    toggleExtra={toggleExtra}
-                    // activeExtra={selectedVariation?.is_disable || !isSelected}
-                  />
+                    <ProductAttributes
+                      product={slug}
+                      variations={data?.custom_variation}
+                      extras={custom_variation?.filter(
+                        (item: { is_extra: boolean }) => item.is_extra
+                      )}
+                      selectedExtras={extras}
+                      attributes={attributes}
+                      setAttributes={setAttributes}
+                      toggleExtra={toggleExtra}
+                      // activeExtra={selectedVariation?.is_disable || !isSelected}
+                    />
                   )}
-                 
 
                   <div className="px-3 pt-2">
                     {(!settings?.site?.obs ||
@@ -539,7 +479,6 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
             </div>
           </div>
         </div>
-      
       </Scrollbar>
     </article>
   );

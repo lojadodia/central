@@ -38,18 +38,16 @@ Props) => {
   const refBgAttr = useRef(null);
   const [cardapioId, setCardapioId] = useState(0);
   for (let name of Object.keys(variations)) {
-    const regEx = /Não, Obrigado/i;
+    const regEx = /Não/i;
     let items = variations[name];
-    //if (items[0].attribute?.name.includes("Bebida")) {
-    const index = items.products?.findIndex((item: { value: string }) =>
-      regEx.test(item.value)
+    const index = items.products?.findIndex((item: { name: string }) =>
+      regEx.test(item.name)
     );
     if (index > -1) {
       let deleteElement = variations[name]?.products?.splice(index, 1);
       variations[name]?.products.unshift(deleteElement[0]);
       //break;
     }
-    //}
   }
 
   const toggleAttr = (

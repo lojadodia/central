@@ -41,8 +41,12 @@ interface Variation {
   quantity: number;
   [key: string]: unknown;
 }
+
+const saveVariations = []
+
 export function generateCartItem(item: Item, variation: Variation) {
   const { id, name, slug, image, price, sale_price, quantity, unit, extras, custom_variation, obs = '' } = item;
+
 
 
   let totalExtras = 0;
@@ -59,7 +63,7 @@ export function generateCartItem(item: Item, variation: Variation) {
         customId += `-${key}`;
 
       }
-      products?.forEach(item => {
+      products.forEach(item => {
         customId += `.${item.id.toString()}`;
       });
 
@@ -89,30 +93,9 @@ export function generateCartItem(item: Item, variation: Variation) {
 
 
     });
-
-    /*
-    variation[id] && variation[id].forEach(_extra => {
-
-
-      _extra.products.forEach((product: { price: number }) => {
-
-        totalExtras += (Number(product.price))
-      });
-
-      // console.log(totalExtras)
-    })
-    */
-
   }
 
-  /*
-    let buildId = ""
-    let extrasKeys = extra.length > 0 ? Object.keys(extras).join('.') : null
-    if (extrasKeys) {
-      buildId = '-'.concat(extrasKeys) ?? ''
-    }
-    */
- 
+
  
   if (!isEmpty(variation)) {
 

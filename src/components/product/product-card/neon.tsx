@@ -13,8 +13,11 @@ type NeonProps = {
 };
 
 const Neon: React.FC<NeonProps> = ({ product, className }) => {
-  const { name, custom_variation, attributes, image, quantity, product_type } =
-    product ?? {};
+  const { name, attributes, custom_variation, image, quantity, product_type, options } = product ?? {};
+
+  let _customVariation = JSON.parse(custom_variation);
+
+  
   const { price, basePrice, discount } = usePrice({
     amount: product.price,
     baseAmount: product.sale_price,
@@ -22,15 +25,15 @@ const Neon: React.FC<NeonProps> = ({ product, className }) => {
   const { price: min_price } = usePrice({
     amount: +product.min_price,
   });
-
-  const { options } = product ?? {};
   const { openModal, setModalView, setModalData } = useUI();
 
   const handleVerifyOptions = () => {
     const checks = [];
-    const notExtras = custom_variation?.filter((item) => !item.is_extra) ?? [];
 
-    if (notExtras.length === 0) return true;
+    if (typeof _customVariation == "object") return true;
+    const notExtras = _customVariation?.filter!((item: {is_extra: boolean}) => !item.is_extra) ?? [];
+
+    if (notExtras?.length === 0) return true
 
     if (Object.keys(attributes).length === 0) return false;
 

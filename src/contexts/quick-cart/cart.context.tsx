@@ -40,15 +40,43 @@ export const CartProvider: React.FC = (props) => {
   );
 
   React.useEffect(() => {
+    notifyCartAction(state)
     saveCart(JSON.stringify(state));
   }, [state, saveCart]);
 
-  const addItemToCart = (item: Item, quantity: number) =>
-    dispatch({ type: "ADD_ITEM_WITH_QUANTITY", item, quantity });
-  const removeItemFromCart = (id: Item["id"]) =>
-    dispatch({ type: "REMOVE_ITEM_OR_QUANTITY", id });
-  const clearItemFromCart = (id: Item["id"]) =>
-    dispatch({ type: "REMOVE_ITEM", id });
+  const notifyCartAction = (state: State) => {
+
+    if (state.updated_at === undefined && !state.isEmpty) {
+      resetCart();
+      return
+    }
+    
+    let lastUpdatedAt = Number(state.updated_at);
+    let updatedAtHour = (Date.now() - lastUpdatedAt) /(3600000); // 3600000 = 1000mil/s * 60s/m * 60m/h
+
+    if (lastUpdatedAt > Date.now()) {
+      
+      resetCart();
+    } else if ( updatedAtHour >= 12) {
+      resetCart();
+    }
+  }
+  React.useEffect(() => {
+    
+  }, [])
+
+  const addItemToCart = (item: Item, quantity: number) => {
+    notifyCartAction(state)
+    return dispatch({ type: "ADD_ITEM_WITH_QUANTITY", item, quantity });
+  }
+  const removeItemFromCart = (id: Item["id"]) => {
+    notifyCartAction(state)
+    return dispatch({ type: "REMOVE_ITEM_OR_QUANTITY", id, updated_at: Date.now() });
+  }
+  const clearItemFromCart = (id: Item["id"]) =>{
+    notifyCartAction(state)
+    return dispatch({ type: "REMOVE_ITEM", id, updated_at: Date.now() });
+  }
   const isInCart = (id: Item["id"]) => !!getItem(state.items, id);
   const getItemFromCart = (id: Item["id"]) => getItem(state.items, id);
   const isInStock = (id: Item["id"]) => inStock(state.items, id);

@@ -19,10 +19,10 @@ interface Metadata {
 
 type Action =
   | { type: "ADD_ITEM_WITH_QUANTITY"; item: Item; quantity: number }
-  | { type: "REMOVE_ITEM_OR_QUANTITY"; id: Item["id"]; quantity?: number }
-  | { type: "ADD_ITEM"; id: Item["id"]; item: Item }
+  | { type: "REMOVE_ITEM_OR_QUANTITY"; id: Item["id"]; quantity?: number, updated_at: number }
+  | { type: "ADD_ITEM"; id: Item["id"]; item: Item, updated_at: number }
   | { type: "UPDATE_ITEM"; id: Item["id"]; item: UpdateItemInput }
-  | { type: "REMOVE_ITEM"; id: Item["id"] }
+  | { type: "REMOVE_ITEM"; id: Item["id"], updated_at: number }
   | { type: "RESET_CART" };
 
 export interface State {
@@ -32,6 +32,7 @@ export interface State {
   totalUniqueItems: number;
   total: number;
   meta?: Metadata | null;
+  updated_at?: Number | undefined,
 }
 export const initialState: State = {
   items: [],
@@ -40,16 +41,18 @@ export const initialState: State = {
   totalUniqueItems: 0,
   total: 0,
   meta: null,
+  updated_at: undefined
 };
 export function cartReducer(state: State, action: Action): State {
   switch (action.type) {
     case "ADD_ITEM_WITH_QUANTITY": {
+      
       const items = addItemWithQuantity(
         state.items,
         action.item,
         action.quantity
       );
-      return generateFinalState(state, items);
+      return {...generateFinalState(state, items), updated_at: Date.now()};
     }
     case "REMOVE_ITEM_OR_QUANTITY": {
       const items = removeItemOrQuantity(
@@ -57,20 +60,21 @@ export function cartReducer(state: State, action: Action): State {
         action.id,
         (action.quantity = 1)
       );
-      return generateFinalState(state, items);
+      return {...generateFinalState(state, items), updated_at: Date.now()};
     }
     case "ADD_ITEM": {
       const items = addItem(state.items, action.item);
-      return generateFinalState(state, items);
+      return {...generateFinalState(state, items), updated_at: Date.now()};
     }
     case "REMOVE_ITEM": {
       const items = removeItem(state.items, action.id);
-      return generateFinalState(state, items);
+      return {...generateFinalState(state, items), updated_at: Date.now()};
     }
     case "UPDATE_ITEM": {
       const items = updateItem(state.items, action.id, action.item);
-      return generateFinalState(state, items);
+      return {...generateFinalState(state, items), updated_at: Date.now()};
     }
+
     case "RESET_CART":
       return initialState;
     default:

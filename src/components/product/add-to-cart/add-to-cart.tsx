@@ -4,7 +4,7 @@ import { cartAnimation } from "@utils/cart-animation";
 import { useCart } from "@contexts/quick-cart/cart.context";
 import { generateCartItem } from "@contexts/quick-cart/generate-cart-item";
 import { Item } from "@contexts/quick-cart/cart.utils";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import { useUI } from "@contexts/ui.context";
 import usePrice from "@utils/use-price";
 
@@ -23,13 +23,14 @@ interface Props {
   variation?: any;
   disabled?: boolean;
   isOpen?: boolean;
-  handlerModal?: () => void
-  handleVerifyOptions?: () => boolean
+  handlerModal?: () => void;
+  handleVerifyOptions?: () => boolean;
 }
 
 export const AddToCart = ({
   data,
   obs,
+  total,
   variant = "helium",
   counterVariant,
   counterClass,
@@ -37,7 +38,7 @@ export const AddToCart = ({
   disabled,
   isOpen = false,
   handleVerifyOptions,
-  handlerModal
+  handlerModal,
 }: Props) => {
   const {
     addItemToCart,
@@ -46,62 +47,54 @@ export const AddToCart = ({
     getItemFromCart,
     isInCart,
   } = useCart();
-  const item: Item = generateCartItem(data, variation);
+
+  const item: Item = total;
+
   const { closeModal } = useUI();
   const handleAddClick = (
     e: React.MouseEvent<HTMLButtonElement | MouseEvent>
-    ) => {
-      e.stopPropagation();
-      if (handleVerifyOptions() === false) {
-        var hash = window.location.hash;
-        window.location.hash = "#";
-        toast.error("Selecione todas as Opções Obrigatórias (*)", {autoClose: 8000});
-        setTimeout(() => {
-          window.location.hash = hash;
-        }, 200);
-       
-        return
-      }
-      if (Number(item.price) <= 0) {
-        toast.error("Após a pagina recarregar, tente denovo.", {autoClose: 8000});
-        location.href=""
-        return
-      }
-      item.obs = obs
+  ) => {
+    e.stopPropagation();
+    if (handleVerifyOptions() === false) {
+      var hash = window.location.hash;
+      window.location.hash = "#";
+      toast.error("Selecione todas as Opções Obrigatórias (*)", {
+        autoClose: 8000,
+      });
+      setTimeout(() => {
+        window.location.hash = hash;
+      }, 200);
+
+      return;
+    }
+
+    item["price"] = total?.price_total;
+    item["price_total"] = total?.price_total;
+
+    console.log(total)
+
+    item.obs = obs;
     addItemToCart(item, 1);
     if (!isInCart(item.id)) {
       cartAnimation(e);
     }
-    closeModal()
+    closeModal();
   };
-  
 
   const handleRemoveClick = (e: any) => {
     e.stopPropagation();
     removeItemFromCart(item.id);
   };
-  const outOfStock = isInCart(item.id) && !isInStock(item.id);
 
-  let items = []
+  item.stock = data.quantity;
+  const outOfStock = !isInStock(item.id);
 
-
-  if (item?.extras) {
-    for(let key in item.extras) {
-      let aux = item.extras[key]
-     
-      const { price: priceExtra } = usePrice({
-        amount: +(aux.price * item?.quantity),
-      });
-      aux.sync_price2 = priceExtra
-      items.push(aux)
-    }
-  }
 
   return !isInCart(item.id) ? (
     <AddToCartBtn
-      disabled={disabled || outOfStock}
+      disabled={!outOfStock}
       variant={variant}
-      onClick={ isOpen ? handlerModal : handleAddClick}
+      onClick={isOpen ? handlerModal : handleAddClick}
     />
   ) : (
     <>

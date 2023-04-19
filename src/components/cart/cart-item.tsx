@@ -50,7 +50,7 @@ const CartItem = ({ item }: CartItemProps) => {
       items.push(aux)
     }
   }
-
+  
   return (
     <motion.div
       layout
