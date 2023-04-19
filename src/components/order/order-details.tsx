@@ -6,19 +6,20 @@ import { formatAddress } from "@utils/format-address";
 import OrderStatus from "./order-status";
 import { RiCloseCircleLine } from 'react-icons/ri';
 import dayjs from "dayjs";
+import { formmatPrice } from "@utils/formmat-price";
 
 const orderTableColumns = [
   {
     title: "Produtos",
     dataIndex: "",
-    align: "left",
     key: "items",
-    width: 130,
+    width: 250,
     ellipsis: true,
     render: (_: any, record: any) => {
       const { price } = usePrice({
-        amount: +record.pivot?.unit_price,
+        amount: +record.pivot?.price_total,
       });
+     
       let name = record.name;
 
       //---------
@@ -42,9 +43,17 @@ const orderTableColumns = [
 
       return (
         <div className="flex items-center">
-      
+          <div className="w-16 h-16 flex flex-shrink-0 rounded overflow-hidden">
+            <img
+              src={
+                record.image?.thumbnail ?? siteSettings.product.placeholderImage
+              }
+              alt={name}
+              className="w-full h-full object-cover"
+            />
+          </div>
 
-          <div className="flex flex-col overflow-hidden">
+          <div className="flex flex-col ml-4 overflow-hidden">
             <div className="flex mb-1">
               <span className="text-sm text-body dark:text-white truncate inline-block overflow-hidden">
                 {name} x&nbsp;
@@ -54,15 +63,30 @@ const orderTableColumns = [
                 {record.unit}
               </span>
             </div>
-            {!!extras && <p className="text-xs text-body dark:text-neutral"><b>Extras</b> <br />
-              { Object.keys(extras).map((key, index) => {
+       
+
+          
+            {extras.map((extra:any) =>
+            (<li
+              className={`text-xs dark:text-neutral ${extra?.group_is_extra == true && "text-body"}`}
+              key={extra.id}>
+              
+               {extra?.group_is_extra == true && (<span>+ </span>)} <span>{extra.name}</span>&nbsp;
+                {extra?.group_is_extra == true && (<span> - {formmatPrice(extra.price)}</span>)}
+            </li>)
+            )}
+
+              {/* { Object.keys(extras).map((key, index) => {
                 const extra = extras[key]
                 const {price} = usePrice({
                   amount: +extra.sync_price
                 })
                 return <span className='block' key={key} >{extra.value} ({price})&nbsp;</span>
-              })}
-            </p>}
+              })} */}
+
+
+
+           
             {record?.pivot?.obs && (
               <>
                 <span className="text-sm  mt-2 block text-body dark:text-neutral">
@@ -70,9 +94,9 @@ const orderTableColumns = [
                 </span>
               </>
             )}
-            <span className="text-sm text-primary font-semibold mb-1 truncate inline-block overflow-hidden">
+            {/* <span className="text-sm text-primary font-semibold mb-1 truncate inline-block overflow-hidden">
               {price}
-            </span>
+            </span> */}
           </div>
         </div>
       );
@@ -83,7 +107,7 @@ const orderTableColumns = [
     dataIndex: "pivot",
     key: "pivot",
     align: "center",
-    width: 40,
+    width: 100,
     render: (pivot: any) => {
       return <p className="text-body dark:text-gray">{pivot.order_quantity}</p>;
     },
@@ -93,10 +117,10 @@ const orderTableColumns = [
     dataIndex: "pivot",
     key: "price",
     align: "right",
-    width: 60,
+    width: 100,
     render: (pivot: any) => {
       const { price } = usePrice({
-        amount: +pivot.subtotal,
+        amount: +pivot.price_total,
       });
       return <p>{price}</p>;
     },
@@ -136,13 +160,15 @@ const OrderDetails = ({ order }: Props) => {
 
   return (
     
-    <div className="flex flex-col w-full bg-white dark:bg-neutral-900 dark:border-neutral-500  border-gray-200">
+    <div className="flex flex-col w-full bg-white dark:bg-neutral-900 dark:border-neutral-500 md:w-2/3 border border-gray-200">
       {order ? (
         <>
-        
+          <h2 className="dark:text-white text-xl text-gray-800 p-5 border-b dark:border-neutral-500 border-gray-200">
+          Pedido - {tracking_number?.slice(-5)} | {delivery_hour}
+          </h2>
          
           <div className="flex flex-col sm:flex-row border-b border-gray-200 dark:border-neutral-500">
-            <div className="w-full  flex flex-col px-0  ">
+            <div className="w-full md:w-3/5 flex flex-col px-5 py-4 border-b sm:border-b-0 dark:border-neutral-500 sm:border-r border-gray-200">
               {/* <div className="mb-4">
                 <span className="text-sm text-heading dark:text-gray font-bold mb-2 block">
                   Endereço para Envio
@@ -154,51 +180,55 @@ const OrderDetails = ({ order }: Props) => {
               </div> */}
 
               <div>
-            
+                <span className="text-sm text-heading dark:text-neutral font-bold mb-2 block">
+                  Para
+                </span>
+
                 <span className="text-sm text-body dark:text-white">
                   {formatAddress(billing_address)}
                 </span>
               </div>
               <div>
-                <span className="text-sm text-heading italic dark:text-neutral  mt-3 mb-2 block">
+                {/* <span className="text-sm text-heading italic dark:text-neutral  mt-5 mb-2 block">
                  {!!obs && ('Obs: ' + obs)}
-                </span>
+                </span> */}
 
                
               </div>
-              <div className="flex justify-between mb-">
-                <span className="text-sm text-body dark:text-gray">Sub Total</span>
-                <span className="text-sm text-heading dark:text-gray">{amount}</span>
-              </div>
+            </div>
 
-              <div className="flex justify-between mb-1">
-                <span className="text-sm text-body dark:text-gray">Descontos</span>
-                <span className="text-sm text-heading dark:text-gray">{discount}</span>
-              </div>
-
-              <div className="flex justify-between mb-1">
-                <span className="text-sm text-body dark:text-gray">Taxa de Entrega</span>
-                <span className="text-sm text-heading dark:text-gray">{delivery_fee}</span>
-              </div>
-              <div className="flex justify-between mb-1">
-                <span className="text-sm text-body dark:text-gray">Outras Taxas</span>
-                <span className="text-sm text-heading dark:text-gray">{sales_tax}</span>
+            <div className="w-full md:w-2/5 flex flex-col px-5 py-4">
+              <div className="flex justify-between mb-3">
+                <span className="text-sm text-heading dark:text-white">Sub Total</span>
+                <span className="text-sm text-heading dark:text-white">{amount}</span>
               </div>
 
               <div className="flex justify-between mb-3">
+                <span className="text-sm text-heading dark:text-white">Descontos</span>
+                <span className="text-sm text-heading dark:text-white">{discount}</span>
+              </div>
+
+              <div className="flex justify-between mb-3">
+                <span className="text-sm text-heading dark:text-white">Taxa de Entrega</span>
+                <span className="text-sm text-heading dark:text-white">{delivery_fee}</span>
+              </div>
+              <div className="flex justify-between mb-3">
+                <span className="text-sm text-heading dark:text-white">Outras Taxas</span>
+                <span className="text-sm text-heading dark:text-white">{sales_tax}</span>
+              </div>
+
+              <div className="flex justify-between">
                 <span className="text-sm font-bold text-heading dark:text-white">Total</span>
                 <span className="text-sm font-bold text-heading dark:text-white">{total}</span>
               </div>
             </div>
-
-
           </div>
  
           {/* Order Table */}
           <div>
-            <div className="w-full flex justify-center items-center px-0">
+            <div className="w-full flex justify-center items-center px-6">
             {!cancelled_at ? <>
-           
+              <OrderStatus status={status?.serial} />
               </> :
               <>
               <div className="bg-red-100 w-full mb-5 mt-5 dark:border-neutral-500 border-t-4 border-red-700 rounded-b text-teal-900 px-4 py-3 shadow-md" style={{borderColor:'#f56565'}} role="alert">

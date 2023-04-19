@@ -6,6 +6,7 @@ import { generateCartItem } from "@contexts/quick-cart/generate-cart-item";
 import { Item } from "@contexts/quick-cart/cart.utils";
 import { toast } from 'react-toastify';
 import { useUI } from "@contexts/ui.context";
+import usePrice from "@utils/use-price";
 
 interface Props {
   data: any;
@@ -80,6 +81,21 @@ export const AddToCart = ({
     removeItemFromCart(item.id);
   };
   const outOfStock = isInCart(item.id) && !isInStock(item.id);
+
+  let items = []
+
+
+  if (item?.extras) {
+    for(let key in item.extras) {
+      let aux = item.extras[key]
+     
+      const { price: priceExtra } = usePrice({
+        amount: +(aux.price * item?.quantity),
+      });
+      aux.sync_price2 = priceExtra
+      items.push(aux)
+    }
+  }
 
   return !isInCart(item.id) ? (
     <AddToCartBtn

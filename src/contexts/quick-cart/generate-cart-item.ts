@@ -1,3 +1,4 @@
+import { isNumber } from "lodash";
 import isEmpty from "lodash/isEmpty";
 interface AttributeExtra {
   id: string | number;
@@ -6,11 +7,14 @@ interface AttributeExtra {
 }
 interface Extra {
   id: string | number;
+  name: string,
+  price: string,
   attribute: AttributeExtra;
   sync_id: string;
   sync_price: string;
   sync_tax_rate: string;
   value: string;
+  is_extra: boolean;
 }
 interface Item {
   id?: string | number;
@@ -21,7 +25,7 @@ interface Item {
     thumbnail: string;
     [key: string]: unknown;
   };
-  custom_variation: any[];
+  custom_variation: any[],
   price: number;
   sale_price?: number;
   quantity?: number;
@@ -39,13 +43,14 @@ interface Variation {
 }
 export function generateCartItem(item: Item, variation: Variation) {
   const { id, name, slug, image, price, sale_price, quantity, unit, extras, custom_variation, obs = '' } = item;
-  let totalExtras = 0
-  let options_variation: Extra[] = []
-  let customId: string = ''
-  let total_price = 0
-  //let extra: Extra[] = [];
-  if (custom_variation) {
 
+
+  let totalExtras = 0;
+  let options_variation: Extra[] = [];
+  let customId: string = "";
+  let total_price = 0;
+
+  if (custom_variation) {
 
     variation && Object.keys(variation).forEach((key) => {
       let products: any[] = variation[key];
@@ -54,7 +59,7 @@ export function generateCartItem(item: Item, variation: Variation) {
         customId += `-${key}`;
 
       }
-      products.forEach(item => {
+      products?.forEach(item => {
         customId += `.${item.id.toString()}`;
       });
 

@@ -65,10 +65,10 @@ export const siteSettings = {
   ],
   dashboardSidebarMenu: [
 
-    {
-      href: ROUTES.LOGOUT,
-      label: "SAIR",
-    },
+    // {
+    //   href: ROUTES.LOGOUT,
+    //   label: "SAIR",
+    // },
   ],
   deliverySchedule: [
     {

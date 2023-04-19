@@ -99,7 +99,7 @@ const Neon: React.FC<NeonProps> = ({ product, className }) => {
                 price
               )
             ) : (
-              <span className="text-body text-xs">
+              <span className="text-primary text-xs">
                 {" "}
                 <RiListCheck2
                   style={{ display: "inline-block", verticalAlign: "-2px" }}
@@ -120,7 +120,7 @@ const Neon: React.FC<NeonProps> = ({ product, className }) => {
         {product?.price == 0 ? (
           product?.product_type != "variable" ? (
             <div
-              className="bg-primary rounded text-xs text-center text-white px-2 py-1.5 sm:py-2.5"
+              className="bg-primary hidden rounded text-xs text-center text-white px-2 py-1.5 sm:py-2.5"
               onClick={handleProductQuickView}
             >
               Saber mais
@@ -138,13 +138,13 @@ const Neon: React.FC<NeonProps> = ({ product, className }) => {
           )
         ) : quantity > 0 ? (
           <div>
-            <AddToCart
+            {/* <AddToCart
               variant="neon"
               data={product}
               isOpen={product_type !== "simple" || options}
               handleVerifyOptions={handleVerifyOptions}
               handlerModal={handleProductQuickView}
-            />
+            /> */}
           </div>
         ) : (
           <div className="bg-red-500 rounded text-xs text-center text-white px-2 py-1.5 sm:py-2.5">

@@ -5,6 +5,7 @@ import Counter from "@components/ui/counter";
 import { CloseIcon } from "@components/icons/close-icon";
 import { fadeInOut } from "@utils/motion/fade-in-out";
 import usePrice from "@utils/use-price";
+import { formmatPrice } from "@utils/formmat-price";
 import { useCart } from "@contexts/quick-cart/cart.context";
 
 interface CartItemProps {
@@ -23,7 +24,7 @@ const CartItem = ({ item }: CartItemProps) => {
     amount: item.price,
   });
   const { price: itemPrice } = usePrice({
-    amount: item.itemTotal,
+    amount: item.item_price_total,
   });
   function handleIncrement(e: any) {
     e.stopPropagation();
@@ -37,16 +38,19 @@ const CartItem = ({ item }: CartItemProps) => {
 
   let items = []
 
+
   if (item?.extras) {
     for(let key in item.extras) {
       let aux = item.extras[key]
+     
       const { price: priceExtra } = usePrice({
-        amount: +(aux.sync_price * item.quantity),
+        amount: +(aux.price * item.quantity),
       });
       aux.sync_price2 = priceExtra
       items.push(aux)
     }
   }
+
   return (
     <motion.div
       layout
@@ -54,9 +58,9 @@ const CartItem = ({ item }: CartItemProps) => {
       animate="to"
       exit="from"
       variants={fadeInOut(0.25)}
-      className="flex items-center py-3 px-4 sm:px-4 text-sm border-b dark:border-neutral-700 border-solid border-gray-200 border-opacity-75"
+      className="flex mt-2 items-center py-1 pl-2 pr-5 text-sm border-b dark:border-neutral-700 border-solid border-gray-200 border-opacity-75"
     >
-      <div className="flex-shrink-0 mr-4 lg:mr-0">
+      <div className="flex-shrink-0 ">
         <Counter
           value={item.quantity}
           onDecrement={handleRemoveClick}
@@ -65,7 +69,7 @@ const CartItem = ({ item }: CartItemProps) => {
           disabled={outOfStock}
         />
       </div>
-      <div className="w-10 hidden lg:block sm:w-16 h-10 sm:h-16 flex items-center justify-center overflow-hidden  mx-4 flex-shrink-0 relative">
+      <div className="w-10 sm:w-16 h-10 sm:h-16 flex items-center justify-center overflow-hidden bg-gray-100 mx-4 flex-shrink-0 relative">
         <Image
           src={item?.image ?? siteSettings?.product?.placeholderImage}
           alt={item.name}
@@ -74,20 +78,21 @@ const CartItem = ({ item }: CartItemProps) => {
         />
       </div>
       <div >
+      
         <h3 className="font-bold text-heading dark:text-white">{item.name}</h3>
-        <p className="my-0 font-semibold text-primary">{price}</p>
+      {item.extras.length === 0 && (<p className="my-0 font-semibold text-primary">{price}</p>)}  
         {items.length !== 0 &&
         (<>
-        <p>
+        {/* <p>
           <span className="text-xs dark:text-neutral"><b>Extras</b></span>
-        </p>
+        </p> */}
           <ul className="w-40 mb-1">
             {items && items.map((extra:any) =>
             (<li
-              className="text-xs dark:text-neutral"
+              className={`text-xs dark:text-neutral ${extra?.group_is_extra == true && "text-body"}`}
               key={extra.id}>
-                <span>{extra.value}</span>&nbsp;
-                (<span>{extra.sync_price2})</span>
+               {extra?.group_is_extra == true && (<span>+ </span>)} <span>{extra.name}</span>&nbsp;
+                {extra?.group_is_extra == true && (<span> - {formmatPrice(extra.price)}</span>)}
             </li>)
             )}
           </ul>
@@ -96,9 +101,9 @@ const CartItem = ({ item }: CartItemProps) => {
         {
           item.obs && <span className="text-xs dark:text-neutral text-gray-500 mb-3 block">Obs: <i>{item.obs}</i></span> 
         }
-        <span className="text-xs dark:text-neutral text-gray-500">
+        {/* <span className="text-xs dark:text-neutral text-gray-500">
           {item.quantity} X {item.unit}
-        </span>
+        </span> */}
       </div>
       <span className="ml-auto font-bold text-lg text-heading dark:text-white">{itemPrice}</span>
       <button

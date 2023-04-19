@@ -124,24 +124,30 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
 
   const handleVerifyOptions = () => {
     const checks = [];
-    const notExtras =
-      data?.custom_variation?.filter((item) => !item.is_extra) ?? [];
 
-    if (notExtras.length === 0) return true;
+    if(data?.product_type == "variable"){
+      const notExtras =
+        data?.custom_variation?.filter((item) => !item.is_extra) ?? [];
 
-    if (Object.keys(attributes).length === 0) return false;
+      if (notExtras.length === 0) return true;
 
-    Object.values(attributes).forEach((item) =>
-      item.forEach((subitem) => {
-        subitem.selected ? checks.push("ok") : null;
-      })
-    );
+      if (Object.keys(attributes).length === 0) return false;
 
-    if (checks.length === notExtras.length) {
-      return true;
+      Object.values(attributes).forEach((item) =>
+        item.forEach((subitem) => {
+          subitem.selected ? checks.push("ok") : null;
+        })
+      );
+
+      if (checks.length === notExtras.length) {
+        return true;
+      }
+       return false;
     }
+    
+   
 
-    return false;
+   
   };
 
   const toggleExtra = (prop: { id: number }) => {
@@ -301,7 +307,8 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
             >
               {name}
             </h3>
-            {description}
+            <div dangerouslySetInnerHTML={{ __html: description }}></div>
+
             {/* {unit && isEmpty(variations) ? (
               <span className="text-sm font-normal text-body dark:text-neutral mt-2 block">
                 {unit}
@@ -436,7 +443,8 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
                 </div>
 
                 <div>
-                  <ProductAttributes
+                  {product_type == "variable" && (
+ <ProductAttributes
                     product={slug}
                     variations={data?.custom_variation}
                     extras={custom_variation?.filter(
@@ -448,6 +456,8 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
                     toggleExtra={toggleExtra}
                     // activeExtra={selectedVariation?.is_disable || !isSelected}
                   />
+                  )}
+                 
 
                   <div className="px-3 pt-2">
                     {(!settings?.site?.obs ||
@@ -529,16 +539,7 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
             </div>
           </div>
         </div>
-        {related_products?.length! > 1 && (
-          <div className="py-8 md:px-10">
-            <div className="px-4">
-              <RelatedProducts
-                products={related_products}
-                currentProductId={id}
-              />
-            </div>
-          </div>
-        )}
+      
       </Scrollbar>
     </article>
   );

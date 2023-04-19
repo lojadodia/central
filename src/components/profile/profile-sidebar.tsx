@@ -28,7 +28,15 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ className }) => {
               </NavLink>
             </li>
           ))}
-          
+          <li
+                
+                className="border-b border-gray-100 dark:border-neutral-700 cursor-pointer last:border-0"
+              >
+
+                  <a href="/app_logout" className="block px-4 py-3 text-sm text-heading dark:text-white font-medium transition duration-200 hover:text-primary">
+                  Terminar Sessão
+                  </a>
+              </li>
       </ul>
       {/* End of top part menu */}
 
