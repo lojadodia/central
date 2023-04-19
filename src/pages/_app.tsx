@@ -92,7 +92,7 @@ export default function CustomApp({ Component, pageProps }: AppProps) {
           Cookies.set("url_endpoint", get[1]);
     
 
-          window.location.href="/central";
+          window.location.href="https://central-v4.lojadodia.com/central";
         }
       }
       
