@@ -36,6 +36,7 @@ import HttpApi from "i18next-http-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
+import http from "@utils/api/http";
 
 const Noop: React.FC = ({ children }) => <>{children}</>;
 
@@ -90,9 +91,14 @@ export default function CustomApp({ Component, pageProps }: AppProps) {
           Cookies.set("auth_token", get[0]);
           Cookies.set("auth_permissions", {"super_admin":"SUPER_ADMIN"});
           Cookies.set("url_endpoint", get[1]);
-    
 
-          window.location.href="/central";
+          http.get(`${get[1]}api/store/info?token=LDDEUu`).then(({ data }) => {
+            if(data?.pub_env?.VERSION == "v4"){
+              window.location.href="https://central-v4.lojadodia.com?token="+Router?.query?.token;
+            }else{
+              window.location.href="/central";
+            }
+          });
         }
       }
       
