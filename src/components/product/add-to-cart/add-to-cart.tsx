@@ -2,11 +2,10 @@ import Counter from "@components/ui/counter";
 import AddToCartBtn from "@components/product/add-to-cart/add-to-cart-btn";
 import { cartAnimation } from "@utils/cart-animation";
 import { useCart } from "@contexts/quick-cart/cart.context";
-import { generateCartItem } from "@contexts/quick-cart/generate-cart-item";
 import { Item } from "@contexts/quick-cart/cart.utils";
 import { toast } from "react-toastify";
 import { useUI } from "@contexts/ui.context";
-import usePrice from "@utils/use-price";
+
 
 interface Props {
   data: any;
@@ -71,7 +70,7 @@ export const AddToCart = ({
     item["price"] = total?.price_total;
     item["price_total"] = total?.price_total;
 
-    console.log(total)
+    console.log(item)
 
     item.obs = obs;
     addItemToCart(item, 1);
@@ -86,11 +85,14 @@ export const AddToCart = ({
     removeItemFromCart(item.id);
   };
 
-  item.stock = data.quantity;
-  const outOfStock = !isInStock(item.id);
+  let outOfStock
 
+  if (item) {
+    item.stock = data?.quantity;
+    outOfStock = !isInStock(item?.id);
+  }
 
-  return !isInCart(item.id) ? (
+  return !isInCart(item?.id) ? (
     <AddToCartBtn
       disabled={!outOfStock}
       variant={variant}

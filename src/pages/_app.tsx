@@ -91,7 +91,7 @@ export default function CustomApp({ Component, pageProps }: AppProps) {
           Cookies.set("auth_permissions", {"super_admin":"SUPER_ADMIN"});
           Cookies.set("url_endpoint", get[1]);
 
-          window.location.href="https://central-v4.lojadodia.com/central";
+          window.location.href="/central";
         }
       }
       
