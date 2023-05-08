@@ -17,6 +17,7 @@ import { useUI } from "@contexts/ui.context";
 import React, { useEffect } from "react";
 import Scrollbar from "@components/ui/scrollbar";
 import BakeryCategory from "@components/category/bakery-category";
+import Feed from "@components/feed";
 
 const CartCounterButton = dynamic(
   () => import("@components/cart/cart-counter-button"),
@@ -80,22 +81,21 @@ export default function HomePage() {
         className="flex flex-1 border-t border-r border-solid border-theme dark:border-neutral-700 dark:bg-black border-opacity-70"
       >
        
-        <main className="flex-1">
-        <div className="grid grid-cols-3 gap-0">
-          
-              <div className="col-span-2">
-                <div className="w-full dark:bg-neutral-900 py-3 px-0 lg:px-5 border-b dark:border-neutral-700 lg:mt-20 mt-5">
+       <main className="flex-1">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-0 ">
+              <div className="col-span-2 mt-10">
+
+              <Feed />
+                {/* <div className="w-full dark:bg-neutral-900 py-3 px-0 lg:px-5 border-b dark:border-neutral-700 lg:mt-20 mt-5">
                    <BakeryCategory /> 
                 </div> 
-             
-              <Scrollbar
-                className="w-full"
-                style={{ height: "calc(100vh - 147px)",marginBottom:"-97px" }}>
-                
-              <ProductFeed />
-            </Scrollbar>
-         
-          </div>
+                <Scrollbar
+                  className="w-full"
+                  style={{ height: "calc(100vh - 147px)",marginBottom:"-97px" }}>
+                  
+                  <ProductFeed />
+                </Scrollbar> */}
+              </div>
           <div className="relative">
 
               <CartSidebarView />

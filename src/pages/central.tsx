@@ -13,11 +13,10 @@ import { fetchSettings } from "@data/settings/use-settings.query";
 import { GetServerSideProps } from "next";
 import Scrollbar from "@components/ui/scrollbar";
 import { RiRefreshLine } from 'react-icons/ri';
+import Feed from "@components/feed";
 const CartSidebarView = dynamic(
 	() => import('@components/cart/cart-sidebar-view')
 );
-
-
 const CartCounterButton = dynamic(
   () => import("@components/cart/cart-counter-button"),
   { ssr: false }
@@ -61,21 +60,20 @@ export default function HomePage() {
       >
        
         <main className="flex-1">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-0">
-          
-              <div className="col-span-2">
-                <div className="w-full dark:bg-neutral-900 py-3 px-0 lg:px-5 border-b dark:border-neutral-700 lg:mt-20 mt-5">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-0 ">
+              <div className="col-span-2 mt-10">
+
+              <Feed />
+                {/* <div className="w-full dark:bg-neutral-900 py-3 px-0 lg:px-5 border-b dark:border-neutral-700 lg:mt-20 mt-5">
                    <BakeryCategory /> 
                 </div> 
-             
-              <Scrollbar
-                className="w-full"
-                style={{ height: "calc(100vh - 147px)",marginBottom:"-97px" }}>
-                
-              <ProductFeed />
-            </Scrollbar>
-         
-          </div>
+                <Scrollbar
+                  className="w-full"
+                  style={{ height: "calc(100vh - 147px)",marginBottom:"-97px" }}>
+                  
+                  <ProductFeed />
+                </Scrollbar> */}
+              </div>
           <div className="relative hidden md:block">
 
               <CartSidebarView />

@@ -66,7 +66,7 @@ const AddToCartBtn: React.FC<Props> = ({ variant, onClick, disabled }) => {
       return (
         <button
           onClick={onClick}
-          disabled={disabled}
+          //disabled={disabled}
           className={cn(
             "py-4 px-5 h-14 w-full flex items-center text-white justify-center text-lg lg:text-base font-light md:rounded bg-primary hover:bg-primary-2 transition-colors duration-300 focus:outline-none focus:bg-primary-2 text-special-shadow",
             {
@@ -74,7 +74,7 @@ const AddToCartBtn: React.FC<Props> = ({ variant, onClick, disabled }) => {
             }
           )}
         >
-          <span>Adicio.</span>
+          <span>ADICIONAR</span>
         </button>
       );
     default:

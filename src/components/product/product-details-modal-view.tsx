@@ -418,7 +418,7 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
                     {data?.price == 0 ? (
                       <a
                         href="/contact"
-                        className="bg-primary w-full rounded text-center text-white px-2 py-4 "
+                        className="bg-primary w-full hidden rounded text-center text-white px-2 py-4 "
                       >
                         Contacte-nos →
                       </a>

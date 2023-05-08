@@ -22,11 +22,15 @@ export const useSettingsQuery = () => {
   );
 };
 
-export const listCategory = async()=>{
+export const listCategory = async(search: string)=>{
   const url = Cookies.get("url_endpoint") ? Cookies.get("url_endpoint") : process.env.NEXT_PUBLIC_REST_API_ENDPOINT;
   return new Promise ((resolve, rejeita )  =>  {
+    let uri = `${url}${API_ENDPOINTS.PRODUCTS}?search=type.slug:home`
+    if (search) {
+      uri = `${url}${API_ENDPOINTS.PRODUCTS}?search=type.slug:home;name:${search}&searchJoin=and`
+    }
 
-    axios.get(  `${url}${API_ENDPOINTS.PRODUCTS}?search=type.slug:home&origin=central`).then((resp)=>{
+    axios.get(uri).then((resp)=>{
       const data:Category[] = resp.data?.data;
       resolve(data);
     }).catch((error)=>{

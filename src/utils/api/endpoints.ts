@@ -26,5 +26,6 @@ export const API_ENDPOINTS: Record<string, string> = {
   CONTACT: "contact",
   ADDRESS: "address",
   TODAY_MENU: "today-menu",
-  CHECK_OFFER: "check-offer"
+  CHECK_OFFER: "check-offer",
+  GET_CATEGORY: "category",
 };
