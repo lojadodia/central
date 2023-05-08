@@ -7,8 +7,8 @@ interface AttributeExtra {
 }
 interface Extra {
   id: string | number;
-  name: string,
-  price: string,
+  name: string;
+  price: string;
   attribute: AttributeExtra;
   sync_id: string;
   sync_price: string;
@@ -25,7 +25,7 @@ interface Item {
     thumbnail: string;
     [key: string]: unknown;
   };
-  custom_variation: any[],
+  custom_variation: any[];
   price: number;
   sale_price?: number;
   quantity?: number;
@@ -42,12 +42,22 @@ interface Variation {
   [key: string]: unknown;
 }
 
-const saveVariations = []
+const saveVariations = [];
 
 export function generateCartItem(item: Item, variation: Variation) {
-  const { id, name, slug, image, price, sale_price, quantity, unit, extras, custom_variation, obs = '' } = item;
-
-
+  const {
+    id,
+    name,
+    slug,
+    image,
+    price,
+    sale_price,
+    quantity,
+    unit,
+    extras,
+    custom_variation,
+    obs = "",
+  } = item;
 
   let totalExtras = 0;
   let options_variation: Extra[] = [];
@@ -55,50 +65,64 @@ export function generateCartItem(item: Item, variation: Variation) {
   let total_price = 0;
 
   if (custom_variation) {
+    variation &&
+      Object.keys(variation).forEach((key) => {
+        let products: any[] = variation[key];
 
-    variation && Object.keys(variation).forEach((key) => {
-      let products: any[] = variation[key];
+        if (!Array.isArray(products)) {
+          customId = `.${products.id.toString()}`;
 
-      if (products.length) {
-        customId += `-${key}`;
+          options_variation.push({
+            menuId: id,
+            group_id: custom_variation[key].id,
+            group_name: custom_variation[key].name,
+            group_is_extra: custom_variation[key].is_extra,
+            id: products.id,
+            name: products.name,
+            price: products.price,
+          });
 
-      }
-      products.forEach(item => {
-        customId += `.${item.id.toString()}`;
-      });
+          total_price = products.price;
 
-      // codigo em analise, calcular o preço total
-      total_price += products.reduce(
-        (first, second) => first + Number(second.price),
-        0);
+          return;
+        }
 
-      
-        products.map((product: Extra) => ({
-          menuId: id,
-          group_id: custom_variation[key].id,
-          group_name: custom_variation[key].name,
-          group_is_extra: custom_variation[key].is_extra,
-          id: product.id,
-          name: product.name,
-          price: product.price,
-        })).forEach((item: any) => {
-          options_variation.push({...item})
+        if (products.length) {
+          customId += `-${key}`;
+        }
+        products.forEach((item) => {
+          customId += `.${item.id.toString()}`;
         });
 
-      if (!custom_variation[key].is_extra) return;
-      totalExtras += products.reduce(
-        (acc, product) => Number(product.price) + Number(acc),
-        0);
+        // codigo em analise, calcular o preço total
+        total_price += products.reduce(
+          (first, second) => first + Number(second.price),
+          0
+        );
 
+        products
+          .map((product: Extra) => ({
+            menuId: id,
+            group_id: custom_variation[key].id,
+            group_name: custom_variation[key].name,
+            group_is_extra: custom_variation[key].is_extra,
+            id: product.id,
+            name: product.name,
+            price: product.price,
+          }))
+          .forEach((item: any) => {
+            options_variation.push({ ...item });
+          });
 
-
-    });
+        if (!custom_variation[key].is_extra) return;
+        totalExtras += products.reduce(
+          (acc, product) => Number(product.price) + Number(acc),
+          0
+        );
+      });
   }
 
-
- 
   if (!isEmpty(variation)) {
-
     return {
       id: `${id}${customId}`,
       productId: id,
@@ -127,6 +151,6 @@ export function generateCartItem(item: Item, variation: Variation) {
     image: image?.thumbnail,
     stock: quantity,
     price: Number(price) + total_price,
-    price_total: Number(price) + Number(total_price)
+    price_total: Number(price) + Number(total_price),
   };
 }

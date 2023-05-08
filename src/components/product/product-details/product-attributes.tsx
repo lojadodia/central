@@ -14,7 +14,7 @@ interface Props {
   baseLimitExtra?: number;
   setAttributes: (key: any) => void;
   toggleExtra: (key: any) => void;
-  handlerModal?: () => void
+  handlerModal?: () => void;
 }
 
 // Product
@@ -33,7 +33,7 @@ const ProductAttributes = ({
 Props) => {
   // const [limitExtra, setLimitExtra] = useState(baseLimitExtra);
   if (!variations) return null;
-
+  const optionRef = useRef(null);
   // const refExtras = useRef(null)
   const refBgAttr = useRef(null);
   const [cardapioId, setCardapioId] = useState(0);
@@ -144,12 +144,11 @@ Props) => {
     }, 500);
   }, []);
 
-  // useEffect(() => {
-  // if (!refExtras.current) return
-  // if (!activeExtra) {
-  //   window.location.hash ="#extras"
-  // }
-  // }, [activeExtra, refExtras.current])
+  useEffect(() => {
+    if (variations.length === 1 && optionRef.current) {
+      optionRef.current.click();
+    }
+  }, [variations, optionRef.current]);
 
   return (
     <>
@@ -163,11 +162,12 @@ Props) => {
           },
           index: number
         ) =>
-          variation.products.length !== 1 && (
+          variation.products && (
             <div
               style={{
                 opacity: index <= cardapioId ? 1 : 1,
                 pointerEvents: index <= cardapioId ? "initial" : "initial",
+                display: variations.length === 1 ? "none" : "",
               }}
               className=" pb-2 flex flex-col relative items-start px-3 first:pt-0"
               key={index}
@@ -225,13 +225,16 @@ Props) => {
                    */
                           key={`${index}.${index2}`}
                           label={item.name}
+                          ref={optionRef}
                           active={
-                            !!attributes[index]?.find(
-                              (value: { name: string }) => {
-                                if (!value) return false;
-                                return value.name == item.name;
-                              }
-                            )
+                            variation.products.length === 1
+                            ? true
+                            : !!attributes[index]?.find(
+                                (value: { name: string }) => {
+                                  if (!value) return false;
+                                  return value.name == item.name;
+                                }
+                              )
                           }
                           onClick={() => {
                             toggleAttr(item, variation.is_extra, index);
@@ -247,12 +250,14 @@ Props) => {
                             label={item.name}
                             price={item.price}
                             active={
-                              !!attributes[index]?.find(
-                                (value: { name: string }) => {
-                                  if (!value) return false;
-                                  return value.name == item.name;
-                                }
-                              )
+                              variation.products.length === 1
+                                ? true
+                                : !!attributes[index]?.find(
+                                    (value: { name: string }) => {
+                                      if (!value) return false;
+                                      return value.name == item.name;
+                                    }
+                                  )
                             }
                             onClick={() =>
                               toggleAttr(item, variation.is_extra, index)

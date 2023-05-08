@@ -1,4 +1,5 @@
 import cn from "classnames";
+import { forwardRef } from "react";
 
 type RadioGroupProps = {
   label?: string;
@@ -8,13 +9,13 @@ type RadioGroupProps = {
   color?: string;
 };
 
-const RadioGroup: React.FC<RadioGroupProps> = ({
+const RadioGroup: React.FC<RadioGroupProps> = forwardRef(({
   label,
   active,
   onClick,
   className,
   color,
-}) => { 
+}, ref) => { 
   const classes = cn(
     {
       "px-4 py-3 my-1 mr-2 text-lg border border-gray-100 bg-white rounded text-heading dark:text-white   dark:bg-neutral-600 dark:border-neutral-300 absolute-capitalize":
@@ -29,7 +30,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
     "cursor-pointer"
   );
   return (
-    <div className={classes.concat(' ').concat(className)} onClick={onClick}>
+    <div ref={ref} className={classes.concat(' ').concat(className)} onClick={onClick}>
       {className === "color" ? (
         <span
           className="w-full h-full rounded-full border dark:border-neutral-700 border-gray-200"
@@ -40,6 +41,6 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
       )} 
     </div>
   );
-};
+});
 
 export default RadioGroup;
