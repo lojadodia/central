@@ -15,7 +15,7 @@ type NeonProps = {
 const Neon: React.FC<NeonProps> = ({ product, className }) => {
   const { name, attributes, custom_variation, image, quantity, product_type, options } = product ?? {};
 
-  let _customVariation = JSON.parse(custom_variation);
+  //let _customVariation = JSON.parse(custom_variation);
 
   
   const { price, basePrice, discount } = usePrice({
@@ -27,28 +27,28 @@ const Neon: React.FC<NeonProps> = ({ product, className }) => {
   });
   const { openModal, setModalView, setModalData } = useUI();
 
-  const handleVerifyOptions = () => {
-    const checks = [];
+  // const handleVerifyOptions = () => {
+  //   const checks = [];
 
-    if (typeof _customVariation == "object") return true;
-    const notExtras = _customVariation?.filter!((item: {is_extra: boolean}) => !item.is_extra) ?? [];
+  //   if (typeof _customVariation == "object") return true;
+  //   const notExtras = _customVariation?.filter!((item: {is_extra: boolean}) => !item.is_extra) ?? [];
 
-    if (notExtras?.length === 0) return true
+  //   if (notExtras?.length === 0) return true
 
-    if (Object.keys(attributes).length === 0) return false;
+  //   if (Object.keys(attributes).length === 0) return false;
 
-    Object.values(attributes).forEach((item) =>
-      item.forEach((subitem) => {
-        subitem.selected ? checks.push("ok") : null;
-      })
-    );
+  //   Object.values(attributes).forEach((item) =>
+  //     item.forEach((subitem) => {
+  //       subitem.selected ? checks.push("ok") : null;
+  //     })
+  //   );
 
-    if (checks.length === notExtras.length) {
-      return true;
-    }
+  //   if (checks.length === notExtras.length) {
+  //     return true;
+  //   }
 
-    return false;
-  };
+  //   return false;
+  // };
 
   function handleProductQuickView() {
     const url: URL = new URL(window.location);
@@ -130,13 +130,13 @@ const Neon: React.FC<NeonProps> = ({ product, className }) => {
             </div>
           ) : (
             <div>
-              <AddToCart
+              {/* <AddToCart
                 variant="neon"
                 data={product}
                 isOpen={product_type !== "simple" || options}
-                handleVerifyOptions={handleVerifyOptions}
+               // handleVerifyOptions={handleVerifyOptions}
                 handlerModal={handleProductQuickView}
-              />
+              /> */}
             </div>
           )
         ) : quantity > 0 ? (
@@ -154,6 +154,9 @@ const Neon: React.FC<NeonProps> = ({ product, className }) => {
             Fora de estoque
           </div>
         )}
+
+
+
         {/* End of add to cart */}
       </header>
     </article>
