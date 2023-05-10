@@ -7,7 +7,7 @@ import renderProductCard from "@components/product/render-product-card";
 //import NotFound from "@components/common/not-found";
 import {
   useProductsQuery, 
- // useProductsTodayMenuQuery,
+  useProductsTodayMenuQuery,
 } from "@data/product/use-products.query";
 import http from "@utils/api/http";
 import { API_ENDPOINTS } from "@utils/api/endpoints";
@@ -104,11 +104,21 @@ const Feed = () => {
     dataAllList();
   }, [search]);
 
-
+  
 
 
   const [products, setProducts] = useState("");
   const [active, setActive] = useState("");
+
+
+  useEffect(() => {
+    if(active == ""){
+      if(!!cacheData2?.length){
+        setActive("_pratos_dia")
+      }
+    }
+  }, [active]);
+  
 
   const backSearch = () => {
     setActive(null);
@@ -127,9 +137,28 @@ const Feed = () => {
   };
 
 
- let loading2 = true // defined
- const data2:any = { pages: [1]} // defined 
-  const [cacheData2, setCacheData2] = useState<any>(data2 ?? []);
+
+ const {
+  isFetching: loading2,
+  isFetchingNextPage: loadingMore2,
+  fetchNextPage: fetchNextPage2,
+  hasNextPage: hasNextPage2,
+  isError: isError2,
+  data: data2,
+  error: error2,
+} = useProductsTodayMenuQuery({
+  type: query.type as string,
+  text: query?.text as string,
+  category: query?.category as string,
+});
+const [cacheData2, setCacheData2] = useState<any>(data2 ?? []);
+
+useEffect(() => {
+  if (data2 && data2.pages[0].data) {
+    let products = data2.pages[0].data;
+    setCacheData2(products);
+  }
+}, [data2]);
 
 
   return (
@@ -137,24 +166,45 @@ const Feed = () => {
       <div className="px-5 border-b dark:border-neutral-500">
       <div className="mt-5 flex flex-nowrap overflow-y-auto w-full  pb-2">
      { !search?.length ? (
-cacheData?.map((item: any) => (
-  <button
-    onClick={() => changeCategory(item.slug)}
-    style={{ lineHeight: "1" }}
-    className={`${
-      active == item.slug &&
-      "dark:bg-blue-700 border uppercase border-black "
-    }  inline-block flex-col justify-between uppercase  mr-2 font-normal items-center border border-gray-100 mb-2 py-3 px-4  md:text-base bg-gray-800 dark:text-white  rounded border-gray-200 dark:border-neutral-700 border-b font-semibold text-heading transition-colors duration-200 focus:outline-none hover:border-primary-2 focus:border-primary-2 hover:bg-primary focus:bg-primary hover:text-white focus:text-white `}
-  >
-   
-    <span className={`${
-      active == item.slug ?
-      "dark:text-white text-white" : "text-white"
-    } truncate pb-2`}
-    
-    >{item.name}</span>
-  </button>
-))
+      <>
+       {!!cacheData2?.length && (
+       <button
+          onClick={() => changeCategory("_pratos_dia")}
+          style={{ lineHeight: "1" }}
+          className={`${
+            active == "_pratos_dia" &&
+            "dark:bg-blue-700 border uppercase border-black "
+          }  inline-block flex-col justify-between uppercase  mr-2 font-normal items-center border border-gray-100 mb-2 py-3 px-4  md:text-base bg-gray-800 dark:text-white  rounded border-gray-200 dark:border-neutral-700 border-b font-semibold text-heading transition-colors duration-200 focus:outline-none hover:border-primary-2 focus:border-primary-2 hover:bg-primary focus:bg-primary hover:text-white focus:text-white `}
+        >
+        
+          <span className={`${
+            active == "_pratos_dia" ?
+            "dark:text-white text-white" : "text-white"
+          } truncate pb-2`}
+          
+          >PRATOS DO DIA</span>
+        </button>
+          )}
+      {cacheData?.map((item: any) => (
+        <button
+          onClick={() => changeCategory(item.slug)}
+          style={{ lineHeight: "1" }}
+          className={`${
+            active == item.slug &&
+            "dark:bg-blue-700 border uppercase border-black "
+          }  inline-block flex-col justify-between uppercase  mr-2 font-normal items-center border border-gray-100 mb-2 py-3 px-4  md:text-base bg-gray-800 dark:text-white  rounded border-gray-200 dark:border-neutral-700 border-b font-semibold text-heading transition-colors duration-200 focus:outline-none hover:border-primary-2 focus:border-primary-2 hover:bg-primary focus:bg-primary hover:text-white focus:text-white `}
+        >
+        
+          <span className={`${
+            active == item.slug ?
+            "dark:text-white text-white" : "text-white"
+          } truncate pb-2`}
+          
+          >{item.name}</span>
+        </button>
+        
+      ))}
+      </>
      ): (
       <button
       onClick={backSearch}
@@ -216,13 +266,11 @@ cacheData?.map((item: any) => (
               
             ) : (
               <>
-            {!!cacheData2?.length && (
+            {active == "_pratos_dia" && (
+            !!cacheData2?.length && (
               <div className="relative">
                 <div className="absolute scroll-behavior" id="hh"></div>
-                <h1 className=" text-2xl dark:text-black text-heading font-bold uppercase">
-                  {" "}
-               
-                </h1>
+             
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-3">
                   <Fragment>
                     {cacheData2?.map((product: any) => (
@@ -233,6 +281,7 @@ cacheData?.map((item: any) => (
                   </Fragment>
                 </div>
               </div>
+            )
             )}
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-3">
                   <Fragment>
