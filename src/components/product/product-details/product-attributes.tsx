@@ -167,7 +167,7 @@ Props) => {
               style={{
                 opacity: index <= cardapioId ? 1 : 1,
                 pointerEvents: index <= cardapioId ? "initial" : "initial",
-                display: variations.length === 1 ? "none" : "",
+                //display: variations.length === 1 ? "none" : "",
               }}
               className=" pb-2 flex flex-col relative items-start px-3 first:pt-0"
               key={index}
