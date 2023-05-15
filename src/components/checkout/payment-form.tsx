@@ -28,6 +28,11 @@ import { RiBankCardFill, RiHandCoinFill} from "react-icons/ri";
 import { useUI } from "@contexts/ui.context";
 import OrderResume from "@components/order/order-resume";
 import TextArea from "@components/ui/text-area";
+import { RiCouponFill } from "react-icons/ri";
+import Coupon from "@components/checkout/coupon";
+import { CloseIcon } from "@components/icons/close-icon";
+
+
 interface FormValues {
   payment_gateway: "cod";
   contact: string;
@@ -130,7 +135,8 @@ export default function PaymentForm() {
     discount,
     payment_method,
     updatePaymentMethod,
-    clearCheckoutData
+    clearCheckoutData,
+    removeCoupon
   } = useCheckout();
 
 
@@ -140,6 +146,7 @@ export default function PaymentForm() {
   );
 
   const subtotal = calculateTotal(available_items);
+  
   const total = calculatePaidTotal(
     {
       totalAmount: subtotal,
@@ -149,6 +156,11 @@ export default function PaymentForm() {
     discount
   );
 
+  const { price: discountPrice } = usePrice(
+    discount && {
+      amount: discount,
+    }
+  );
   async function onSubmit(values: FormValues) {
 
 
@@ -214,10 +226,32 @@ export default function PaymentForm() {
   }
 
   return (
-    <form
+
+    <div className="p-5 sm:p-8 bg-white border-gray-200 rounded-lg dark:bg-neutral-800 border dark:border-neutral-700">
+
+
+{discount ? (
+          <div className={`flex justify-between mb-4 mt-10  ${coupon?.code && "p-2 border border-dashed border-red-700"}`}>
+            <p className="text-sm text-heading dark:text-neutral mr-4">Desconto</p>
+            <span className="text-xs font-semibold bg-red-500 uppercase text-white px-2 py-1 flex items-center mr-auto bg-primary  rounded">
+            <RiCouponFill className="mr-2"
+                    style={{ display: "inline-block", verticalAlign: "-2px" }}
+                  />   {coupon.code}
+              <button onClick={removeCoupon}>
+                <CloseIcon className="w-3 h-3 ml-2" />
+              </button>
+            </span>
+            <span className="text-sm text-body dark:text-neutral">- {discountPrice}</span>
+          </div>
+        ) : (
+          <div className="flex justify-between mt-5 mb-4">
+            <Coupon client={client} />
+          </div>
+        )}
+          <form
       onSubmit={handleSubmit(onSubmit)}
       noValidate
-      className="p-5 sm:p-8 bg-white border-gray-200 rounded-lg dark:bg-neutral-800 border dark:border-neutral-700"
+      className=""
     >
       <div className="">
         <div className="flex items-center justify-between mb-2">
@@ -253,11 +287,12 @@ export default function PaymentForm() {
           {...register("obs")}
           variant="outline"
           placeholder="Ex. Troco de 5,00 €"
-          className="col-span-2 capitalize"
+          className="col-span-1 capitalize"
+          rows={2}
           style={{fontSize:"1.125rem !important"}}
         />
 
-        
+
         </div>
         <OrderResume />
       </div>
@@ -299,5 +334,7 @@ export default function PaymentForm() {
      )}
        
     </form>
+    </div>
+  
   );
 }

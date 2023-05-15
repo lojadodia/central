@@ -6,6 +6,7 @@ import { AddToCart } from "@components/product/add-to-cart/add-to-cart";
 import { useUI } from "@contexts/ui.context";
 import { useSettings } from "@contexts/settings.context";
 import { RiListCheck2 } from "react-icons/ri";
+import { formmatPrice } from "@utils/formmat-price";
 
 type NeonProps = {
   product: any;
@@ -15,7 +16,7 @@ type NeonProps = {
 const Neon: React.FC<NeonProps> = ({ product, className }) => {
   const { name, attributes, custom_variation, image, quantity, product_type, options } = product ?? {};
 
-  //let _customVariation = JSON.parse(custom_variation);
+  let _customVariation = JSON.parse(custom_variation);
 
   
   const { price, basePrice, discount } = usePrice({
@@ -27,28 +28,29 @@ const Neon: React.FC<NeonProps> = ({ product, className }) => {
   });
   const { openModal, setModalView, setModalData } = useUI();
 
-  // const handleVerifyOptions = () => {
-  //   const checks = [];
+  const handleVerifyOptions = () => {
+    const checks = [];
 
-  //   if (typeof _customVariation == "object") return true;
-  //   const notExtras = _customVariation?.filter!((item: {is_extra: boolean}) => !item.is_extra) ?? [];
+    if (typeof _customVariation == "object") return true;
+    const notExtras = _customVariation?.filter!((item: {is_extra: boolean}) => !item.is_extra) ?? [];
 
-  //   if (notExtras?.length === 0) return true
+    if (notExtras?.length === 0) return true
 
-  //   if (Object.keys(attributes).length === 0) return false;
+    if (Object.keys(attributes).length === 0) return false;
 
-  //   Object.values(attributes).forEach((item) =>
-  //     item.forEach((subitem) => {
-  //       subitem.selected ? checks.push("ok") : null;
-  //     })
-  //   );
+    Object.values(attributes).forEach((item) =>
+      item.forEach((subitem) => {
+        subitem.selected ? checks.push("ok") : null;
+      })
+    );
 
-  //   if (checks.length === notExtras.length) {
-  //     return true;
-  //   }
+    if (checks.length === notExtras.length) {
+      return true;
+    }
 
-  //   return false;
-  // };
+    return false;
+  };
+
 
   function handleProductQuickView() {
     const url: URL = new URL(window.location);
@@ -102,13 +104,25 @@ const Neon: React.FC<NeonProps> = ({ product, className }) => {
                 price
               )
             ) : (
-              <span className="text-primary text-xs">
-                {" "}
-                <RiListCheck2
-                  style={{ display: "inline-block", verticalAlign: "-2px" }}
-                />{" "}
-                Opções de Escolha
-              </span>
+             <>
+             {product?.menu_price ? (
+                  <>
+                    {!product?.max_price && (  <span className="text-primary text-xs menu-choose-price-span"><sup>DESDE</sup></span>)} {formmatPrice(product?.menu_price)}
+                  </>
+                  ): (
+                    <>
+                    <span className="text-primary text-xs menu-choose-price-span">
+
+                    {" "}
+                      <RiListCheck2
+                        style={{ display: "inline-block", verticalAlign: "-2px" }}
+                      />{" "}
+                      Opções de Escolha
+                    </span>
+                    
+                    </>
+                )}
+                </>
             )}
           </span>
           {discount && (
@@ -141,13 +155,13 @@ const Neon: React.FC<NeonProps> = ({ product, className }) => {
           )
         ) : quantity > 0 ? (
           <div>
-            {/* <AddToCart
+            <AddToCart
               variant="neon"
               data={product}
-              isOpen={product_type !== "simple" || options}
+              isOpen={product_type !== "simple"}
               handleVerifyOptions={handleVerifyOptions}
               handlerModal={handleProductQuickView}
-            /> */}
+            />
           </div>
         ) : (
           <div className="bg-red-500 rounded text-xs text-center text-white px-2 py-1.5 sm:py-2.5">

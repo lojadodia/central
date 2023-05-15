@@ -58,11 +58,11 @@ export default function HomePage() {
         name="grid"
         className="flex flex-1 border-t border-r border-solid border-theme dark:border-neutral-700 dark:bg-black border-opacity-70"
       >
-       
+      
         <main className="flex-1">
         <div className="grid grid-cols-2 md:grid-cols-3 gap-0 ">
-              <div className="col-span-2 mt-10">
-
+              <div className="col-span-2">
+             
               <Feed />
                 {/* <div className="w-full dark:bg-neutral-900 py-3 px-0 lg:px-5 border-b dark:border-neutral-700 lg:mt-20 mt-5">
                    <BakeryCategory /> 

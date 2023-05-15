@@ -112,12 +112,10 @@ const Feed = () => {
 
 
   useEffect(() => {
-    if(active == ""){
-      if(!!cacheData2?.length){
+    if(!active){
         setActive("_pratos_dia")
-      }
     }
-  }, [active]);
+  }, []);
   
 
   const backSearch = () => {
@@ -128,12 +126,17 @@ const Feed = () => {
 
 
   const changeCategory = (category: any) => {
-    http
+    if(category == "_pratos_dia"){
+      setActive("_pratos_dia")
+    }else{
+      http
       .get(`${API_ENDPOINTS.GET_CATEGORY}/${category}/products`)
       .then(({ data }) => {
         setProducts(data);
         setActive(category);
       });
+    }
+   
   };
 
 
@@ -162,7 +165,8 @@ useEffect(() => {
 
 
   return (
-    <div className="bg-black mt-5 pt-2">
+    <div className="bg-black mt-7">
+       <div className="hidden lg:block mt-10 pt-6 pb-2"></div>
       <div className="px-5 border-b dark:border-neutral-500">
       <div className="mt-5 flex flex-nowrap overflow-y-auto w-full  pb-2">
      { !search?.length ? (
