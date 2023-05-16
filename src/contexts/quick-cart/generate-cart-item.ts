@@ -42,8 +42,6 @@ interface Variation {
   [key: string]: unknown;
 }
 
-const saveVariations = [];
-
 export function generateCartItem(item: Item, variation: Variation) {
   const {
     id,
