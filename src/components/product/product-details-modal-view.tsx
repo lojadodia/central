@@ -16,11 +16,10 @@ import VariationPrice from "./product-details/product-variant-price";
 import { useSettings } from "@contexts/settings.context";
 import Input from "@components/ui/input";
 import Cookies from "js-cookie";
-import SimpleModal from "./question-modal";
+
 import Scrollbar from "@components/ui/scrollbar";
 import { generateCartItem } from "@contexts/quick-cart/generate-cart-item";
 import { formmatPrice } from "@utils/formmat-price";
-
 
 const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
   const router = useRouter();
@@ -40,9 +39,9 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
   const variations = getVariations(data?.variations!);
   const variationsExtra = getVariations(data?.variations!);
   const [modaL, setModal] = useState(false);
-  
+
   let calculateItem = data && generateCartItem(data, attributes);
-  
+
   const [totalPriceExtra, setPriceExtra] = useState<number>(10);
 
   const {
@@ -68,8 +67,6 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
     router.push(path);
     closeModal();
   };
-
- 
 
   useEffect(() => {
     for (let key in custom_variation) {
@@ -120,8 +117,6 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
       posy = 0;
     };
   }, []);
-
-  
 
   const handleVerifyOptions = () => {
     const checks = [];
@@ -183,8 +178,6 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
 
   const settings = useSettings();
 
-  
-
   if (loading)
     return (
       <div className="w-96 flex justify-center items-center h-96 bg-white dark:bg-black relative">
@@ -193,19 +186,6 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
     );
   return (
     <article className="bg-white dark:bg-neutral-900 w-full h-full  dark:border dark:border-neutral-700 relative lg:rounded-lg z-[59] overflow-y-auto">
-      <div>
-        {modaL && (
-          <div
-            style={
-              Cookies.get("alcohol") !== "true"
-                ? { position: "absolute", top: -20, left: -470, zIndex: 999 }
-                : { display: "none" }
-            }
-          >
-            <SimpleModal />
-          </div>
-        )}
-      </div>
       {/* Sticky bar  |||   max-w-6xl */}
 
       <div

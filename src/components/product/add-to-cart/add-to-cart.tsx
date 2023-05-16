@@ -6,6 +6,7 @@ import { Item } from "@contexts/quick-cart/cart.utils";
 import { toast } from "react-toastify";
 import { useUI } from "@contexts/ui.context";
 import { useSettings } from "@contexts/settings.context";
+import { generateCartItem } from "@contexts/quick-cart/generate-cart-item";
 
 interface Props {
   data: any;
@@ -47,8 +48,15 @@ export const AddToCart = ({
     getItemFromCart,
     isInCart,
   } = useCart();
+  const generatedItem = generateCartItem(data, variation)
+  console.log(generatedItem)
 
-  const item: Item = total;
+  const item: Item = {
+    ...generatedItem,
+    ...total,
+    id: `${data.id}`
+  };
+
   const { closeModal } = useUI();
 
   const handleAddClick = (
@@ -67,6 +75,7 @@ export const AddToCart = ({
       }, 200);
       return;
     }
+    
 
     item["price"] = total?.price_total ?? data?.price;
     item["price_total"] = total?.price_total ?? data?.price;
@@ -76,6 +85,8 @@ export const AddToCart = ({
     if (!isInCart(item.id)) {
       cartAnimation(e);
     }
+
+   
 
     // NOTIFY FB PIXEL
     const FACEBOOKPIXELID = settings?.api?.facebook_pixel;
@@ -97,7 +108,7 @@ export const AddToCart = ({
       closeModal();
     }
   };
-
+ 
   const handleRemoveClick = (e: any) => {
     e.stopPropagation();
     removeItemFromCart(item.id);
@@ -107,6 +118,7 @@ export const AddToCart = ({
 
   if (item) {
     item.stock = data.quantity;
+    
     outOfStock = !isInStock(item.id);
   }
 
