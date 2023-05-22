@@ -49,12 +49,12 @@ export const AddToCart = ({
     isInCart,
   } = useCart();
   const generatedItem = generateCartItem(data, variation)
-  console.log(generatedItem)
+  
 
   const item: Item = {
     ...generatedItem,
     ...total,
-    id: `${data.id}`
+    id: `${Date.now()}`
   };
 
   const { closeModal } = useUI();

@@ -26,6 +26,8 @@ const CartSidebarView = () => {
       setOrders(data?.orders?.data);
     }
   }, [data?.orders?.data]);
+
+ 
   return (
     <>
       <section className="flex flex-col h-full relative dark:bg-neutral-900 border-l dark:border-neutral-700">
