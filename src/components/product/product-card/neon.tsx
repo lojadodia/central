@@ -16,7 +16,12 @@ type NeonProps = {
 const Neon: React.FC<NeonProps> = ({ product, className }) => {
   const { name, attributes, custom_variation, image, quantity, product_type, options } = product ?? {};
 
-  let _customVariation = JSON.parse(custom_variation);
+  if(custom_variation){
+    let _customVariation = JSON.parse(custom_variation);
+  }else{
+    let _customVariation = null;
+  }
+
 
   
   const { price, basePrice, discount } = usePrice({

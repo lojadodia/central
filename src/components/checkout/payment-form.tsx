@@ -150,7 +150,7 @@ export default function PaymentForm() {
   const total = calculatePaidTotal(
     {
       totalAmount: subtotal,
-      tax: 0,
+      tax: checkoutData?.total_tax,
       shipping_charge: checkoutData?.shipping_charge!,
     },
     discount
@@ -179,7 +179,7 @@ export default function PaymentForm() {
       paid_total: total,
       order_type: order_type,
       total,
-      sales_tax: 0,
+      sales_tax: checkoutData?.total_tax,
       delivery_fee: checkoutData?.shipping_charge,
       delivery_way: checkoutData?.mail,
       delivery_time: delivery_time,

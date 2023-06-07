@@ -145,7 +145,7 @@ const Coupon = ({ client }: CouponProps) => {
     const total =  calculatePaidTotal(
       {
         totalAmount: base_amount,
-        tax: 0,
+        tax: checkoutData?.total_tax,
         // Tem algum problema com a taxa verificar depois
         //tax: checkoutData?.total_tax,
         shipping_charge: checkoutData?.shipping_charge,

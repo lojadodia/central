@@ -380,19 +380,18 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
                   )}
 
                   <div className="px-3 pt-2">
-                    {(!settings?.site?.obs ||
-                      settings?.site?.obs == "block") && (
+
                       <Input
                         name="obs"
                         value={obs}
-                        maxLength={25}
+
                         onInput={(e) => setObs(e.target.value)}
                         label="OBSERVAÇÕES"
                         variant="outline"
                         placeholder="Obs: Ex: sem alho, mal passado..."
                         className="w-full col-span-4 mt-3"
                       />
-                    )}
+
                   </div>
                   <div className="mt-4 md:mt-6 flex flex-col lg:flex-row items-center">
                     {data?.price == 0 ? (
