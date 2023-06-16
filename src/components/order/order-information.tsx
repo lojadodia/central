@@ -21,14 +21,14 @@ const OrderInformation = (props: Props) => {
   const settings = useSettings();
   const { checkoutData, discount, removeCoupon, coupon } = useCheckout();
   
-
+  const taxBag = settings?.order?.type.activeTaxBag
 
   const available_items = items?.filter(
     (item: any) => !checkoutData?.unavailable_products?.includes(item.id)
   );
   const { price: tax } = usePrice(
     checkoutData && {
-      amount: checkoutData?.total_tax,
+      amount: taxBag === 'false' ? 0 : checkoutData?.total_tax,
     }
   );
   const { price: shipping } = usePrice(
@@ -52,7 +52,7 @@ const OrderInformation = (props: Props) => {
       amount: calculatePaidTotal(
         {
           totalAmount: base_amount,
-          tax: checkoutData?.total_tax,
+          tax: taxBag === 'false' ? 0 : checkoutData?.total_tax,
           shipping_charge: checkoutData?.shipping_charge,
           coupon: coupon
         },
@@ -93,10 +93,11 @@ const OrderInformation = (props: Props) => {
             <p className="text-sm text-body dark:text-neutral">Sub Total</p>
             <span className="text-sm text-body dark:text-neutral">{sub_total}</span>
           </div>
-          <div className="flex justify-between mb-2">
+          {taxBag !== 'false' &&  <div className="flex justify-between mb-2">
             <p className="text-sm text-body dark:text-neutral">{settings?.aux?.taxName ? settings?.aux?.taxName : "Taxas"}</p>
             <span className="text-sm text-body dark:text-neutral">{tax}</span>
-          </div>
+          </div>}
+         
           <div className="flex justify-between mb-2">
             <p className="text-sm text-body dark:text-neutral">Entrega</p>
             <span className="text-sm text-body dark:text-neutral">{shipping}</span>

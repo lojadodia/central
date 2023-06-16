@@ -10,12 +10,19 @@ import ProductTypeMenu from "@components/layout/navbar/product-type-menu";
 import { addActiveScroll } from "@utils/add-active-scroll";
 import dynamic from "next/dynamic";
 import Button from "@components/ui/button";
-import { RiArrowLeftLine, RiUser3Fill, RiFileList2Fill, RiTruckFill, RiShoppingBag3Fill } from "react-icons/ri";
+import {
+  RiArrowLeftLine,
+  RiUser3Fill,
+  RiFileList2Fill,
+  RiTruckFill,
+  RiShoppingBag3Fill,
+} from "react-icons/ri";
 import { useCheckout } from "@contexts/checkout.context";
 import { useCart } from "@contexts/quick-cart/cart.context";
 import usePrice from "@utils/use-price";
 import router from "next/router";
 import { useRouter } from "next/router";
+import { useSettings } from "@contexts/settings.context";
 
 const AuthorizedMenu = dynamic(
   () => import("@components/layout/navbar/authorized-menu"),
@@ -27,24 +34,27 @@ type DivElementRef = React.MutableRefObject<HTMLDivElement>;
 const NavbarWithSearch = () => {
   const router = useRouter();
   const navbarRef = useRef() as DivElementRef;
+  const settings = useSettings();
   const { isAuthorize, displayHeaderSearch, displayMobileSearch } = useUI();
   const { client, delivery_schedule, order_type, delivery_time } = useCheckout();
   addActiveScroll(navbarRef);
-
-  const { innerWidth: width} = window;
+  
+  const { checkoutData } = useCheckout();
+  const taxBag = settings?.order?.type.activeTaxBag;
+  const { innerWidth: width } = window;
 
   const { total } = useCart();
   const { price: totalPrice } = usePrice({
-    amount: total,
+    amount: taxBag === "false" ? total : total + checkoutData?.total_tax,
   });
-  if(width > 900){
-    if(displayHeaderSearch){
+  if (width > 900) {
+    if (displayHeaderSearch) {
       var bg = "bg-white dark:bg-black border-b dark:border-neutral-700";
-    }else{
+    } else {
       var bg = "bg-transparent dark:bg-transparent ";
     }
-  }else{
-      var bg = "bg-white dark:bg-black border-b dark:border-neutral-700";
+  } else {
+    var bg = "bg-white dark:bg-black border-b dark:border-neutral-700";
   }
 
   const hadleBack = () => {
@@ -57,7 +67,8 @@ const NavbarWithSearch = () => {
       className="site-header-with-search h-14 md:h-14 lg:h-auto"
     >
       <nav
-        className="w-full px-4 lg:px-8 flex justify-between items-center top-0 right-0 z-20 transition-transform duration-300 is-sticky dark:bg-neutral-900 fixed shadow-sm border-b dark:border-neutral-700" style={{height:"78px"}}
+        className="w-full px-4 lg:px-8 flex justify-between items-center top-0 right-0 z-20 transition-transform duration-300 is-sticky dark:bg-neutral-900 fixed shadow-sm border-b dark:border-neutral-700"
+        style={{ height: "78px" }}
       >
         {displayMobileSearch ? (
           <div className="w-full">
@@ -67,48 +78,87 @@ const NavbarWithSearch = () => {
           <>
             <Logo className="mx-auto lg:mx-0" />
             <div className="inline-block px-4 w-full">
-            <div className="hidden md:block">
-            <Button onClick={hadleBack} className="px-4 uppercase py-3 mr-2 text-center display-inline text-sm bg-primary  text-white  rounded h-12  border-gray-200 border dark:border-neutral-700 dark:bg-primary cursor-pointer" size="small" >
-              <RiArrowLeftLine style={{ display: "inline-block", verticalAlign: '-2px' }} />&nbsp;Voltar
-            </Button>
-            {total > 0 && (
-                <Button className="px-4 uppercase py-3 mr-2 text-center display-inline text-sm bg-primary  text-white  rounded h-12  border-gray-200 border dark:border-neutral-700 dark:bg-neutral-600 cursor-pointer" size="small" >
-                  <RiFileList2Fill style={{ display: "inline-block", verticalAlign: '-2px' }} />&nbsp; {totalPrice}
+              <div className="hidden md:block">
+                <Button
+                  onClick={hadleBack}
+                  className="px-4 uppercase py-3 mr-2 text-center display-inline text-sm bg-primary  text-white  rounded h-12  border-gray-200 border dark:border-neutral-700 dark:bg-primary cursor-pointer"
+                  size="small"
+                >
+                  <RiArrowLeftLine
+                    style={{ display: "inline-block", verticalAlign: "-2px" }}
+                  />
+                  &nbsp;Voltar
                 </Button>
-              )
+                {total > 0 && (
+                  <Button
+                    className="px-4 uppercase py-3 mr-2 text-center display-inline text-sm bg-primary  text-white  rounded h-12  border-gray-200 border dark:border-neutral-700 dark:bg-neutral-600 cursor-pointer"
+                    size="small"
+                  >
+                    <RiFileList2Fill
+                      style={{ display: "inline-block", verticalAlign: "-2px" }}
+                    />
+                    &nbsp; {totalPrice}
+                  </Button>
+                )}
+                {client?.name && (
+                  <Button
+                    className="px-4 uppercase py-3 mr-2 text-center text-sm bg-primary display-inline text-white  rounded h-12  border-gray-200 border dark:border-neutral-700 dark:bg-neutral-600  cursor-pointer"
+                    size="small"
+                  >
+                    <RiUser3Fill
+                      style={{ display: "inline-block", verticalAlign: "-2px" }}
+                    />
+                    &nbsp; {client?.name?.replace(/ .*/, "")}
+                  </Button>
+                )}
+                {order_type && (
+                  <Button
+                    className="px-4 py-3 mr-2 text-center text-sm bg-primary display-inline text-white  rounded h-12  border-gray-200 border dark:border-neutral-700 cursor-pointer dark:bg-neutral-600"
+                    size="small"
+                  >
+                    {order_type == "takeaway" ? (
+                      <>
+                        <RiShoppingBag3Fill
+                          style={{
+                            display: "inline-block",
+                            verticalAlign: "-2px",
+                          }}
+                        />
+                        &nbsp; TAKEAWAY
+                      </>
+                    ) : (
+                      <>
+                        <RiTruckFill
+                          style={{
+                            display: "inline-block",
+                            verticalAlign: "-2px",
+                          }}
+                        />
+                        &nbsp; ENTREGA
+                      </>
+                    )}
+                  </Button>
+                )}
+                {delivery_schedule && (
+                  <Button
+                    className="px-4 py-3 mr-2 text-center text-sm bg-primary  hidden lg:display-inline  text-white  rounded h-12  border-gray-200 border dark:border-neutral-700 cursor-pointer dark:bg-neutral-600"
+                    size="small"
+                  >
+                    {delivery_schedule == "schedule" ? "AGENDAMENTO" : "AGORA"}
+                  </Button>
+                )}
 
-              }
-              {client?.name && (
-                <Button className="px-4 uppercase py-3 mr-2 text-center text-sm bg-primary display-inline text-white  rounded h-12  border-gray-200 border dark:border-neutral-700 dark:bg-neutral-600  cursor-pointer" size="small" >
-                  <RiUser3Fill style={{ display: "inline-block", verticalAlign: '-2px' }} />&nbsp; {client?.name?.replace(/ .*/,'')}
-                </Button>
-              )
-
-              }
-             {order_type && (
-              <Button className="px-4 py-3 mr-2 text-center text-sm bg-primary display-inline text-white  rounded h-12  border-gray-200 border dark:border-neutral-700 cursor-pointer dark:bg-neutral-600" size="small" >
-                { order_type == "takeaway" ?
-                (<><RiShoppingBag3Fill style={{ display: "inline-block", verticalAlign: '-2px' }} />&nbsp; TAKEAWAY</>)
-                :
-                (<><RiTruckFill style={{ display: "inline-block", verticalAlign: '-2px' }} />&nbsp; ENTREGA</>)
-                }
-              </Button>
-            )}
-             {delivery_schedule && (
-              <Button className="px-4 py-3 mr-2 text-center text-sm bg-primary  hidden lg:display-inline  text-white  rounded h-12  border-gray-200 border dark:border-neutral-700 cursor-pointer dark:bg-neutral-600" size="small" >
-                { delivery_schedule == "schedule" ? "AGENDAMENTO" : "AGORA"}
-              </Button>
-              )}
-
-            {delivery_time && (
-              <Button className="px-4 py-3 mr-2 text-center text-sm bg-primary hidden lg:display-inline  text-white  rounded h-12  border-gray-200 border dark:border-neutral-700 cursor-pointer dark:bg-neutral-600" size="small" >
-                { delivery_time }
-              </Button>
-              )}
+                {delivery_time && (
+                  <Button
+                    className="px-4 py-3 mr-2 text-center text-sm bg-primary hidden lg:display-inline  text-white  rounded h-12  border-gray-200 border dark:border-neutral-700 cursor-pointer dark:bg-neutral-600"
+                    size="small"
+                  >
+                    {delivery_time}
+                  </Button>
+                )}
+              </div>
             </div>
-            </div>
-          
-         
+
             <ul className=" lg:flex items-center flex-shrink-0 space-x-10">
               {/* 
             <li key="track-orders">
