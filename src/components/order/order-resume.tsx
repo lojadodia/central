@@ -75,14 +75,14 @@ const OrderResume = (props: Props) => {
               {sub_total}
             </span>
           </div>
-          {taxBag !== "false" && (
+          
             <div className="flex justify-between mb-2">
               <p className="text-lg text-body dark:text-neutral">
                 {settings?.aux?.taxName ? settings?.aux?.taxName : "Taxas"}
               </p>
               <span className="text-lg text-body dark:text-neutral">{tax}</span>
             </div>
-          )}
+          
 
           <div className="flex justify-between mb-2">
             <p className="text-lg text-body dark:text-neutral">Entrega</p>

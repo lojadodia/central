@@ -6,13 +6,13 @@ import { formatOrderedProduct } from "@utils/format-ordered-product";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import ValidationError from "@components/ui/validation-error";
-import { ROUTES } from "@utils/routes";
+
 import { useCreateOrderMutation } from "@data/order/use-create-order.mutation";
 import { useOrderStatusesQuery } from "@data/order/use-order-statuses.query";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useCart } from "@contexts/quick-cart/cart.context";
-import { useCustomerQuery } from "@data/customer/use-customer.query";
+
 import { useSettings } from "@contexts/settings.context";
 import { toast } from "react-toastify";
 import usePrice from "@utils/use-price";
@@ -23,7 +23,7 @@ import {
 } from "@contexts/quick-cart/cart.utils";
 import { useTranslation } from "react-i18next";
 import i18next from "i18next";
-import axios from "axios";
+
 import { RiBankCardFill, RiHandCoinFill } from "react-icons/ri";
 import { useUI } from "@contexts/ui.context";
 import OrderResume from "@components/order/order-resume";
@@ -66,7 +66,7 @@ const paymentSchema = Yup.object().shape({
 
 export default function PaymentForm() {
   const settings = useSettings();
-  const taxBag = settings?.order?.type.activeTaxBag
+  const taxBag = settings?.order?.type.activeTaxBag;
   const [order, setOrder] = useState({
     id: null,
     tracking_number: null,
@@ -145,7 +145,10 @@ export default function PaymentForm() {
   const total = calculatePaidTotal(
     {
       totalAmount: subtotal,
-      tax: checkoutData?.total_tax,
+      tax:
+        settings?.order?.type.activeTaxBag === "false"
+          ? 0
+          : checkoutData?.total_tax,
       shipping_charge: checkoutData?.shipping_charge!,
     },
     discount
@@ -172,7 +175,10 @@ export default function PaymentForm() {
       paid_total: total,
       order_type: order_type,
       total,
-      sales_tax: checkoutData?.total_tax,
+      sales_tax:
+        settings?.order?.type.activeTaxBag === "false"
+          ? 0
+          : checkoutData?.total_tax,
       delivery_fee: checkoutData?.shipping_charge,
       delivery_way: checkoutData?.mail,
       delivery_time: delivery_time,
