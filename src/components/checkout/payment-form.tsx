@@ -142,6 +142,8 @@ export default function PaymentForm() {
 
   const subtotal = calculateTotal(available_items);
 
+
+
   const total = calculatePaidTotal(
     {
       totalAmount: subtotal,

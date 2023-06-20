@@ -44,8 +44,9 @@ const NavbarWithSearch = () => {
   const { innerWidth: width } = window;
 
   const { total } = useCart();
+  
   const { price: totalPrice } = usePrice({
-    amount: taxBag === "false" ? total : total + checkoutData?.total_tax,
+    amount: (taxBag === "true" && !!checkoutData?.total_tax) ? total +  checkoutData?.total_tax : total,
   });
   if (width > 900) {
     if (displayHeaderSearch) {

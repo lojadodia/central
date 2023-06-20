@@ -12,12 +12,19 @@ import ValidationError from "@components/ui/validation-error";
 import { useVerifyCheckoutMutation } from "@data/order/use-checkout-verify.mutation";
 import { useCart } from "@contexts/quick-cart/cart.context";
 import { useSettings } from "@contexts/settings.context";
-import { toast } from 'react-toastify'
+import { toast } from "react-toastify";
 
 const VerifyCheckout = () => {
   const router = useRouter();
   const [errorMessage, setError] = useState("");
-  const { delivery_time, client, billing_address, setCheckoutData, order_type, checkoutData } = useCheckout();
+  const {
+    delivery_time,
+    client,
+    billing_address,
+    setCheckoutData,
+    order_type,
+    checkoutData,
+  } = useCheckout();
   const { items, total, isEmpty } = useCart();
   const { openModal, setModalView } = useUI();
   const settings = useSettings();
@@ -26,13 +33,10 @@ const VerifyCheckout = () => {
       amount: total,
     }
   );
-   
-  const { price: minAmount } = usePrice(
-    {
-      amount: +settings?.minAmount,
-    }
-  );
- 
+
+  const { price: minAmount } = usePrice({
+    amount: +settings?.minAmount,
+  });
 
   // if (!isEmpty) {
   //   http.post(`${API_ENDPOINTS.CHECK_OFFER}`, {
@@ -44,7 +48,6 @@ const VerifyCheckout = () => {
   //       item.id = `${item.id}.offer`
   //       clearItemFromCart(item.id)
 
-       
   //         item.price = 0
   //         addItemToCart(item, data.qty)
   //         setModalView("PRODUCT_OFFER")
@@ -55,122 +58,123 @@ const VerifyCheckout = () => {
   //   })
   // }
 
-
-
-  const {
-    mutate: verifyCheckout,
-    isLoading: loading,
-  } = useVerifyCheckoutMutation();
+  const { mutate: verifyCheckout, isLoading: loading } =
+    useVerifyCheckoutMutation();
   async function handleVerifyCheckout() {
     if (loggedIn()) {
       // if (settings?.minAmount <= total) {
-        setCheckoutData(null);
-        if (!client) {
-          toast.error("Selecione o Cliente");
-          return false;
-        }
+      // setCheckoutData(null);
+      if (!client) {
+        toast.error("Selecione o Cliente");
+        return false;
+      }
 
-        if (!order_type) {
-          toast.error("Selecione o Tipo de Encomenda");
-          return false;
-        }
+      if (!order_type) {
+        toast.error("Selecione o Tipo de Encomenda");
+        return false;
+      }
 
-        if (!delivery_time) {
-          toast.error("Selecione a Data de Entrega");
-          return false;
-        }
+      if (!delivery_time) {
+        toast.error("Selecione a Data de Entrega");
+        return false;
+      }
 
+      setModalView("ADD_CARD_INFO");
+      openModal();
 
-        setModalView("ADD_CARD_INFO");
-        openModal();
-
-        
-        if (order_type == "takeaway") {
-
-          if ((settings?.scheduleType != "store" && delivery_time) || ((settings?.scheduleType == "store"))) {
-            //if (billing_address && shipping_address) {
-            verifyCheckout(
-              {
-                amount: total,
-                products: items?.map((item) => formatOrderedProduct(item)),
-                billing_address: {
-                  'mode': 'takeaway'
-                },
-                shipping_address: {
-                  'mode': 'takeaway'
-                },
-
+      if (order_type == "takeaway") {
+        if (
+          (settings?.scheduleType != "store" && delivery_time) ||
+          settings?.scheduleType == "store"
+        ) {
+          //if (billing_address && shipping_address) {
+          verifyCheckout(
+            {
+              amount: total,
+              products: items?.map((item) => formatOrderedProduct(item)),
+              billing_address: {
+                mode: "takeaway",
               },
-              {
-                onSuccess: (data) => {
-                  setCheckoutData(data);
-                  
-                  //router.push("/checkout");
+              shipping_address: {
+                mode: "takeaway",
+              },
+            },
+            {
+              onSuccess: (data) => {
+                setCheckoutData(data);
 
-                },
-                onError: (error) => {
-                },
-              }
-            );
-          } else {
-            if (settings?.scheduleType != "store") {
+                //router.push("/checkout");
+              },
+              onError: (error) => {},
+            }
+          );
+        } else {
+          if (settings?.scheduleType != "store") {
+            toast.error("Selecione a Data e Hora");
+          }
+        }
+      } else {
+        if (
+          (settings?.scheduleType != "store" &&
+            billing_address &&
+            delivery_time) ||
+          (settings?.scheduleType == "store" && billing_address)
+        ) {
+          //if (billing_address && shipping_address) {
+          verifyCheckout(
+            {
+              amount: total,
+              products: items?.map((item) => formatOrderedProduct(item)),
+              billing_address: {
+                ...(billing_address?.address && billing_address.address),
+              },
+              shipping_address: {
+                ...(billing_address?.address && billing_address.address),
+              },
+            },
+            {
+              onSuccess: (data) => {
+               const verifyCheckout = checkoutData && checkoutData?.manual
+                  setCheckoutData({
+                    ...data,
+  
+                    shipping_charge: verifyCheckout ?
+                       checkoutData?.shipping_charge
+                      : data.shipping_charge,
+                  });
+               
+                
+
+                if (data["shipping_charge"] == 98765) {
+                  setCheckoutData(null);
+                  //setError("Não entregamos pra essa Morada");
+                  toast.error(
+                    "Para entregas nesta morada nos contacte: " +
+                      settings?.site?.phone
+                  );
+                } else {
+                  //router.push("/checkout");
+                }
+              },
+              onError: (error) => {},
+            }
+          );
+        } else {
+          if (settings?.scheduleType != "store") {
+            if (!billing_address) {
+              toast.error("Clique sobre o seu Endereço para o Selecionar");
+            } else if (!delivery_time) {
               toast.error("Selecione a Data e Hora");
             }
-
-          }
-
-        } else {
-          if ((settings?.scheduleType != "store" && billing_address && delivery_time) || ((settings?.scheduleType == "store" && billing_address))) {
-            //if (billing_address && shipping_address) {
-            verifyCheckout(
-              {
-                amount: total,
-                products: items?.map((item) => formatOrderedProduct(item)),
-                billing_address: {
-                  ...(billing_address?.address && billing_address.address),
-                },
-                shipping_address: {
-                  ...(billing_address?.address && billing_address.address),
-                },
-
-              },
-              {
-                onSuccess: (data) => {
-                  setCheckoutData(data);
-                  if (data['shipping_charge'] == 98765) {
-                    setCheckoutData(null);
-                    //setError("Não entregamos pra essa Morada");
-                    toast.error("Para entregas nesta morada nos contacte: "+settings?.site?.phone);
-                  } else {
-                    //router.push("/checkout");
-                  }
-                },
-                onError: (error) => {
-                },
-              }
-            );
           } else {
-            if (settings?.scheduleType != "store") {
-              if (!billing_address) {
-                toast.error("Clique sobre o seu Endereço para o Selecionar");
-              } else if (!delivery_time) {
-                toast.error("Selecione a Data e Hora");
-              }
-            } else {
-              toast.error("Adicione ou selecione o seu Endereço");
-            }
-
+            toast.error("Adicione ou selecione o seu Endereço");
           }
         }
-
-
-
-
+      }
 
       // } else {
       //   toast.error("Valor inferior ao valor mínimo de: " + minAmount + ".");
       // }
-
     } else {
       setModalView("LOGIN_VIEW");
       openModal();
@@ -209,15 +213,16 @@ const VerifyCheckout = () => {
         </div>
       </div> */}
 
-      {(settings?.order?.type?.takeaway == 'true' || settings?.order?.type?.delivery == 'true') && (
-      <Button
-        loading={loading}
-        className="w-full  rounded-full h-16 text-lg text-special-shadow"
-        onClick={handleVerifyCheckout}
-        //disabled={isEmpty}
-      >
-       Submeter Encomenda →
-      </Button>
+      {(settings?.order?.type?.takeaway == "true" ||
+        settings?.order?.type?.delivery == "true") && (
+        <Button
+          loading={loading}
+          className="w-full  rounded-full h-16 text-lg text-special-shadow"
+          onClick={handleVerifyCheckout}
+          //disabled={isEmpty}
+        >
+          Submeter Encomenda →
+        </Button>
       )}
       {errorMessage && (
         <div className="mt-3">
