@@ -116,6 +116,7 @@ const CreateOrUpdateAddressForm = () => {
       lng: 0,
       type: address?.type ?? type,
       ...(address?.address && address),
+      
     },
   });
 
@@ -139,8 +140,6 @@ const CreateOrUpdateAddressForm = () => {
     setTimeout(() => {
       updateBillingAddress(values);
     }, 600);
-
-    console.log(values);
 
     if (searchMode === "manual" && checkoutData) {
       checkoutData.shipping_charge = +deliveryFee;

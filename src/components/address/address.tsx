@@ -27,7 +27,7 @@ const Address = ({ id, addresses, heading, count, type }: Props) => {
      //updateBillingAddress(null);
      //updateShippingAddress(null);
     }
-  }, [type]);
+  }, [addresses, type]);
 
 
   /*
