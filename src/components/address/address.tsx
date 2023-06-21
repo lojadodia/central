@@ -29,21 +29,6 @@ const Address = ({ id, addresses, heading, count, type }: Props) => {
     }
   }, [addresses, type]);
 
-
-  /*
-  useEffect(() => {
-    if (addresses && type === "billing") {
-      updateBillingAddress(addresses[0]);
-    }
-    if (addresses && type === "shipping") {
-      updateShippingAddress(addresses[0]);
-    }
-  }, [addresses]);
-  */
-
-
-
-
   function handleAdd() {
     if (loggedIn()) {
       setModalData({ customerId: id, type });

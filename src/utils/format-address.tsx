@@ -8,19 +8,22 @@ function removeEmpty(obj: any): any {
       {}
     );
 }
-//street_address door details, zip, city 
+//street_address door details, zip, city
 export function formatAddress(address: UserAddress) {
   let formattedAddress = {};
   if (address) {
     formattedAddress = removeEmpty(address);
-     
-  } 
-
-  if(!formattedAddress?.street_address){
-    return "Takeaway";
-  }else{
-    return formattedAddress?.street_address + ' ' + formattedAddress?.door + ' ' + formattedAddress?.details + ', '+ formattedAddress?.zip + ', ' + formattedAddress?.city;
   }
-  
 
+  const noZip = formattedAddress?.zip ?? "";
+  const showComma = noZip ? ', ' : ''
+  const returnString = `
+  ${formattedAddress?.street_address} ${formattedAddress?.door} ${formattedAddress?.details}, ${noZip}${showComma}
+  ${formattedAddress?.city}`;
+
+  if (!formattedAddress?.street_address) {
+    return "Takeaway";
+  } else {
+    return returnString;
+  }
 }

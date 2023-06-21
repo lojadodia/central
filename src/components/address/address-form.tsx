@@ -76,6 +76,21 @@ const addressSchema = yup.object().shape({
   }),
 });
 
+const addressManualSchema = yup.object().shape({
+  type: yup.string().required("Tipo de Morada é obrigatório"),
+  title: yup.string().required("Título é obrigatório"),
+  delivery_fee: yup.string().optional(),
+  address: yup.object().shape({
+    country: yup.string().required("País é obrigatório"),
+    city: yup.string().required("Cidade é obrigatória"),
+    state: yup.string().required("Detalhes para entrega"),
+    zip: yup.string().optional(),
+    street_address: yup.string().required("O endereço da rua é obrigatório"),
+    details: yup.string().required("Detalhes para entrega"),
+    door: yup.string().required("O número da porta é obrigatório"),
+  }),
+});
+
 const CreateOrUpdateAddressForm = () => {
   const [showImg, setShowImg] = useState(false);
   const [searchMode, setSearchMode] = useState<"automatic" | "manual">(
@@ -104,7 +119,7 @@ const CreateOrUpdateAddressForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({
-    resolver: yupResolver(addressSchema),
+    resolver: yupResolver(searchMode === 'automatic' ? addressSchema : addressManualSchema),
     defaultValues: {
       // title: address?.title ?? "Endereço",
       // country: address?.country ?? "Portugal",
@@ -306,6 +321,18 @@ const CreateOrUpdateAddressForm = () => {
     }
   }
 
+  const handleAutomaticSearch = () => {
+    setSearchMode("automatic");
+    setShowInformLoc(false);
+  }
+
+  const handleSelectManualSearch = () => {
+    setSearchMode("manual");
+    setShowInformLoc(true);
+    setValue("address.state", "Portugal");
+    setValue('address.city', settings?.site?.address_city)
+  }
+
   return (
     <div className="p-5 sm:p-8 bg-white dark:bg-neutral-800 border dark:border-neutral-700 border-gray-200 rounded-lg">
       <h1 className="text-heading dark:text-white font-semibold text-lg text-center mb-0 ">
@@ -314,28 +341,22 @@ const CreateOrUpdateAddressForm = () => {
 
       <div className="grid mt-5 gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 ">
         <div
-          onClick={() => {
-            setSearchMode("automatic");
-          }}
+          onClick={handleAutomaticSearch}
           className={`px-4 py-3 text-center text-sm ${
             searchMode == "automatic"
               ? "bg-primary display-inline text-white"
               : ""
-          }  rounded h-12  border-gray-200 border dark:border-neutral-700 cursor-pointer`}
+          }  rounded h-12  border-gray-200 border dark:border-neutral-700 cursor-pointer uppercase`}
         >
-          Busca automática
+          BUSCA AUTOMÁTICA
         </div>
         <div
-          onClick={() => {
-            setSearchMode("manual");
-            setShowInformLoc(true);
-            setValue("address.state", "Portugal");
-          }}
+          onClick={handleSelectManualSearch}
           className={`px-4 py-3 text-center text-sm ${
             searchMode == "manual" ? "bg-primary display-inline text-white" : ""
-          }  rounded h-12  border-gray-200 border dark:border-neutral-700 cursor-pointer`}
+          }  rounded h-12  border-gray-200 border dark:border-neutral-700 cursor-pointer uppercase`}
         >
-          Manual
+          MANUAL
         </div>
       </div>
 
@@ -352,7 +373,7 @@ const CreateOrUpdateAddressForm = () => {
           required
           value={deliveryFee}
           type="number"
-          className="col-span-2 mt-5"
+          className="col-span-2 mt-5 bg-primary p-2 rounded"
         />
       )}
 
