@@ -21,11 +21,8 @@ const Address = ({ id, addresses, heading, count, type }: Props) => {
       handleSelect(addresses[0])
       updateBillingAddress(addresses[0]);
     }
-    else if (addresses?.length && type === "shipping") {
+    else if (!!addresses?.length && type === "shipping") {
       updateShippingAddress(addresses[0]);
-    } else {
-     //updateBillingAddress(null);
-     //updateShippingAddress(null);
     }
   }, [addresses, type]);
 
