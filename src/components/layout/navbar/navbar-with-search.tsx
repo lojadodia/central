@@ -40,7 +40,7 @@ const NavbarWithSearch = () => {
   addActiveScroll(navbarRef);
   
   const { checkoutData } = useCheckout();
-  const taxBag = settings?.order?.type.activeTaxBag;
+  const taxBag = settings?.order?.type.active_tax_bag;
   const { innerWidth: width } = window;
 
   const { total } = useCart();

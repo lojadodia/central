@@ -23,7 +23,7 @@ const OrderResume = (props: Props) => {
     setModalView("UPDATE_DELIVERY_FEE");
     return openModal();
   };
-  const taxBag = settings?.order?.type.activeTaxBag;
+  const taxBag = settings?.order?.type.active_tax_bag;
 
   const available_items = items?.filter(
     (item: any) => !checkoutData?.unavailable_products?.includes(item.id)

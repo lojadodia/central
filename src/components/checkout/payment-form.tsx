@@ -66,7 +66,7 @@ const paymentSchema = Yup.object().shape({
 
 export default function PaymentForm() {
   const settings = useSettings();
-  const taxBag = settings?.order?.type.activeTaxBag;
+  const taxBag = settings?.order?.type.active_tax_bag;
   const [order, setOrder] = useState({
     id: null,
     tracking_number: null,
@@ -148,7 +148,7 @@ export default function PaymentForm() {
     {
       totalAmount: subtotal,
       tax:
-        settings?.order?.type.activeTaxBag === "false"
+        settings?.order?.type.active_tax_bag === "false"
           ? 0
           : checkoutData?.total_tax,
       shipping_charge: checkoutData?.shipping_charge!,
@@ -178,7 +178,7 @@ export default function PaymentForm() {
       order_type: order_type,
       total,
       sales_tax:
-        settings?.order?.type.activeTaxBag === "false"
+        settings?.order?.type.active_tax_bag === "false"
           ? 0
           : checkoutData?.total_tax,
       delivery_fee: checkoutData?.shipping_charge,

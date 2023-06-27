@@ -21,7 +21,7 @@ const OrderInformation = (props: Props) => {
   const settings = useSettings();
   const { checkoutData, discount, removeCoupon, coupon } = useCheckout();
 
-  const taxBag = settings?.order?.type.activeTaxBag;
+  const taxBag = settings?.order?.type.active_tax_bag;
 
   const available_items = items?.filter(
     (item: any) => !checkoutData?.unavailable_products?.includes(item.id)
