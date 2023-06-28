@@ -21,6 +21,7 @@ export const fetchCategories = async ({ queryKey }: QueryParamsType) => {
   } = await CategoryService.find(params as CategoriesQueryOptionsType);
   return { categories: { data } };
 };
+// Pegar Categoria
 export const useCategoriesQuery = (options: CategoriesQueryOptionsType) => {
   return useQuery<{ categories: { data: Category[] } }, Error>(
     [API_ENDPOINTS.PARENT_CATEGORIES, options],
