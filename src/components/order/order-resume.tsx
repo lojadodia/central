@@ -30,7 +30,7 @@ const OrderResume = (props: Props) => {
   );
   const { price: tax } = usePrice(
     checkoutData && {
-      amount: taxBag === "false" ? 0 : checkoutData?.total_tax,
+      amount: 0,
     }
   );
   const { price: shipping } = usePrice(
@@ -55,7 +55,7 @@ const OrderResume = (props: Props) => {
       amount: calculatePaidTotal(
         {
           totalAmount: base_amount,
-          tax: taxBag === "false" ? 0 : checkoutData?.total_tax,
+          tax: 0,
           shipping_charge: checkoutData?.shipping_charge,
           coupon: coupon,
         },

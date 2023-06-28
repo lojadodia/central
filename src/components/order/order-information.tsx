@@ -28,7 +28,7 @@ const OrderInformation = (props: Props) => {
   );
   const { price: tax } = usePrice(
     checkoutData && {
-      amount: taxBag === "false" ? 0 : checkoutData?.total_tax,
+      amount: 0,
     }
   );
   const { price: shipping } = usePrice(
