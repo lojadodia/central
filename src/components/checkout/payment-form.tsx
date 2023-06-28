@@ -177,10 +177,7 @@ export default function PaymentForm() {
       paid_total: total,
       order_type: order_type,
       total,
-      sales_tax:
-        settings?.order?.type.active_tax_bag === "false"
-          ? 0
-          : checkoutData?.total_tax,
+      sales_tax: 0,
       delivery_fee: checkoutData?.shipping_charge,
       delivery_way: checkoutData?.mail,
       delivery_time: delivery_time,
